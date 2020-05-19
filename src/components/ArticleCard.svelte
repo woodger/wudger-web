@@ -5,51 +5,67 @@
   export let price;
   export let activityType;
   export let index;
+
+  // onMount(async () => {
+  //   const refreshToken = localStorage.getItem('refreshToken');
+  //
+  //   if (refreshToken) {
+  //     const pairs = await fetchRefresh(refreshToken);
+  //
+  //     localStorage.setItem('refreshToken', pairs.refreshToken);
+  //     accessToken.set(pairs.accessToken);
+  //
+  //     return;
+  //   }
+  //   else {
+  //     visible = true;
+  //   }
+  // });
 </script>
 
 <style>
-  .card {
+  .article-card {
     padding: 1rem;
   }
 
-  .card__row {
+  .article-card__row {
     display: flex;
   }
 
-  .card__col {
+  .article-card__col {
     margin: 0 .5rem;
   }
 
-  .card__options {
+  .article-card__options {
     display: flex;
     font-size: .9rem;
     font-style: italic;
     color: #333000;
   }
 
-  .card__option {
+  .article-card__option {
     margin: 1rem;
   }
 
-  .card__option_green {
+  .article-card__option_green {
     color: #03a817;
   }
 </style>
 
-<div class="card">
-  <div class="card__row">
-    <div class="card__col">{index}.</div>
-    <div class="card__col">
+<div class="article-card">
+  <div class="article-card__row">
+    <div class="article-card__col">{index}.</div>
+    <div class="article-card__col">
       <div>
         <a href="/articles/{id}">{title}</a>
       </div>
-      <div class="card__options">
+      <div class="article-card__options">
 
         {#if madeYear}
-          <div class="card__option">{madeYear} год</div>
+          <div class="article-card__option">{madeYear} год</div>
         {/if}
 
-        <div class="card__option">
+        <div class="article-card__option">
           {#if price === 0}
             Бесплатно
           {:else}
@@ -58,7 +74,7 @@
         </div>
 
         {#if activityType}
-          <div class="card__option card__option_green">
+          <div class="article-card__option article-card__option_green">
             {activityType}
           </div>
         {/if}

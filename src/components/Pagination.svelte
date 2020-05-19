@@ -5,6 +5,7 @@
   const {query, path} = $page;
 
   let tabs = [];
+  let active = 0;
 
   $: if ($page) {
     const searchParams = new URLSearchParams();
@@ -21,6 +22,14 @@
       };
     });
   }
+
+  stores().page.subscribe(({query}) => {
+    if (query.page) {
+      active = parseInt(query.page);
+
+      console.log(active);
+    }
+  });
 </script>
 
 <style>
@@ -34,15 +43,15 @@
     justify-content: center;
     align-items: center;
     margin: .5rem;
-    min-width: 28px;
-    height: 28px;
+    min-width: 30px;
+    height: 30px;
     text-decoration: none;
   }
 </style>
 
 <nav class="pagination">
   {#each tabs as {href}, index (href)}
-    <a class="pagination__btn global__btn" {href}>
+    <a class="pagination__btn global__btn" class:global__btn_blue={index === active} {href}>
       {index + 1}
     </a>
   {/each}

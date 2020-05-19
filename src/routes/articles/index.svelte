@@ -26,7 +26,7 @@
 
   export let posts = [];
 
-  let title = 'Каталог научных исследований и материалов для студентов';
+  let title = 'Каталог';
   let page = 0;
   let limit = 10;
 
@@ -41,23 +41,24 @@
   });
 </script>
 
-<style>
-  .articles__container {
-    margin: 0 auto;
-    max-width: 1200px;
-  }
-</style>
-
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>
 
-<div class="articles__container">
+<!-- <style>
+  .article-card__col_right {
+    margin-left: auto;
+  }
+</style> -->
+
+<div class="global__container">
   <h1>{title}</h1>
 
-  {#each posts as post, index (post.id)}
-    <ArticleCard {...post} index={page * limit + index + 1} />
-  {/each}
+  <div>
+    {#each posts as post, index (post.id)}
+      <ArticleCard {...post} index={page * limit + index + 1} />
+    {/each}
 
-  <Pagination />
+    <Pagination />
+  </div>
 </div>
