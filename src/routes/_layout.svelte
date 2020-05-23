@@ -16,8 +16,9 @@
   }
 
   :global(h1) {
-    margin: 0;
-    padding: 3rem 1rem;
+    margin: 2rem 1rem;
+		padding: .5rem 0;
+		font-family: "Times New Roman", Georgia, serif;
     font-weight: normal;
     font-size: 1.5rem;
   }

@@ -17,7 +17,7 @@
 	}
 
 	p {
-		margin: 1em auto;
+		margin: 1rem;
 	}
 
 	@media (min-width: 480px) {
@@ -31,10 +31,12 @@
 	<title>{status}</title>
 </svelte:head>
 
-<h1>{status}</h1>
+<div class="global__container">
+	<h1>{status}</h1>
 
-<p>{error.message}</p>
+	<p>{error.message}</p>
 
-{#if dev && error.stack}
-	<pre>{error.stack}</pre>
-{/if}
+	{#if dev && error.stack}
+		<pre>{error.stack}</pre>
+	{/if}
+</div>

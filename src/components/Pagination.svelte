@@ -26,8 +26,6 @@
   stores().page.subscribe(({query}) => {
     if (query.page) {
       active = parseInt(query.page);
-
-      console.log(active);
     }
   });
 </script>

@@ -1,72 +1,88 @@
 <script>
 	import {onMount} from 'svelte';
-  // import {accessToken, fetchAuthorization, fetchRefresh} from '../stores/user';
-	import {fetchAuthorization, fetchRefresh, fetchUserInfo} from '../stores/http-requests';
-	import {userInfo} from '../stores/redux';
+	import {authorize, userInfo, credentials} from '../stores/global';
 
-  let isVisibleForm = false;
   let login = '';
   let password = '';
 
-  function onClickEntry() {
-		isVisibleForm = !isVisibleForm;
-  }
+	async function getAuthorization({login, password}) {
+	  const url = new URL('/api/v1/users/login', process.env.API_URL);
+	  const body = new FormData();
+
+	  body.set('login', login);
+	  body.set('password', password);
+
+	  const res = await fetch(url, {
+	    method: 'POST',
+	    body
+	  });
+
+	  if (res.status !== 200) {
+	    return;
+	  }
+
+	  return await res.json();
+	}
+
+	async function getUserInfo(accessToken) {
+	  const url = new URL('/api/v1/users/info', process.env.API_URL);
+	  const body = new FormData();
+
+	  const res = await fetch(url, {
+	    headers: {
+	      'X-Access-Token': accessToken
+	    }
+	  });
+
+	  if (res.status !== 200) {
+	    return;
+	  }
+
+	  return await res.json();
+	}
+
+	async function onClickNext() {
+		$credentials = await getAuthorization({ login, password });
+		await authorization($credentials);
+
+		$authorize = !$userInfo;
+	}
+
+	function onClickEnter() {
+		$authorize = !$authorize;
+	}
 
 	function onClickExit() {
-		localStorage.removeItem('accessToken');
-		localStorage.removeItem('refreshToken');
-
 		$userInfo = undefined;
 	}
 
-	async function userAuthorization({accessToken, refreshToken}) {
-		localStorage.setItem('accessToken', accessToken);
-		localStorage.setItem('refreshToken', refreshToken);
+	async function authorization({accessToken} = {}) {
+		if (accessToken) {
+			localStorage.setItem('accessToken', accessToken);
+			$userInfo = await getUserInfo(accessToken);
+		}
+		else {
+			const accessToken = localStorage.getItem('accessToken');
 
-		$userInfo = await fetchUserInfo(accessToken);
-  }
-
-  async function onClickNext() {
-		const pairs = await fetchAuthorization({ login, password });
-    await userAuthorization(pairs);
-
-    isVisibleForm = false;
-  }
-
-  onMount(async () => {
-		const accessToken = localStorage.getItem('accessToken');
-		const refreshToken = localStorage.getItem('refreshToken');
-
-		if (accessToken && refreshToken) {
-			$userInfo = await fetchUserInfo(accessToken);
-
-			if (!$userInfo) {
-				const pairs = await fetchRefresh();
-				await userAuthorization(pairs);
+			if (accessToken) {
+				$userInfo = await getUserInfo(accessToken);
 			}
 		}
-  });
+	}
+
+	onMount(async () => {
+		await authorization();
+
+		userInfo.subscribe((value) => {
+			if (value === undefined) {
+				localStorage.removeItem('accessToken');
+			}
+		});
+	});
 </script>
 
 <style>
-  .enter__btn {
-		display: flex;
-  	align-items: center;
-  	height: 30px;
-  	margin: 0 1rem;
-    padding: 0 1rem;
-    text-decoration: none;
-    outline: none;
-  	cursor: pointer;
-  }
-
-  .authorization {
-    /* position: absolute;
-    top: 30%;
-    top: calc(50% - 150px);
-    left: 30%;
-    left: calc(50% - 150px);
-    width: 300px; */
+  .login {
 		position: fixed;
 		top: calc(50% - 150px);
 		left: calc(50% - 150px);
@@ -75,74 +91,71 @@
 		background: #ffffff;
   }
 
-  .authorization__inner {
+  .login__inner {
     padding: 1rem;
   }
 
-  .authorization__input {
+  .login__input {
     width: 100%;
     height: 2rem;
   }
 
-  .authorization__field {
+  .login__field {
     max-width: 300px
   }
 
-  .authorization__field-inner {
+  .login__field-inner {
     padding: .5rem 1rem;
   }
 
-  .authorization__control {
+  .login__control {
     margin-top: 1rem;
   }
 
-  .authorization__label {
+  .login__label {
     line-height: 2rem;
     font-size: .9rem;
     color: #666666;
   }
 
-  .authorization__btn {
+  .login__btn {
     height: 30px;
     padding: 1px 1rem;
   }
-
 </style>
 
 {#if $userInfo}
-	<div class="global__btn enter__btn" on:click={onClickExit}>
-		<!-- <img src="icons/exit.svg" alt="menu" width="16" height="16" /> -->
-		Выход
-	</div>
+	<button class="global__btn login__btn" on:click={onClickExit}>
+		<img src="icons/exit.svg" alt="exit" width="16" height="16" />
+	</button>
 {:else}
-	<div class="global__btn enter__btn" on:click={onClickEntry}>
-		<!-- <img src="icons/exit.svg" alt="menu" width="16" height="16" /> -->
-		Вход
-	</div>
+	<button class="global__btn login__btn" on:click={onClickEnter}>
+		<img src="icons/enter.svg" alt="enter" width="16" height="16" />
+	</button>
 {/if}
 
-{#if isVisibleForm}
-	<div class="authorization">
-		<div class="authorization__inner">
+{#if $authorize}
+	<div class="login">
+		<div class="login__inner">
 			<h1>Вход</h1>
 
-			<div class="authorization__field">
-				<div class="authorization__field-inner">
-					<label class="authorization__label">Логин</label>
-					<input class="authorization__input global__input" type="text" bind:value={login}>
+			<div class="login__field">
+				<div class="login__field-inner">
+					<label class="login__label">Логин</label>
+					<input class="login__input global__input" bind:value={login}>
 				</div>
 			</div>
 
-			<div class="authorization__field">
-				<div class="authorization__field-inner">
-					<label class="authorization__label">Пароль</label>
-					<input class="authorization__input global__input" type="password" bind:value={password}>
+			<div class="login__field">
+				<div class="login__field-inner">
+					<label class="login__label">Пароль</label>
+					<input class="login__input global__input" type="password" bind:value={password}>
 				</div>
 			</div>
 
-			<div class="authorization__field">
-				<div class="authorization__field-inner authorization__control">
-					<button class="authorization__btn global__btn global__btn_blue" on:click={onClickNext}>
+			<div class="login__field">
+				<div class="login__field-inner login__control">
+					<button class="login__btn global__btn global__btn_blue" on:click={onClickNext}>
 						Далее
 					</button>
 				</div>

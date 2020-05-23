@@ -5,22 +5,7 @@
   export let price;
   export let activityType;
   export let index;
-
-  // onMount(async () => {
-  //   const refreshToken = localStorage.getItem('refreshToken');
-  //
-  //   if (refreshToken) {
-  //     const pairs = await fetchRefresh(refreshToken);
-  //
-  //     localStorage.setItem('refreshToken', pairs.refreshToken);
-  //     accessToken.set(pairs.accessToken);
-  //
-  //     return;
-  //   }
-  //   else {
-  //     visible = true;
-  //   }
-  // });
+  export let path;
 </script>
 
 <style>
@@ -50,6 +35,10 @@
   .article-card__option_green {
     color: #03a817;
   }
+
+  .article-card__col_right {
+    margin-left: auto;
+  }
 </style>
 
 <div class="article-card">
@@ -57,7 +46,7 @@
     <div class="article-card__col">{index}.</div>
     <div class="article-card__col">
       <div>
-        <a href="/articles/{id}">{title}</a>
+        <a href="{path}/{id}">{title}</a>
       </div>
       <div class="article-card__options">
 
@@ -80,6 +69,9 @@
         {/if}
       </div>
     </div>
-    <slot />
+
+    <div class="article-card__col_right">
+      <slot />
+    </div>
   </div>
 </div>
