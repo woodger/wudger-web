@@ -27,6 +27,8 @@
     .global__btn,
     .global__input
   ) {
+		display: flex;
+		align-items: center;
     border: 1px solid #aaaaaa;
     border-radius: 3px;
     box-sizing: border-box;

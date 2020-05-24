@@ -1,13 +1,12 @@
 <script>
   import Menu from './Menu.svelte';
-  import Login from './Login.svelte';
-  // import Search from './Search.svelte';
+  import UserButton from './authoriziton/UserButton.svelte';
 
-  let isVisibleMenu = false;
-
-  function onClickMenu() {
-    isVisibleMenu = !isVisibleMenu;
-  }
+  // let isVisibleMenu = false;
+  //
+  // function onClickMenu() {
+  //   isVisibleMenu = !isVisibleMenu;
+  // }
 </script>
 
 <style>
@@ -22,7 +21,7 @@
   }
 
   .nav__inner > :last-child {
-    margin: 1rem 1rem 1rem auto;
+    margin-left: auto;
   }
 
   .nav__btn {
@@ -44,24 +43,21 @@
   <div class="nav">
     <div class="global__container">
       <div class="nav__inner">
-        <div class="nav__btn" on:click={onClickMenu}>
+        <!-- <div class="nav__btn" on:click={onClickMenu}>
           <img src="icons/three-bars.svg" alt="menu" width="16" height="16" />
-        </div>
+        </div> -->
         <a class="nav__btn nav__btn_logo" href="/">
           <img src="images/logo.svg" alt="wudger.ru" width="128" height="32" />
         </a>
         <a class="global__btn nav__btn" href="/articles">
           Каталог
         </a>
-        <!-- <div>
-          <Search />
-        </div> -->
         <div>
-          <Login />
+          <UserButton />
         </div>
       </div>
     </div>
 
-    <Menu visible={isVisibleMenu} />
+    <Menu />
   </div>
 </nav>

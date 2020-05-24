@@ -1,32 +1,29 @@
 <script>
-  import {stores} from '@sapper/app';
+  import * as sapper from '@sapper/app';
 
-  const {page} = stores();
-  const {query, path} = $page;
+  export let length = 5;
 
   let tabs = [];
   let active = 0;
 
-  $: if ($page) {
+  sapper.stores().page.subscribe(({query, path}) => {
+    if (query.page) {
+      active = +query.page;
+    }
+
     const searchParams = new URLSearchParams();
 
     for (let i of Object.keys(query)) {
       searchParams.append(i, query[i]);
     }
 
-    tabs = [].map.call('%'.repeat(5), (i, index) => {
+    tabs = [].map.call('%'.repeat(length), (i, index) => {
       searchParams.set('page', index);
 
       return {
         href: path + '?' + searchParams
       };
     });
-  }
-
-  stores().page.subscribe(({query}) => {
-    if (query.page) {
-      active = parseInt(query.page);
-    }
   });
 </script>
 

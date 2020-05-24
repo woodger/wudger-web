@@ -1,20 +1,17 @@
 <script>
-  import {stores} from '@sapper/app';
+  import * as sapper from '@sapper/app';
   import ArticleCard from '../../components/ArticleCard.svelte';
   import Pagination from '../../components/Pagination.svelte';
-  import {userInfo} from '../../store';
+  import * as store from '@store';
 
   export let articles = [];
   export let title = 'Каталог';
 
   let page = 0;
   let limit = 10;
-  let path;
+  let path = '/articles';
 
-  $: path = $userInfo && userInfo.groups.includes('admin') ?
-    '/articles-admin' : '/articles';
-
-  stores().page.subscribe(({query}) => {
+  sapper.stores().page.subscribe(({query}) => {
     if (query.page) {
       page = +query.page;
     }
@@ -23,6 +20,11 @@
       limit = +query.limit;
     }
   });
+
+  // store.userInfo.subscribe(({groups = []} = {}) => {
+  //   path = groups.includes('admin') ?
+  //     '/articles-admin' : '/articles';
+  // });
 </script>
 
 <script context="module">
@@ -55,7 +57,7 @@
 
   <div>
     {#each articles as item, index (item.id)}
-      <ArticleCard {...item} {path} index={page * limit + index + 1} />
+      <ArticleCard {...item} href="{path}/{item.id}" index={page * limit + index + 1} />
     {/each}
 
     <Pagination />

@@ -1,7 +1,9 @@
 <script>
 	import {onMount} from 'svelte';
-	import {authorize, userInfo, credentials} from '../stores/global';
+	// import {authorize, userInfo, credentials} from '../stores/global';
 
+	let showBtnEnter = true;
+	let showAuthForm = false;
   let login = '';
   let password = '';
 
@@ -41,43 +43,56 @@
 	  return await res.json();
 	}
 
-	async function onClickNext() {
-		$credentials = await getAuthorization({ login, password });
-		await authorization($credentials);
-
-		$authorize = !$userInfo;
-	}
-
 	function onClickEnter() {
-		$authorize = !$authorize;
+		store.showAuthForm.set(!showAuthForm);
 	}
 
 	function onClickExit() {
-		$userInfo = undefined;
+		localStorage.removeItem('accessToken');
+		store.userInfo.set();
 	}
 
-	async function authorization({accessToken} = {}) {
-		if (accessToken) {
-			localStorage.setItem('accessToken', accessToken);
-			$userInfo = await getUserInfo(accessToken);
-		}
-		else {
-			const accessToken = localStorage.getItem('accessToken');
+	async function onClickNext() {
+		const credentials = await getAuthorization({ login, password });
 
-			if (accessToken) {
-				$userInfo = await getUserInfo(accessToken);
+		if (credentials) {
+			const info = await getUserInfo(credentials.accessToken);
+
+			if (info) {
+				localStorage.setItem('accessToken', credentials.accessToken);
+
+				store.userInfo.set(info);
+				store.showAuthForm.set(false);
 			}
 		}
 	}
 
 	onMount(async () => {
-		await authorization();
-
-		userInfo.subscribe((value) => {
-			if (value === undefined) {
-				localStorage.removeItem('accessToken');
-			}
+		store.showAuthForm.subscribe((value) => {
+			showAuthForm = value;
 		});
+
+		store.accessToken.subscribe(async (value) => {
+			if (!value) {
+				return;
+			}
+
+			const info = await getUserInfo(value);
+
+			if (info) {
+				store.userInfo.set(info);
+				return;
+			}
+
+			localStorage.removeItem('accessToken');
+		});
+
+		store.userInfo.subscribe((value) => {
+			showBtnEnter = !value;
+		});
+
+		const token = localStorage.getItem('accessToken');
+		store.accessToken.set(token);
 	});
 </script>
 
@@ -124,17 +139,17 @@
   }
 </style>
 
-{#if $userInfo}
-	<button class="global__btn login__btn" on:click={onClickExit}>
-		<img src="icons/exit.svg" alt="exit" width="16" height="16" />
-	</button>
-{:else}
+{#if showBtnEnter}
 	<button class="global__btn login__btn" on:click={onClickEnter}>
 		<img src="icons/enter.svg" alt="enter" width="16" height="16" />
 	</button>
+{:else}
+	<button class="global__btn login__btn" on:click={onClickExit}>
+		<img src="icons/exit.svg" alt="exit" width="16" height="16" />
+	</button>
 {/if}
 
-{#if $authorize}
+{#if showAuthForm}
 	<div class="login">
 		<div class="login__inner">
 			<h1>Вход</h1>

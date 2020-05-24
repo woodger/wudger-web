@@ -1,5 +1,6 @@
-import {writable} from 'svelte/store';
+import { writable } from 'svelte/store';
 
-export const authorize = writable(false);
-export const credentials = writable();
+export const visibleMenu = writable(false);
+export const showAuthForm = writable(false);
+export const accessToken = writable();
 export const userInfo = writable();

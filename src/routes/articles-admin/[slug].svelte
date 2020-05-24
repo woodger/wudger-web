@@ -1,7 +1,7 @@
-<script>
+<!-- <script>
   import {onMount} from 'svelte';
   import {fade} from 'svelte/transition';
-  import {userInfo, credentials, authorize} from '../../stores/global';
+  import * as store from '@store';
 
   export let characteristics = [];
 
@@ -9,7 +9,9 @@
   let lang = {};
 
   userInfo.subscribe(({groups = []} = {}) => {
-    $authorize = !groups.includes('admin');
+    // $authorize = !groups.includes('admin');
+    //
+    // store.showAuthForm
   });
 
   $: characteristics = [{
@@ -197,4 +199,4 @@
       {@html page}
     {/each}
   </div>
-{/if}
+{/if} -->

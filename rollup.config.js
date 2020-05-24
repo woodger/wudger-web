@@ -1,10 +1,11 @@
 import resolve from 'rollup-plugin-node-resolve';
-import replace from '@rollup/plugin-replace';
 import commonjs from 'rollup-plugin-commonjs';
 import svelte from 'rollup-plugin-svelte';
 import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import dotenv from 'rollup-plugin-dotenv';
+import replace from '@rollup/plugin-replace';
+import alias from '@rollup/plugin-alias';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
 
@@ -20,6 +21,13 @@ const dedupe = importee => {
   return importee === 'svelte' || importee.startsWith('svelte/');
 };
 
+const customResolver = {
+  entries: [{
+    find: '@store',
+    replacement: __dirname + '/src/store.js'
+  }]
+};
+
 export default {
   client: {
 		input: config.client.input(),
@@ -30,32 +38,35 @@ export default {
 				'process.browser': true,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
-			svelte({
+
+      alias(customResolver),
+
+      svelte({
 				dev: false,
 				hydratable: true,
 				emitCss: true
 			}),
-			resolve({
-				browser: true,
-				dedupe
-			}),
 			commonjs(),
+      resolve({
+        browser: true,
+        dedupe
+      }),
 
-			legacy && babel({
+      legacy && babel({
 				extensions: ['.js', '.mjs', '.html', '.svelte'],
 				runtimeHelpers: true,
-				exclude: ['node_modules/@babel/**'],
-				presets: [
-					['@babel/preset-env', {
-						targets: '> 0.25%, not dead'
-					}]
-				],
-				plugins: [
-					'@babel/plugin-syntax-dynamic-import',
-					['@babel/plugin-transform-runtime', {
-						useESModules: true
-					}]
-				]
+        exclude: ['node_modules/@babel/**'],
+        presets: [
+          ['@babel/preset-env', {
+            targets: '> 0.25%, not dead'
+          }]
+        ],
+        plugins: [
+          ['@babel/plugin-syntax-dynamic-import'],
+          ['@babel/plugin-transform-runtime', {
+            useESModules: true
+          }]
+        ]
 			}),
 
 			!dev && terser({
@@ -75,6 +86,7 @@ export default {
 				'process.browser': false,
 				'process.env.NODE_ENV': JSON.stringify(mode)
 			}),
+      alias(customResolver),
 			svelte({
 				generate: 'ssr',
 				dev

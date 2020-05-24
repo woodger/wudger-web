@@ -1,11 +1,10 @@
 <script>
-  export let id;
   export let title;
   export let madeYear;
   export let price;
   export let activityType;
   export let index;
-  export let path;
+  export let href;
 </script>
 
 <style>
@@ -46,7 +45,7 @@
     <div class="article-card__col">{index}.</div>
     <div class="article-card__col">
       <div>
-        <a href="{path}/{id}">{title}</a>
+        <a {href}>{title}</a>
       </div>
       <div class="article-card__options">
 
