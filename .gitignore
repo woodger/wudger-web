@@ -1,6 +1,6 @@
 node_modules
 package-lock.json
-yarn-error.log
+.env
 
 src/node_modules/@sapper
 cypress/screenshots
