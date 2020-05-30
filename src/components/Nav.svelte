@@ -1,12 +1,5 @@
 <script>
-  import Menu from './Menu.svelte';
-  import UserButton from './authoriziton/UserButton.svelte';
-
-  // let isVisibleMenu = false;
-  //
-  // function onClickMenu() {
-  //   isVisibleMenu = !isVisibleMenu;
-  // }
+  import AccountButton from './oauth2/AccountButton.svelte';
 </script>
 
 <style>
@@ -43,9 +36,6 @@
   <div class="nav">
     <div class="global__container">
       <div class="nav__inner">
-        <!-- <div class="nav__btn" on:click={onClickMenu}>
-          <img src="icons/three-bars.svg" alt="menu" width="16" height="16" />
-        </div> -->
         <a class="nav__btn nav__btn_logo" href="/">
           <img src="images/logo.svg" alt="wudger.ru" width="128" height="32" />
         </a>
@@ -53,11 +43,9 @@
           Каталог
         </a>
         <div>
-          <UserButton />
+          <AccountButton />
         </div>
       </div>
     </div>
-
-    <Menu />
   </div>
 </nav>

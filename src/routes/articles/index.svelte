@@ -2,14 +2,12 @@
   import * as sapper from '@sapper/app';
   import ArticleCard from '../../components/ArticleCard.svelte';
   import Pagination from '../../components/Pagination.svelte';
-  import * as store from '@store';
 
   export let articles = [];
   export let title = 'Каталог';
 
   let page = 0;
   let limit = 10;
-  let path = '/articles';
 
   sapper.stores().page.subscribe(({query}) => {
     if (query.page) {
@@ -20,11 +18,6 @@
       limit = +query.limit;
     }
   });
-
-  // store.userInfo.subscribe(({groups = []} = {}) => {
-  //   path = groups.includes('admin') ?
-  //     '/articles-admin' : '/articles';
-  // });
 </script>
 
 <script context="module">
@@ -57,7 +50,7 @@
 
   <div>
     {#each articles as item, index (item.id)}
-      <ArticleCard {...item} href="{path}/{item.id}" index={page * limit + index + 1} />
+      <ArticleCard {...item} href="/articles/{item.id}" index={page * limit + index + 1} />
     {/each}
 
     <Pagination />

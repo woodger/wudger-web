@@ -1,5 +1,46 @@
 <script>
+	import { onMount } from 'svelte';
+	import { get, post } from '@fetch';
+	import store from '@store';
 	import Nav from '../components/Nav.svelte';
+
+	onMount(async () => {
+		store['oauth2.user.credentials'].subscribe(async (value) => {
+			if (!value) {
+				value = JSON.parse(
+					localStorage.getItem('credentials')
+				);
+			}
+
+			if (!value) {
+				value = await post('/api/v1/users/registration', {
+					data: {
+						login: 'guest'
+					}
+				});
+			}
+
+			localStorage.setItem('credentials', JSON.stringify(value));
+
+			const info = await get('/api/v1/users/info', {
+				headers: {
+					'X-Access-Token': value.accessToken
+				}
+			});
+
+			if (info) {
+				return store['oauth2.user.info'].set(info);
+			}
+
+			value = await get('/api/v1/users/refresh', {
+				data: {
+					token: value.refreshToken
+				}
+			});
+
+			store['oauth2.user.credentials'].set(value);
+		});
+	});
 </script>
 
 <style>
@@ -7,18 +48,18 @@
     font-size: 14px;
   }
 
-  :global(a) {
-    cursor: pointer;
-  }
-
   :global(body) {
     font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   }
 
+	:global(a) {
+		cursor: pointer;
+	}
+
   :global(h1) {
     margin: 2rem 1rem;
 		padding: .5rem 0;
-		font-family: "Times New Roman", Georgia, serif;
+		/* font-family: "Times New Roman", Georgia, serif; */
     font-weight: normal;
     font-size: 1.5rem;
   }
@@ -48,15 +89,14 @@
 
   :global(.global__btn_blue) {
     border: 1px solid #2d77af;
-    background: #4087bb;
     background: linear-gradient(to bottom, #5192c3 7%, #4087bb 97%, #2d77af 100%);
     color: #ffffff;
   }
 
   :global(.global__input) {
     padding: 0;
-    text-indent: .5rem;
     box-shadow: inset 0 1px 1px #dddddd;
+		text-indent: .5rem;
   }
 
   :global(
@@ -68,8 +108,8 @@
   }
 
 	:global(.global__container) {
-    margin: 0 auto;
     max-width: 1200px;
+		margin: 0 auto;
   }
 </style>
 

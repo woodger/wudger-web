@@ -1,4 +1,3 @@
-import resolve from 'rollup-plugin-node-resolve';
 import commonjs from 'rollup-plugin-commonjs';
 import svelte from 'rollup-plugin-svelte';
 import babel from 'rollup-plugin-babel';
@@ -6,6 +5,7 @@ import { terser } from 'rollup-plugin-terser';
 import dotenv from 'rollup-plugin-dotenv';
 import replace from '@rollup/plugin-replace';
 import alias from '@rollup/plugin-alias';
+import resolve from '@rollup/plugin-node-resolve';
 import config from 'sapper/config/rollup.js';
 import pkg from './package.json';
 
@@ -24,7 +24,11 @@ const dedupe = importee => {
 const customResolver = {
   entries: [{
     find: '@store',
-    replacement: __dirname + '/src/store.js'
+    replacement: __dirname + '/src/asserts/store'
+  },
+  {
+    find: '@fetch',
+    replacement: __dirname + '/src/asserts/fetch'
   }]
 };
 
