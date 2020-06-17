@@ -1,23 +1,29 @@
 <script>
-  import { onMount } from 'svelte';
   import store from '@store';
+  import request from '@request';
 
-  let visible = false;
-  let admin = false;
+  export let props;
+
+  let isAdmin = false;
 
   function onClickEnter() {
-    store['oauth2.menu.visible'].set(false);
-    store['oauth2.login.visible'].set(true);
+    store['oauth2.authorization.required'].set(true);
+    props.isVisibleMenu = false;
   }
 
-  onMount(() => {
-    store['oauth2.menu.visible'].subscribe((value) => {
-      visible = value;
-    });
+  async function onClickExit() {
+    request.clearCredentials();
 
-    store['oauth2.user.info'].subscribe((value) => {
-      admin = value && value.groups.includes('admin');
-    });
+    const res = await request('/api/v1/users/info');
+    const info = await res.json();
+    store['oauth2.user.info'].set(info);
+
+    props.isVisibleMenu = false;
+  }
+
+  store['oauth2.user.info'].subscribe((value) => {
+    isAdmin = value && value.groups.includes('admin');
+    store['oauth2.user.admin'].set(isAdmin);
   });
 </script>
 
@@ -35,10 +41,6 @@
     min-height: 7rem;
   }
 
-  .modal-menu__control {
-
-  }
-
   .modal-menu__username {
     margin: 1rem;
     font-weight: bold;
@@ -51,22 +53,28 @@
   }
 </style>
 
-{#if visible}
+{#if props.isVisibleMenu}
   <div class="modal-menu">
     <div class="modal-menu__account">
       <div class="modal-menu__username">
-        {admin ? 'Админ' : 'Гость'}
+        {isAdmin ? 'Админ' : 'Гость'}
       </div>
     </div>
 
-    <div class="modal-menu__control">
+    <div>
       <button class="modal-menu__btn global__btn">
         Мои покупки
       </button>
-      <button class="modal-menu__btn global__btn" on:click={onClickEnter}>
-        <!-- Вход -->
-        <img src="icons/enter.svg" alt="enter" width="16" height="16" />
-      </button>
+
+      {#if isAdmin}
+        <button class="modal-menu__btn global__btn" on:click={onClickExit}>
+          <img src="icons/exit.svg" alt="exit" width="16" height="16" />
+        </button>
+      {:else}
+        <button class="modal-menu__btn global__btn" on:click={onClickEnter}>
+          <img src="icons/enter.svg" alt="enter" width="16" height="16" />
+        </button>
+      {/if}
     </div>
   </div>
 {/if}

@@ -1,32 +1,43 @@
 <script>
-  import { onMount } from 'svelte';
-  import { post } from '@fetch';
+  import request from '@request';
   import store from '@store';
 
+  export let props;
+
+  const form = {};
   let visible = false;
-  let login;
-  let password;
+
+  store['oauth2.authorization.required'].subscribe((value) => {
+    visible = value;
+  });
 
   async function onClickNext() {
-    const credentials = await post('/api/v1/users/login', {
-      data: { login, password }
+    const res = await request('/api/v1/users/authorization', {
+      method: 'POST',
+      data: form
     });
 
-    if (credentials) {
-      store['oauth2.user.credentials'].set(credentials);
-      store['oauth2.login.visible'].set(false);
+    if (res.status === 200) {
+      const pairs = await res.json();
+      request.saveCredentials(pairs);
+
+      await props.getUserInfo();
+      onClickClose();
+    }
+    else {
+      store['notification.message'].set({
+        message: 'Ошибка: Неверный логин или пароль'
+      });
     }
   }
 
   function onClickClose() {
-    store['oauth2.login.visible'].set(false);
+    store['oauth2.authorization.required'].set(false);
   }
 
-  onMount(() => {
-    store['oauth2.login.visible'].subscribe((value) => {
-      visible = value;
-    });
-  });
+  function onInput({target}) {
+    form[target.name] = target.value;
+  }
 </script>
 
 <style>
@@ -87,14 +98,14 @@
       <div class="login__row">
         <div class="login__row-inner">
           <div class="login__label">Логин</div>
-          <input class="login__input global__input" bind:value={login}>
+          <input class="login__input global__input" type="text" name="login" on:input={onInput}>
         </div>
       </div>
 
       <div class="login__row">
         <div class="login__row-inner">
           <div class="login__label">Пароль</div>
-          <input class="login__input global__input" type="password" bind:value={password}>
+          <input class="login__input global__input" type="password" name="password" on:input={onInput}>
         </div>
       </div>
 

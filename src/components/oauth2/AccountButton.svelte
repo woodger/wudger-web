@@ -1,13 +1,27 @@
 <script>
+  import { onMount } from 'svelte';
+  import { writable } from 'svelte/store';
+  import request from '@request';
   import store from '@store';
-  import LoginForm from './LoginForm.svelte';
   import AccountMenu from './AccountMenu.svelte';
+  import AuthorizationForm from './AuthorizationForm.svelte';
 
-  function onClickUser() {
-    store['oauth2.menu.visible'].update((value) => {
-      return !value;
-    });
+  const props = {
+    isVisibleMenu: false,
+
+    async getUserInfo() {
+      const res = await request('/api/v1/users/info');
+      const info = await res.json();
+
+      store['oauth2.user.info'].set(info);
+    }
+  };
+
+  function onClickAccount() {
+    props.isVisibleMenu = !props.isVisibleMenu;
   }
+
+  onMount(props.getUserInfo);
 </script>
 
 <style>
@@ -22,12 +36,11 @@
   }
 </style>
 
-<LoginForm />
-
 <div class="oauth2">
-  <div class="oauth2__btn global__btn" on:click={onClickUser}>
-    <img src="icons/user.svg" alt="user" width="16" height="16" />
+  <div class="oauth2__btn global__btn" on:click={onClickAccount}>
+    <img src="icons/user.svg" alt="account" width="16" height="16" />
   </div>
-
-  <AccountMenu />
+  <AccountMenu {props} />
 </div>
+
+<AuthorizationForm {props} />

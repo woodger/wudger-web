@@ -27,8 +27,8 @@ const customResolver = {
     replacement: __dirname + '/src/asserts/store'
   },
   {
-    find: '@fetch',
-    replacement: __dirname + '/src/asserts/fetch'
+    find: '@request',
+    replacement: __dirname + '/src/asserts/request'
   }]
 };
 

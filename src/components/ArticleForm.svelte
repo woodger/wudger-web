@@ -1,66 +1,118 @@
 <script>
   import { onMount } from 'svelte';
-  import { get } from '@fetch';
+  import request from '@request';
 
   export let slug;
+  export let update;
 
-  let doc = { pages: [] };
+  let data = { pages: [] };
+  let edit = { pages: [] };
 
   onMount(async () => {
-    doc = await get(`/api/v1/articles/${slug}`);
+    const res = await request(`/api/v1/articles/${slug}`);
+    data = await res.json();
   });
+
+  async function onClickSave() {
+    const res = await request(`/api/v1/articles/${slug}`, {
+      method: 'PUT',
+      data: edit
+    });
+
+    const {ok} = await res.json();
+
+    if (ok === 1) {
+      await update();
+    }
+    else {
+      store['notification.error'].set({
+        message: 'Упс... все сломалось!'
+      });
+    }
+  }
+
+  async function onClickTrash() {
+    if (confirm('Удалить?') === false) {
+      return;
+    }
+
+    const res = await request(`/api/v1/articles/${slug}`, {
+      method: 'DELETE'
+    });
+
+    const {ok, n} = await res.json();
+
+    if (ok === 1 && n === 1) {
+      await update();
+    }
+    else {
+      store['notification.error'].set({
+        message: 'Упс... все сломалось!'
+      });
+    }
+  }
+
+  function onInput({target}) {
+    edit[target.name] = target.value;
+  }
 </script>
 
 <style>
-  .article {
+  .edit-form {
+    margin: 1rem 1rem 3rem;
+    box-shadow: 0 1px 3px #aaaaaa;
+    background: #ffffff;
+  }
+
+  .edit-form__values {
     display: flex;
     flex-wrap: wrap;
-    margin: 1rem 0;
+    padding: 1rem 0;
   }
 
-  .article__control {
+  .edit-form__control {
     display: flex;
     align-items: center;
-    margin: 1rem 0;
+    padding: 1rem 0;
   }
 
-  .article__field {
+  .edit-form__field {
     margin: 0 1rem .5rem;
   }
 
-  .article__field > div {
-    margin: .5rem;
-    font-size: .9rem;
-    color: #999999;
-  }
-
-  .article__field_100 {
-    width: 100%;
-  }
-
-  .article__field_10 {
+  .edit-form__field_10 {
     width: 10%;
     min-width: 10rem;
   }
 
-  .article__field_20 {
+  .edit-form__field_20 {
     width: 20%;
     min-width: 20rem;
   }
 
-  .article__input {
+  .edit-form__field_100 {
+    width: 100%;
+  }
+
+  .edit-form__label {
+    margin: .5rem 0;
+    color: #999999;
+  }
+
+  .edit-form__input {
     min-height: 30px;
     width: 100%;
   }
 
-  .article__textarea {
+  .edit-form__textarea {
     min-height: 6rem;
     width: 100%;
     padding: .5rem;
+    text-indent: 0;
     resize: vertical;
   }
 
-  .article__btn {
+  .edit-form__btn {
     display: flex;
     align-items: center;
     height: 30px;
@@ -68,55 +120,81 @@
     margin: 0 1rem;
     text-decoration: none;
   }
-
-  .article__pages {
-    min-height: 50rem;
-    margin: 1rem 0 0;
-    background: #eeeeee;
-  }
 </style>
 
-<div class="article">
-  <div class="article__field article__field_100">
-    <div>Наименование</div>
-    <input class="global__input article__input" value={doc.title}>
-  </div>
+<div class="edit-form">
+  <div class="edit-form__values">
+    <div class="edit-form__field edit-form__field_100">
+      <div class="edit-form__label">Наименование</div>
+      <input
+        class="global__input edit-form__input"
+        name="title"
+        value={data.title}
+        on:input={onInput}
+      />
+    </div>
 
-  <div class="article__field article__field_10">
-    <div>Цена, ₽</div>
-    <input class="global__input article__input" value={doc.price}>
-  </div>
+    <div class="edit-form__field edit-form__field_10">
+      <div class="edit-form__label">Цена, ₽</div>
+      <input
+        class="global__input edit-form__input"
+        name="price"
+        value={data.price}
+        on:input={onInput}
+      />
+    </div>
 
-  <div class="article__field article__field_10">
-    <div>Создан, год</div>
-    <input class="global__input article__input" value={doc.madeYear}>
-  </div>
+    <div class="edit-form__field edit-form__field_10">
+      <div class="edit-form__label">Создан, год</div>
+      <input
+        class="global__input edit-form__input"
+        name="madeYear"
+        value={data.madeYear}
+        on:input={onInput}
+      />
+    </div>
 
-  <div class="article__field article__field_10">
-    <div>Тип деятельности</div>
-    <input class="global__input article__input" value={doc.activityType}>
-  </div>
+    <div class="edit-form__field edit-form__field_20">
+      <div class="edit-form__label">Тип деятельности</div>
+      <input
+        class="global__input edit-form__input"
+        name="activityType"
+        value={data.activityType}
+        on:input={onInput}
+      />
+    </div>
 
-  <div class="article__field article__field_20">
-    <div>Скрыть страницы</div>
-    <input class="global__input article__input" value={doc.hidePages}>
-  </div>
+    <div class="edit-form__field edit-form__field_20">
+      <div class="edit-form__label">Скрыть страницы</div>
+      <input
+        class="global__input edit-form__input"
+        name="hidePages"
+        value={data.hidePages}
+        on:input={onInput}
+      />
+    </div>
 
-  <div class="article__field article__field_20">
-    <div>Комментарий</div>
-    <input class="global__input article__input" value={doc.note}>
-  </div>
+    <div class="edit-form__field edit-form__field_20">
+      <div class="edit-form__label">Комментарий</div>
+      <input
+        class="global__input edit-form__input"
+        name="note"
+        value={data.note}
+        on:input={onInput}
+      />
+    </div>
 
-  <div class="article__field article__field_100">
-    <div>Описание</div>
-    <textarea class="article__textarea global__input">{doc.descriotion}</textarea>
+    <div class="edit-form__field edit-form__field_100">
+      <div class="edit-form__label">Описание</div>
+      <textarea class="edit-form__textarea global__input">{data.descriotion}</textarea>
+    </div>
   </div>
-</div>
-<div class="article__control">
-  <div class="global__btn global__btn_blue article__btn">
-    Сохранить
-  </div>
-  <div class="global__btn article__btn">
-    <img src="icons/trash.svg" alt="edit" width="16" height="16" />
+  <div class="edit-form__control">
+    <div class="global__btn global__btn_blue edit-form__btn" on:click={onClickSave}>
+      Сохранить
+    </div>
+    <div class="global__btn edit-form__btn" on:click={onClickTrash}>
+      <img src="icons/trash.svg" alt="edit" width="16" height="16" />
+    </div>
   </div>
 </div>

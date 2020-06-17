@@ -3,15 +3,15 @@
   import ArticleCard from '../../components/ArticleCard.svelte';
   import Pagination from '../../components/Pagination.svelte';
 
-  export let articles = [];
-  export let title = 'Каталог';
+  export let docs = [];
 
-  let page = 0;
+  let title = 'Каталог';
+  let sheet = 0;
   let limit = 10;
 
   sapper.stores().page.subscribe(({query}) => {
-    if (query.page) {
-      page = +query.page;
+    if (query.sheet) {
+      sheet = +query.sheet;
     }
 
     if (query.limit) {
@@ -21,11 +21,11 @@
 </script>
 
 <script context="module">
-  export async function preload(page) {
+  export async function preload({query}) {
     const url = new URL('/api/v1/articles', process.env.API_URL);
 
-    for (let i of Object.keys(page.query)) {
-      url.searchParams.set(i, page.query[i]);
+    for (let i of Object.keys(query)) {
+      url.searchParams.set(i, query[i]);
     }
 
     const res = await this.fetch(url);
@@ -33,7 +33,7 @@
 
     if (res.ok) {
       return {
-        articles: json.values
+        docs: json.values
       };
 		}
 
@@ -49,8 +49,8 @@
   <h1>{title}</h1>
 
   <div>
-    {#each articles as item, index (item.id)}
-      <ArticleCard {...item} href="/articles/{item.id}" index={page * limit + index + 1} />
+    {#each docs as value, index (value.id)}
+      <ArticleCard {value} href="/articles/{value.id}" index={sheet * limit + index + 1} />
     {/each}
 
     <Pagination />

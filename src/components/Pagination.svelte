@@ -7,8 +7,8 @@
   let active = 0;
 
   sapper.stores().page.subscribe(({query, path}) => {
-    if (query.page) {
-      active = +query.page;
+    if (query.sheet) {
+      active = +query.sheet;
     }
 
     const searchParams = new URLSearchParams();
@@ -18,7 +18,7 @@
     }
 
     tabs = [].map.call('%'.repeat(length), (i, index) => {
-      searchParams.set('page', index);
+      searchParams.set('sheet', index);
 
       return {
         href: path + '?' + searchParams

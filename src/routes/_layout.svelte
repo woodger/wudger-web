@@ -1,46 +1,6 @@
 <script>
-	import { onMount } from 'svelte';
-	import { get, post } from '@fetch';
-	import store from '@store';
 	import Nav from '../components/Nav.svelte';
-
-	onMount(async () => {
-		store['oauth2.user.credentials'].subscribe(async (value) => {
-			if (!value) {
-				value = JSON.parse(
-					localStorage.getItem('credentials')
-				);
-			}
-
-			if (!value) {
-				value = await post('/api/v1/users/registration', {
-					data: {
-						login: 'guest'
-					}
-				});
-			}
-
-			localStorage.setItem('credentials', JSON.stringify(value));
-
-			const info = await get('/api/v1/users/info', {
-				headers: {
-					'X-Access-Token': value.accessToken
-				}
-			});
-
-			if (info) {
-				return store['oauth2.user.info'].set(info);
-			}
-
-			value = await get('/api/v1/users/refresh', {
-				data: {
-					token: value.refreshToken
-				}
-			});
-
-			store['oauth2.user.credentials'].set(value);
-		});
-	});
+	import Notification from '../components/Notification.svelte';
 </script>
 
 <style>
@@ -57,9 +17,8 @@
 	}
 
   :global(h1) {
-    margin: 2rem 1rem;
-		padding: .5rem 0;
-		/* font-family: "Times New Roman", Georgia, serif; */
+		margin: 1rem 0;
+    padding: 2rem 1rem;
     font-weight: normal;
     font-size: 1.5rem;
   }
@@ -111,6 +70,10 @@
     max-width: 1200px;
 		margin: 0 auto;
   }
+
+	/* main {
+		padding-top: 50px;
+	} */
 </style>
 
 <Nav />
@@ -118,3 +81,5 @@
 <main>
 	<slot></slot>
 </main>
+
+<Notification />

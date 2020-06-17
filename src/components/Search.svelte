@@ -14,7 +14,7 @@
 
   .search__btn {
     height: 30px;
-    padding: 1px 1rem;
+    padding: 0 1rem;
     border-radius: 0 3px 3px 0;
     border-left: none;
   }
