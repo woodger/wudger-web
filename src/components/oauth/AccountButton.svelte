@@ -13,7 +13,7 @@
       const res = await request('/api/v1/users/info');
       const info = await res.json();
 
-      store['oauth2.user.info'].set(info);
+      store['oauth.user.info'].set(info);
     }
   };
 
@@ -25,19 +25,19 @@
 </script>
 
 <style>
-  .oauth2 {
+  .oauth {
     position: relative;
     margin: 1rem;
   }
 
-  .oauth2__btn {
+  .oauth__btn {
     height: 30px;
     padding: 0 1rem;
   }
 </style>
 
-<div class="oauth2">
-  <div class="oauth2__btn global__btn" on:click={onClickAccount}>
+<div class="oauth">
+  <div class="oauth__btn global__btn" on:click={onClickAccount}>
     <img src="icons/user.svg" alt="account" width="16" height="16" />
   </div>
   <AccountMenu {props} />

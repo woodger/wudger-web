@@ -7,12 +7,12 @@
   const form = {};
   let visible = false;
 
-  store['oauth2.authorization.required'].subscribe((value) => {
+  store['oauth.required'].subscribe((value) => {
     visible = value;
   });
 
   async function onClickNext() {
-    const res = await request('/api/v1/users/authorization', {
+    const res = await request('/api/v1/oauth', {
       method: 'POST',
       data: form
     });
@@ -32,7 +32,7 @@
   }
 
   function onClickClose() {
-    store['oauth2.authorization.required'].set(false);
+    store['oauth.required'].set(false);
   }
 
   function onInput({target}) {

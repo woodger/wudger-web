@@ -29,15 +29,16 @@
     }
 
     const res = await this.fetch(url);
-    const json = await res.json();
 
     if (res.ok) {
+      const {values} = await res.json();
+
       return {
-        docs: json.values
+        docs: values
       };
 		}
 
-    this.error(res.status, json.message);
+    this.error(res.status);
   }
 </script>
 
@@ -52,7 +53,7 @@
     {#each docs as value, index (value.id)}
       <ArticleCard {value} href="/articles/{value.id}" index={sheet * limit + index + 1} />
     {/each}
-
-    <Pagination />
   </div>
+
+  <Pagination />
 </div>

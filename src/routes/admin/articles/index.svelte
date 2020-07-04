@@ -32,8 +32,8 @@
   }
 
   $: if (mount) {
-    store['oauth2.user.admin'].subscribe((value) => {
-      store['oauth2.authorization.required'].set(
+    store['oauth.user.admin'].subscribe((value) => {
+      store['oauth.required'].set(
         !(isVisibleArticleList = value)
       );
     });

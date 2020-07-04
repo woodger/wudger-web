@@ -7,7 +7,7 @@
   let isAdmin = false;
 
   function onClickEnter() {
-    store['oauth2.authorization.required'].set(true);
+    store['oauth.required'].set(true);
     props.isVisibleMenu = false;
   }
 
@@ -16,14 +16,14 @@
 
     const res = await request('/api/v1/users/info');
     const info = await res.json();
-    store['oauth2.user.info'].set(info);
+    store['oauth.user.info'].set(info);
 
     props.isVisibleMenu = false;
   }
 
-  store['oauth2.user.info'].subscribe((value) => {
+  store['oauth.user.info'].subscribe((value) => {
     isAdmin = value && value.groups.includes('admin');
-    store['oauth2.user.admin'].set(isAdmin);
+    store['oauth.user.admin'].set(isAdmin);
   });
 </script>
 

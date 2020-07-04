@@ -1,11 +1,11 @@
 <script>
   import store from '@store';
-  import AccountButton from './oauth2/AccountButton.svelte';
+  import AccountButton from './oauth/AccountButton.svelte';
   import Search from './Search.svelte';
 
   let admin = false;
 
-  store['oauth2.user.admin'].subscribe((value) => {
+  store['oauth.user.admin'].subscribe((value) => {
     admin = value;
   });
 </script>

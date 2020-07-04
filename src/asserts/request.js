@@ -1,12 +1,12 @@
-function saveCredentials(pairs) {
+const saveCredentials = (pairs) => {
   localStorage.setItem('accessToken', pairs.accessToken);
   localStorage.setItem('refreshToken', pairs.refreshToken);
-}
+};
 
-function clearCredentials() {
+const clearCredentials = () => {
   localStorage.removeItem('accessToken');
   localStorage.removeItem('refreshToken');
-}
+};
 
 export default async function request(...args) {
   let [path, {method = 'GET', query = {}, headers = {}, data} = {}, auth = true] = args;
@@ -20,11 +20,8 @@ export default async function request(...args) {
     let accessToken = localStorage.getItem('accessToken');
 
     if (!accessToken) {
-      const res = await request('/api/v1/users/registration', {
-        method: 'POST',
-        data: {
-          login: 'guest'
-        }
+      const res = await request('/api/v1/users', {
+        method: 'POST'
       },
       false);
 
@@ -57,13 +54,10 @@ export default async function request(...args) {
   });
 
   if (res.status === 401 && res.statusText === 'JWT Expired') {
-    const refreshToken = localStorage.getItem('refreshToken');
+    const opie = localStorage.getItem('refreshToken');
 
-    const res = await request('/api/v1/users/refresh', {
-      method: 'POST',
-      data: {
-        token: refreshToken
-      }
+    const res = await request(`/api/v1/oauth/${opie}`, {
+      method: 'POST'
     },
     false);
 
