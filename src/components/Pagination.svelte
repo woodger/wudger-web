@@ -28,12 +28,12 @@
 </script>
 
 <style>
-  .pagination {
+  .container {
     display: flex;
     padding: 1rem .5rem;
   }
 
-  .pagination__btn {
+  .btn {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -44,9 +44,9 @@
   }
 </style>
 
-<nav class="pagination">
+<nav class="container">
   {#each tabs as {href}, index (href)}
-    <a class="pagination__btn global__btn" class:global__btn_blue={index === active} {href}>
+    <a class="btn global__btn" class:global__btn_blue={index === active} {href}>
       {index + 1}
     </a>
   {/each}

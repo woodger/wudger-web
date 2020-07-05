@@ -6,8 +6,10 @@
 
   let isAdmin = false;
 
+  $: store['oauth.user.admin'].set(isAdmin);
+
   function onClickEnter() {
-    store['oauth.required'].set(true);
+    store['oauth.form.visible'].set(true);
     props.isVisibleMenu = false;
   }
 
@@ -22,13 +24,12 @@
   }
 
   store['oauth.user.info'].subscribe((value) => {
-    isAdmin = value && value.groups.includes('admin');
-    store['oauth.user.admin'].set(isAdmin);
+    isAdmin = value !== null && value.groups.includes('admin');
   });
 </script>
 
 <style>
-  .modal-menu {
+  .container {
     position: absolute;
     top: 35px;
     right: 0;
@@ -37,16 +38,16 @@
     background: #ffffff;
   }
 
-  .modal-menu__account {
+  .account {
     min-height: 7rem;
   }
 
-  .modal-menu__username {
+  .username {
     margin: 1rem;
     font-weight: bold;
   }
 
-  .modal-menu__btn {
+  .btn {
     height: 30px;
     margin: 1rem;
     padding: 0 1rem;
@@ -54,24 +55,24 @@
 </style>
 
 {#if props.isVisibleMenu}
-  <div class="modal-menu">
-    <div class="modal-menu__account">
-      <div class="modal-menu__username">
+  <div class="container">
+    <div class="account">
+      <div class="username">
         {isAdmin ? 'Админ' : 'Гость'}
       </div>
     </div>
 
     <div>
-      <button class="modal-menu__btn global__btn">
+      <button class="btn global__btn">
         Мои покупки
       </button>
 
       {#if isAdmin}
-        <button class="modal-menu__btn global__btn" on:click={onClickExit}>
+        <button class="btn global__btn" on:click={onClickExit}>
           <img src="icons/exit.svg" alt="exit" width="16" height="16" />
         </button>
       {:else}
-        <button class="modal-menu__btn global__btn" on:click={onClickEnter}>
+        <button class="btn global__btn" on:click={onClickEnter}>
           <img src="icons/enter.svg" alt="enter" width="16" height="16" />
         </button>
       {/if}

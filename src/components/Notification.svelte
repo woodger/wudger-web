@@ -25,13 +25,13 @@
 </script>
 
 <style>
-  .notification {
+  .container {
     position: fixed;
     bottom: 0;
     right: 0;
   }
 
-  .notification__message {
+  .message {
     width: 300px;
     min-height: 30px;
     margin: 1.5rem 1rem;
@@ -41,8 +41,8 @@
 </style>
 
 {#if message}
-  <div class="notification">
-    <div class="notification__message global__btn" transition:fade on:click={onClickClose}>
+  <div class="container">
+    <div class="message global__btn" transition:fade on:click={onClickClose}>
       {message}
     </div>
   </div>

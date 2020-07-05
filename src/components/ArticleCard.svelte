@@ -23,73 +23,73 @@
 </script>
 
 <style>
-  .article-card {
+  .container {
     padding: 1rem 0;
   }
 
-  .article-card__row {
+  .row {
     display: flex;
   }
 
-  .article-card__number {
+  .number {
     margin: 1rem;
   }
 
-  .article-card__title {
+  .title {
     margin: 1rem;
     font-size: 1.2rem;
   }
 
-  .article-card__descriotion {
+  .descriotion {
     margin: 1rem;
   }
 
-  .article-card__options {
+  .option-group {
     display: flex;
     font-style: italic;
     color: #333000;
   }
 
-  .article-card__option {
+  .option {
     margin: 0 1rem;
   }
 
-  .article-card__option_green {
+  .option_green {
     color: #269926;
   }
 
-  .article-card__option_red {
+  .option_red {
     color: #bf3030;
   }
 
-  .article-card__col_right {
+  .col_right {
     margin-left: auto;
   }
 </style>
 
-<div class="article-card">
-  <div class="article-card__row">
+<div class="container">
+  <div class="row">
     <div>
-      <div class="article-card__number">
+      <div class="number">
         {index}.
       </div>
     </div>
     <div>
-      <div class="article-card__title">
+      <div class="title">
         <a {href}>{value.title}</a>
       </div>
 
       {#if value.descriotion}
-        <div class="article-card__descriotion">{crop(value.descriotion)}</div>
+        <div class="descriotion">{crop(value.descriotion)}</div>
       {/if}
 
-      <div class="article-card__options">
+      <div class="option-group">
 
         {#if value.madeYear}
-          <div class="article-card__option">{value.madeYear} год</div>
+          <div class="option">{value.madeYear} год</div>
         {/if}
 
-        <div class="article-card__option">
+        <div class="option">
           {#if value.price === 0}
             Бесплатно
           {:else}
@@ -98,18 +98,18 @@
         </div>
 
         {#if value.activityType}
-          <div class="article-card__option article-card__option_green">
+          <div class="option option_green">
             {value.activityType}
           </div>
         {/if}
 
         {#if value.note}
-          <div class="article-card__option article-card__option_red">{value.note}</div>
+          <div class="option option_red">{value.note}</div>
         {/if}
       </div>
     </div>
 
-    <div class="article-card__col_right">
+    <div class="col_right">
       <slot />
     </div>
   </div>

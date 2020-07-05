@@ -7,7 +7,7 @@
   const form = {};
   let visible = false;
 
-  store['oauth.required'].subscribe((value) => {
+  store['oauth.form.visible'].subscribe((value) => {
     visible = value;
   });
 
@@ -32,7 +32,7 @@
   }
 
   function onClickClose() {
-    store['oauth.required'].set(false);
+    store['oauth.form.visible'].set(false);
   }
 
   function onInput({target}) {
@@ -41,7 +41,7 @@
 </script>
 
 <style>
-  .login {
+  .container {
     position: fixed;
     top: calc(50% - 200px);
     left: calc(50% - 150px);
@@ -50,40 +50,40 @@
     background: #ffffff;
   }
 
-  .login__title {
+  .title {
     margin: 2rem 1rem;
     font-size: 1.5rem;
   }
 
-  .login__inner {
+  .inner {
     padding: 1rem;
   }
 
-  .login__input {
+  .input {
     width: 100%;
     height: 2rem;
   }
 
-  .login__row {
+  .row {
     min-width: 250px
   }
 
-  .login__row-inner {
+  .row-inner {
     padding: .5rem 1rem;
   }
 
-  .login__control {
+  .control {
     display: flex;
     margin-top: 1rem;
   }
 
-  .login__label {
+  .label {
     line-height: 2rem;
     font-size: .9rem;
     color: #666666;
   }
 
-  .login__btn {
+  .btn {
     height: 30px;
     padding: 0 1rem;
     margin: 1rem;
@@ -91,31 +91,31 @@
 </style>
 
 {#if visible}
-  <div class="login">
-    <div class="login__inner">
-      <div class="login__title">Вход</div>
+  <div class="container">
+    <div class="inner">
+      <div class="title">Вход</div>
 
-      <div class="login__row">
-        <div class="login__row-inner">
-          <div class="login__label">Логин</div>
-          <input class="login__input global__input" type="text" name="login" on:input={onInput}>
+      <div class="row">
+        <div class="row-inner">
+          <div class="label">Логин</div>
+          <input class="input global__input" type="text" name="login" on:input={onInput}>
         </div>
       </div>
 
-      <div class="login__row">
-        <div class="login__row-inner">
-          <div class="login__label">Пароль</div>
-          <input class="login__input global__input" type="password" name="password" on:input={onInput}>
+      <div class="row">
+        <div class="row-inner">
+          <div class="label">Пароль</div>
+          <input class="input global__input" type="password" name="password" on:input={onInput}>
         </div>
       </div>
 
-      <div class="login__row">
-        <div class="login__control">
-          <button class="login__btn global__btn global__btn_blue" on:click={onClickNext}>
+      <div class="row">
+        <div class="control">
+          <button class="btn global__btn global__btn_blue" on:click={onClickNext}>
             Далее
           </button>
 
-          <button class="login__btn global__btn" on:click={onClickClose}>
+          <button class="btn global__btn" on:click={onClickClose}>
             Закрыть
           </button>
         </div>

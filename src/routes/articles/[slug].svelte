@@ -46,42 +46,42 @@
 </script>
 
 <style>
-  .article__inner {
+  .props {
     display: flex;
   }
 
-  .article__control {
+  .control {
     display: flex;
     align-items: center;
     margin: 1rem 0;
   }
 
-  .article__coll_50 {
+  .coll_50 {
     width: 60%;
   }
 
-  .article__feature {
+  .feature {
     display: flex;
     margin: .5rem;
     background: url(data:image/gif;base64,R0lGODlhAwABAIABANra2v///yH5BAEKAAEALAAAAAADAAEAAAICRFIAOw==) 0 .9rem repeat-x;
   }
 
-  .article__feature > :first-child {
+  .feature > :first-child {
     width: 30%;
   }
 
-  .article__feature > :first-child span {
+  .feature > :first-child span {
     padding: 0 .5rem;
     background: #ffffff;
   }
 
-  .article__feature > :last-child {
+  .feature > :last-child {
     width: 70%;
     padding: 0 .5rem;
     background: #ffffff;
   }
 
-  .article__btn {
+  .btn {
     display: flex;
   	align-items: center;
   	height: 30px;
@@ -90,11 +90,11 @@
     text-decoration: none;
   }
 
-  .article__btn_right {
+  .btn_right {
     margin-left: auto;
   }
 
-  .article__pages {
+  .pages {
     min-height: 50rem;
     margin: 1rem 0 0;
     background: #eeeeee;
@@ -108,39 +108,35 @@
 <div class="global__container">
   <h1>{doc.title}</h1>
 
-  <div class="article__control">
-    <div class="global__btn global__btn_blue article__btn article__btn_right">
+  <div class="control">
+    <div class="global__btn global__btn_blue btn btn_right">
       Купить
     </div>
   </div>
 
-  <div class="article">
-    <div class="article__inner">
-      <div class="article__coll_50">
-        <div>
-          {#each characteristics as {name, value, unit}}
-            {#if value}
-              <div class="article__feature">
-                <div>
-                  <span>{name}</span>
-                </div>
-                <div>
-                  <span>{value}</span>
+  <div class="props">
+    <div class="coll_50">
+    {#each characteristics as {name, value, unit}}
+      {#if value}
+        <div class="feature">
+          <div>
+            <span>{name}</span>
+          </div>
+          <div>
+            <span>{value}</span>
 
-                  {#if unit}
-                    <span> {unit}</span>
-                  {/if}
-                </div>
-              </div>
+            {#if unit}
+              <span> {unit}</span>
             {/if}
-          {/each}
+          </div>
         </div>
-      </div>
+      {/if}
+    {/each}
     </div>
   </div>
 </div>
 
-<div class="article__pages">
+<div class="pages">
   {#each doc.pages as page}
     {@html page}
   {/each}

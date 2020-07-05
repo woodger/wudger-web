@@ -3,15 +3,15 @@
   import AccountButton from './oauth/AccountButton.svelte';
   import Search from './Search.svelte';
 
-  let admin = false;
+  let isAdmin = false;
 
   store['oauth.user.admin'].subscribe((value) => {
-    admin = value;
+    isAdmin = value;
   });
 </script>
 
 <style>
-  .nav {
+  .container {
     box-shadow: 0 1px 3px #aaaaaa;
     /* position: fixed;
     top: 0;
@@ -21,17 +21,17 @@
     background: #ffffff;
   }
 
-  .nav__inner {
+  .inner {
     display: flex;
     align-items: center;
     height: 50px;
   }
 
-  .nav__inner > :last-child {
+  .inner > :last-child {
     margin-left: auto;
   }
 
-  .nav__btn {
+  .btn {
     display: flex;
   	align-items: center;
   	height: 30px;
@@ -41,25 +41,31 @@
     cursor: pointer;
   }
 
-  .nav__btn_logo {
+  .btn_logo {
     padding: 0;
   }
 </style>
 
-<nav>
-  <div class="nav">
-    <div class="global__container">
-      <div class="nav__inner">
-        <a class="nav__btn nav__btn_logo" href="/">
-          <img src="images/logo.svg" alt="wudger.ru" width="128" height="32" />
+<nav class="container">
+  <div class="global__container">
+    <div class="inner">
+      <a class="btn btn_logo" href="/">
+        <img src="images/logo.svg" alt="wudger.ru" width="128" height="32" />
+      </a>
+      <a class="btn global__btn global__btn_blue" href="/articles">
+        Каталог
+      </a>
+
+      <Search />
+
+      {#if isAdmin}
+        <a class="btn global__btn" href="/admin/articles">
+          Управление каталогом
         </a>
-        <a class="nav__btn global__btn global__btn_blue" href="{admin ? '/admin' : ''}/articles">
-          Каталог
-        </a>
-        <Search />
-        <div>
-          <AccountButton />
-        </div>
+      {/if}
+
+      <div>
+        <AccountButton />
       </div>
     </div>
   </div>

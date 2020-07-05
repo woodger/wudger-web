@@ -8,8 +8,8 @@
   import Pagination from '../../../components/Pagination.svelte';
 
   let mount = false;
-  let isVisibleArticleList = false;
-  let isVisibleArticleForm = false;
+  let listVisible = false;
+  let formVisible = false;
   let title = 'Управление каталогом';
   let sheet = 0;
   let limit = 10;
@@ -17,7 +17,7 @@
   let edit;
   let data = [];
 
-  $: if (query && isVisibleArticleList) {
+  $: if (query && listVisible) {
     if (query.sheet) {
       sheet = +query.sheet;
     }
@@ -33,8 +33,8 @@
 
   $: if (mount) {
     store['oauth.user.admin'].subscribe((value) => {
-      store['oauth.required'].set(
-        !(isVisibleArticleList = value)
+      store['oauth.form.visible'].set(
+        !(listVisible = value)
       );
     });
   }
@@ -52,7 +52,7 @@
 
   async function update() {
     data = await getArticleList();
-    isVisibleArticleForm = false;
+    formVisible = false;
   }
 
   function onClickAdd() {
@@ -62,7 +62,7 @@
   function onClickEdit(slug) {
     return () => {
       edit = slug;
-      isVisibleArticleForm = !isVisibleArticleForm;
+      formVisible = !formVisible;
     };
   }
 
@@ -72,11 +72,11 @@
 </script>
 
 <style>
-  .admin__control {
+  .control {
     display: flex;
   }
 
-  .admin__btn {
+  .btn {
     height: 30px;
     padding: 0 1rem;
     margin: 1rem;
@@ -87,25 +87,25 @@
 	<title>{title}</title>
 </svelte:head>
 
-{#if isVisibleArticleList}
+{#if listVisible}
   <div class="global__container">
     <h1>{title}</h1>
 
-    <div class="admin__control">
-      <div class="admin__btn global__btn" on:click={onClickAdd}>
+    <div class="control">
+      <div class="btn global__btn" on:click={onClickAdd}>
         Добавить
       </div>
     </div>
 
     {#each data as value, index (value.id)}
       <ArticleCard value={value} href="/articles/{value.id}" index={sheet * limit + index + 1}>
-        <div class="admin__btn global__btn" on:click={onClickEdit(value.id)}>
+        <div class="btn global__btn" on:click={onClickEdit(value.id)}>
           <img src="icons/edit.svg" alt="edit" width="16" height="16" />
         </div>
       </ArticleCard>
 
-      {#if isVisibleArticleForm && value.id === edit}
-        <div class="admin__form">
+      {#if formVisible && value.id === edit}
+        <div>
           <ArticleForm {update} slug={value.id} />
         </div>
       {/if}

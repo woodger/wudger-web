@@ -25,19 +25,19 @@
 </script>
 
 <style>
-  .oauth {
+  .container {
     position: relative;
     margin: 1rem;
   }
 
-  .oauth__btn {
+  .btn {
     height: 30px;
     padding: 0 1rem;
   }
 </style>
 
-<div class="oauth">
-  <div class="oauth__btn global__btn" on:click={onClickAccount}>
+<div class="container">
+  <div class="btn global__btn" on:click={onClickAccount}>
     <img src="icons/user.svg" alt="account" width="16" height="16" />
   </div>
   <AccountMenu {props} />
