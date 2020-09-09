@@ -1,28 +1,60 @@
 <script>
   import { onMount } from 'svelte';
   import request from '@request';
+  import store from '@store';
 
   export let slug;
-  export let update;
+  export let complite;
 
-  let data = { pages: [] };
-  let edit = { pages: [] };
+  const now = new Date();
+  let original = {
+    title: null,
+    price: 0,
+    madeYear: now.getFullYear(),
+    descriotion: null,
+    hidePages: null,
+    pages: [],
+    note: null,
+    activityType: null
+  };
+
+  let editable = { pages: [] };
 
   onMount(async () => {
-    const res = await request(`/api/v1/articles/${slug}`);
-    data = await res.json();
+    if (slug) {
+      const res = await request(`/api/v1/articles/${slug}`);
+      original = await res.json();
+    }
   });
 
   async function onClickSave() {
+    const res = await request(`/api/v1/articles`, {
+      method: 'POST',
+      data: editable
+    });
+
+    const {ok, n} = await res.json();
+
+    if (ok === 1 && n === 1) {
+      await complite();
+    }
+    else {
+      store['notification.error'].set({
+        message: 'Упс... все сломалось!'
+      });
+    }
+  }
+
+  async function onClickUpdate() {
     const res = await request(`/api/v1/articles/${slug}`, {
       method: 'PUT',
-      data: edit
+      data: editable
     });
 
     const {ok} = await res.json();
 
     if (ok === 1) {
-      await update();
+      await complite();
     }
     else {
       store['notification.error'].set({
@@ -43,7 +75,7 @@
     const {ok, n} = await res.json();
 
     if (ok === 1 && n === 1) {
-      await update();
+      await complite();
     }
     else {
       store['notification.error'].set({
@@ -52,8 +84,17 @@
     }
   }
 
-  function onInput({target}) {
-    edit[target.name] = target.value;
+  function onInputText({target}) {
+    editable[target.name] = target.value;
+  }
+
+  async function onInputFile({target}) {
+    const res = await request(`/api/v1/files`, {
+      method: 'POST',
+      data: {
+        files: target.files
+      }
+    });
   }
 </script>
 
@@ -95,7 +136,7 @@
   }
 
   .label {
-    margin: .5rem 0;
+    margin: 0 0 .5rem;
     color: #999999;
   }
 
@@ -105,7 +146,7 @@
   }
 
   .textarea {
-    min-height: 6rem;
+    min-height: 5rem;
     width: 100%;
     padding: .5rem;
     text-indent: 0;
@@ -120,6 +161,10 @@
     margin: 0 1rem;
     text-decoration: none;
   }
+
+  [type="file"] {
+    display: none;
+  }
 </style>
 
 <div class="container">
@@ -129,8 +174,8 @@
       <input
         class="global__input input"
         name="title"
-        value={data.title}
-        on:input={onInput}
+        value={original.title}
+        on:input={onInputText}
       />
     </div>
 
@@ -139,8 +184,8 @@
       <input
         class="global__input input"
         name="price"
-        value={data.price}
-        on:input={onInput}
+        value={original.price}
+        on:input={onInputText}
       />
     </div>
 
@@ -149,8 +194,8 @@
       <input
         class="global__input input"
         name="madeYear"
-        value={data.madeYear}
-        on:input={onInput}
+        value={original.madeYear}
+        on:input={onInputText}
       />
     </div>
 
@@ -159,8 +204,8 @@
       <input
         class="global__input input"
         name="activityType"
-        value={data.activityType}
-        on:input={onInput}
+        value={original.activityType}
+        on:input={onInputText}
       />
     </div>
 
@@ -169,8 +214,8 @@
       <input
         class="global__input input"
         name="hidePages"
-        value={data.hidePages}
-        on:input={onInput}
+        value={original.hidePages}
+        on:input={onInputText}
       />
     </div>
 
@@ -179,22 +224,36 @@
       <input
         class="global__input input"
         name="note"
-        value={data.note}
-        on:input={onInput}
+        value={original.note}
+        on:input={onInputText}
       />
     </div>
 
     <div class="field field_100">
       <div class="label">Описание</div>
-      <textarea class="textarea global__input">{data.descriotion}</textarea>
+      <textarea class="textarea global__input">{original.descriotion}</textarea>
     </div>
   </div>
   <div class="control">
-    <div class="global__btn global__btn_blue btn" on:click={onClickSave}>
-      Сохранить
-    </div>
-    <div class="global__btn btn" on:click={onClickTrash}>
-      <img src="icons/trash.svg" alt="edit" width="16" height="16" />
-    </div>
+    {#if slug}
+      <div class="global__btn global__btn_blue btn" on:click={onClickUpdate}>
+        Обновить
+      </div>
+    {:else}
+      <div class="global__btn global__btn_blue btn" on:click={onClickSave}>
+        Сохранить
+      </div>
+    {/if}
+
+    {#if slug}
+      <div class="global__btn btn" on:click={onClickTrash}>
+        <img src="icons/trash.svg" alt="edit" width="16" height="16" />
+      </div>
+    {/if}
+
+    <label class="global__btn btn">
+      <img src="icons/upload.svg" alt="upload" width="16" height="16" />
+      <input type="file" on:input={onInputFile} multiple />
+    </label>
   </div>
 </div>

@@ -3,10 +3,10 @@
   import AccountButton from './oauth/AccountButton.svelte';
   import Search from './Search.svelte';
 
-  let isAdmin = false;
+  let admin;
 
   store['oauth.user.admin'].subscribe((value) => {
-    isAdmin = value;
+    admin = value;
   });
 </script>
 
@@ -58,9 +58,9 @@
 
       <Search />
 
-      {#if isAdmin}
+      {#if admin}
         <a class="btn global__btn" href="/admin/articles">
-          Управление каталогом
+          <img src="icons/stack.svg" alt="stack" width="16" height="16" />
         </a>
       {/if}
 

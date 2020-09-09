@@ -43,7 +43,14 @@ export default async function request(...args) {
     body = new FormData();
 
     for (let [key, value] of Object.entries(data)) {
-      body.append(key, value);
+      if (value instanceof FileList) {
+        for (let file of value) {
+          body.append(key, file);
+        }
+      }
+      else {
+        body.append(key, value);
+      }
     }
   }
 

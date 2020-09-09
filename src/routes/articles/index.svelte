@@ -49,11 +49,9 @@
 <div class="global__container">
   <h1>{title}</h1>
 
-  <div>
-    {#each docs as value, index (value.id)}
-      <ArticleCard {value} href="/articles/{value.id}" index={sheet * limit + index + 1} />
-    {/each}
-  </div>
+  {#each docs as value, index (value.id)}
+    <ArticleCard {value} href="/articles/{value.id}" index={sheet * limit + index + 1} />
+  {/each}
 
   <Pagination />
 </div>

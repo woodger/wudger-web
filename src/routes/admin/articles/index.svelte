@@ -13,9 +13,9 @@
   let title = 'Управление каталогом';
   let sheet = 0;
   let limit = 10;
+  let slug;
   let query;
-  let edit;
-  let data = [];
+  let docs = [];
 
   $: if (query && listVisible) {
     if (query.sheet) {
@@ -27,17 +27,21 @@
     }
 
     getArticleList().then((value) => {
-      data = value;
+      docs = value;
     });
   }
 
-  $: if (mount) {
-    store['oauth.user.admin'].subscribe((value) => {
+  $: if (formVisible === false) {
+    slug = undefined;
+  }
+
+  store['oauth.user.admin'].subscribe((value) => {
+    if (value !== undefined) {
       store['oauth.form.visible'].set(
         !(listVisible = value)
-      );
-    });
-  }
+      )
+    }
+  });
 
   sapper.stores().page.subscribe((value) => {
     query = value.query;
@@ -50,18 +54,14 @@
     return values;
   }
 
-  async function update() {
-    data = await getArticleList();
+  async function updateList() {
+    docs = await getArticleList();
     formVisible = false;
   }
 
-  function onClickAdd() {
-
-  }
-
-  function onClickEdit(slug) {
+  function onClickCallForm(id) {
     return () => {
-      edit = slug;
+      slug = id;
       formVisible = !formVisible;
     };
   }
@@ -92,22 +92,24 @@
     <h1>{title}</h1>
 
     <div class="control">
-      <div class="btn global__btn" on:click={onClickAdd}>
+      <div class="btn global__btn" on:click={onClickCallForm()}>
         Добавить
       </div>
     </div>
 
-    {#each data as value, index (value.id)}
-      <ArticleCard value={value} href="/articles/{value.id}" index={sheet * limit + index + 1}>
-        <div class="btn global__btn" on:click={onClickEdit(value.id)}>
+    {#if formVisible && !slug}
+      <ArticleForm complite={updateList} />
+    {/if}
+
+    {#each docs as value, index (value.id)}
+      <ArticleCard {value} href="/articles/{value.id}" index={sheet * limit + index + 1}>
+        <div class="btn global__btn" on:click={onClickCallForm(value.id)}>
           <img src="icons/edit.svg" alt="edit" width="16" height="16" />
         </div>
       </ArticleCard>
 
-      {#if formVisible && value.id === edit}
-        <div>
-          <ArticleForm {update} slug={value.id} />
-        </div>
+      {#if formVisible && value.id === slug}
+        <ArticleForm {slug} complite={updateList} />
       {/if}
     {/each}
 
