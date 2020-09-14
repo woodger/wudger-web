@@ -17,8 +17,8 @@
 	}
 
   :global(h1) {
-		margin: 1rem 0;
-    padding: 2rem 1rem;
+		margin: 0;
+    padding: 2.5rem 1rem;
     font-weight: normal;
     font-size: 1.5rem;
   }
@@ -71,9 +71,9 @@
 		margin: 0 auto;
   }
 
-	/* main {
-		padding-top: 50px;
-	} */
+	main {
+		margin-top: 50px;
+	}
 </style>
 
 <Nav />

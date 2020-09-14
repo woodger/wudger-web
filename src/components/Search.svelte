@@ -22,7 +22,5 @@
 
 <div class="container">
   <input class="global__input input" placeholder="Поиск ..." />
-  <button class="global__btn btn">
-    Найти
-  </button>
+  <button class="global__btn btn">Найти</button>
 </div>

@@ -13,11 +13,10 @@
 <style>
   .container {
     box-shadow: 0 1px 3px #aaaaaa;
-    /* position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 1; */
     background: #ffffff;
   }
 
@@ -46,7 +45,7 @@
   }
 </style>
 
-<nav class="container">
+<div class="container">
   <div class="global__container">
     <div class="inner">
       <a class="btn btn_logo" href="/">
@@ -69,4 +68,4 @@
       </div>
     </div>
   </div>
-</nav>
+</div>
