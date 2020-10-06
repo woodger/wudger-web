@@ -1,6 +1,6 @@
-const saveCredentials = (pairs) => {
-  localStorage.setItem('accessToken', pairs.accessToken);
-  localStorage.setItem('refreshToken', pairs.refreshToken);
+const saveCredentials = ({accessToken, refreshToken}) => {
+  localStorage.setItem('accessToken', accessToken);
+  localStorage.setItem('refreshToken', refreshToken);
 };
 
 const clearCredentials = () => {
@@ -9,17 +9,16 @@ const clearCredentials = () => {
 };
 
 export default async function request(...args) {
-  let [path, {method = 'GET', query = {}, headers = {}, data} = {}, auth = true] = args;
-  const url = new URL(path, process.env.API_URL);
-
-  for (let i of Object.keys(query)) {
-    url.searchParams.set(i, query[i]);
-  }
+  let [
+    path,
+    {method = 'GET', query = {}, headers = {}, data} = {},
+    auth = true
+  ] = args;
 
   if (auth) {
     let accessToken = localStorage.getItem('accessToken');
 
-    if (!accessToken) {
+    if (!accessToken || accessToken === String(undefined)) {
       const res = await request('/api/v1/users', {
         method: 'POST'
       },
@@ -35,6 +34,12 @@ export default async function request(...args) {
       'X-Access-Token': accessToken,
       ...headers
     };
+  }
+
+  const url = new URL(path, process.env.API_URL);
+
+  for (let i of Object.keys(query)) {
+    url.searchParams.set(i, query[i]);
   }
 
   let body;

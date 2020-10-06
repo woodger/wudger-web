@@ -7,7 +7,7 @@
 
 <style>
   .container {
-    /* background: url(/images/abstract.svg) repeat-x; */
+    background: url(/images/wallpapers/abstract.svg) repeat-x;
     box-shadow: 0 1px 3px #aaaaaa;
   }
 

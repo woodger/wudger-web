@@ -39,9 +39,8 @@
 
 <div class="global__container">
   <div>
-    <img src="imagesT/comodo2.svg" alt="comodo" width="95" height="36" class="seal" />
-    <!--<img src="images/a++.png" alt="a++" width="90" height="36" class="seal" />-->
-    <img src="imagesT/aplus.svg" alt="a++" width="90" height="36" class="seal" />
-    <img src="imagesT/pci.svg" alt="pci" width="95" height="36" class="seal" />
+    <img src="/images/seals/comodo2.svg" alt="comodo" width="95" height="36" class="seal" />
+    <img src="/images/seals/aplus.svg" alt="a++" width="90" height="36" class="seal" />
+    <img src="/images/seals/pci.svg" alt="pci" width="95" height="36" class="seal" />
   </div>
 </div>
