@@ -1,4 +1,7 @@
 <script>
+  import Navigation from '../../components/navigation/Navigation.svelte';
+  import Button from '../../components/Button.svelte';
+
   export let doc;
 
   let characteristics;
@@ -27,7 +30,7 @@
 
 <script context="module">
   export async function preload({params, query}) {
-    const url = new URL(`/api/v1/articles/${params.slug}`, process.env.API_URL);
+    const url = new URL(`/api/v1/articles/${params.id}`, process.env.API_URL);
 
     for (let [key, value] of Object.entries(query)) {
       url.searchParams.set(key, value);
@@ -53,7 +56,10 @@
   .control {
     display: flex;
     align-items: center;
-    margin: 1rem 0;
+  }
+
+  .buy {
+    margin-left: auto;
   }
 
   .coll_50 {
@@ -81,19 +87,6 @@
     background: #ffffff;
   }
 
-  .btn {
-    display: flex;
-  	align-items: center;
-  	height: 30px;
-    padding: 0 1rem;
-    margin: 0 1rem;
-    text-decoration: none;
-  }
-
-  .btn_right {
-    margin-left: auto;
-  }
-
   .pages {
     min-height: 50rem;
     margin: 1rem 0 0;
@@ -105,12 +98,14 @@
 	<title>{doc.title}</title>
 </svelte:head>
 
+<Navigation />
+
 <div class="global__container">
   <h1>{doc.title}</h1>
 
   <div class="control">
-    <div class="global__btn global__btn_blue btn btn_right">
-      Купить
+    <div class="buy">
+      <Button color="blue">Купить</Button>
     </div>
   </div>
 

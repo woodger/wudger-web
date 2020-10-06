@@ -1,17 +1,23 @@
 <script>
   import store from '@store';
   import request from '@request';
+  import Button from '../../Button.svelte';
 
   export let props;
 
   let admin;
+  let username;
 
-  function onClickEnter() {
-    store['oauth.form.visible'].set(true);
-  }
+  $: username = admin ?
+    'Админ' : 'Гость';
 
   function close() {
     props.isVisibleMenu = false;
+  }
+
+  function onClickEnter() {
+    store['oauth.form.visible'].set(true);
+    close();
   }
 
   async function onClickExit() {
@@ -22,6 +28,8 @@
 
     store['oauth.user.info'].set(info);
     props.isVisibleMenu = false;
+
+    close();
   }
 
   store['oauth.user.admin'].subscribe((value) => {
@@ -56,36 +64,28 @@
     font-weight: bold;
   }
 
-  .btn {
-    height: 30px;
-    margin: 1rem;
-    padding: 0 1rem;
-    text-decoration: none;
-    cursor: pointer;
+  .control {
+    display: flex;
   }
 </style>
 
 {#if props.isVisibleMenu}
   <div class="container">
     <div class="account">
-      <div class="username">
-        {admin ? 'Админ' : 'Гость'}
-      </div>
+      <div class="username">{username}</div>
     </div>
 
-    <div>
-      <button class="btn global__btn" on:click={close}>
-        Мои покупки
-      </button>
+    <div class="control">
+      <Button click={close}>Мои покупки</Button>
 
       {#if admin}
-        <button class="btn global__btn" on:click={onClickExit} on:click={close}>
+        <Button click={onClickExit}>
           <img src="icons/exit.svg" alt="exit" width="16" height="16" />
-        </button>
+        </Button>
       {:else}
-        <button class="btn global__btn" on:click={onClickEnter} on:click={close}>
+        <Button click={onClickEnter}>
           <img src="icons/enter.svg" alt="enter" width="16" height="16" />
-        </button>
+        </Button>
       {/if}
     </div>
   </div>

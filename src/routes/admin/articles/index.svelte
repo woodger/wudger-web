@@ -3,9 +3,11 @@
   import * as sapper from '@sapper/app';
   import store from '@store';
   import request from '@request';
+  import Navigation from '../../../components/navigation/Navigation.svelte';
   import ArticleCard from '../../../components/ArticleCard.svelte';
   import ArticleForm from '../../../components/ArticleForm.svelte';
   import Pagination from '../../../components/Pagination.svelte';
+  import Button from '../../../components/Button.svelte';
 
   let mount = false;
   let listVisible = false;
@@ -59,9 +61,9 @@
     formVisible = false;
   }
 
-  function onClickCallForm(id) {
+  function onClickForm(value) {
     return () => {
-      slug = id;
+      slug = value;
       formVisible = !formVisible;
     };
   }
@@ -76,10 +78,8 @@
     display: flex;
   }
 
-  .btn {
-    height: 30px;
-    padding: 0 1rem;
-    margin: 1rem;
+  .pagination {
+    margin: 3rem 0;
   }
 </style>
 
@@ -87,13 +87,17 @@
 	<title>{title}</title>
 </svelte:head>
 
+<Navigation />
+
 {#if listVisible}
   <div class="global__container">
     <h1>{title}</h1>
 
     <div class="control">
-      <div class="btn global__btn" on:click={onClickCallForm()}>
-        Добавить
+      <div class="btn">
+        <Button click={onClickForm()}>
+          Добавить
+        </Button>
       </div>
     </div>
 
@@ -103,9 +107,9 @@
 
     {#each docs as value, index (value.id)}
       <ArticleCard {value} href="/articles/{value.id}" index={sheet * limit + index + 1}>
-        <div class="btn global__btn" on:click={onClickCallForm(value.id)}>
+        <Button click={onClickForm(value.id)}>
           <img src="icons/edit.svg" alt="edit" width="16" height="16" />
-        </div>
+        </Button>
       </ArticleCard>
 
       {#if formVisible && value.id === slug}
@@ -113,6 +117,8 @@
       {/if}
     {/each}
 
-    <Pagination />
+    <div class="pagination">
+      <Pagination />
+    </div>
   </div>
 {/if}

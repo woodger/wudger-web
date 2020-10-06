@@ -2,54 +2,52 @@
   import { onMount } from 'svelte';
   import request from '@request';
   import store from '@store';
+  import Button from './Button.svelte';
 
-  export let slug;
-  export let complite;
+  export let slug = undefined;
+  export let complite = undefined;
 
-  const now = new Date();
-  let original = {
-    title: null,
-    price: 0,
-    madeYear: now.getFullYear(),
-    descriotion: null,
-    hidePages: null,
-    pages: [],
-    note: null,
-    activityType: null
-  };
-
-  let editable = { pages: [] };
+  let original = {};
+  let editable = {};
 
   onMount(async () => {
     if (slug) {
       const res = await request(`/api/v1/articles/${slug}`);
       original = await res.json();
     }
+    else {
+      const date = new Date();
+
+      original = {
+        title: null,
+        price: 0,
+        madeYear: date.getFullYear(),
+        descriotion: null,
+        hidePages: null,
+        pages: [],
+        note: null,
+        activityType: null
+      };
+    }
   });
 
+  const uuid = Date.now();
+
   async function onClickSave() {
-    const res = await request(`/api/v1/articles`, {
-      method: 'POST',
-      data: editable
-    });
+    let res
 
-    const {ok, n} = await res.json();
-
-    if (ok === 1 && n === 1) {
-      await complite();
+    if (slug) {
+      res = await request(`/api/v1/articles/${slug}`, {
+        method: 'PUT',
+        data: editable
+      })
     }
     else {
-      store['notification.error'].set({
-        message: 'Упс... все сломалось!'
+      res = await request(`/api/v1/articles`, {
+        method: 'POST',
+        data: editable
       });
     }
-  }
-
-  async function onClickUpdate() {
-    const res = await request(`/api/v1/articles/${slug}`, {
-      method: 'PUT',
-      data: editable
-    });
 
     const {ok} = await res.json();
 
@@ -95,12 +93,26 @@
         files: target.files
       }
     });
+
+    const {ok} = await res.json();
+
+    if (ok === 1) {
+      store['notification.message'].set({
+        message: 'Файл загружен'
+      });
+    }
+    else {
+      store['notification.error'].set({
+        message: 'Упс... все сломалось!'
+      });
+    }
   }
 </script>
 
 <style>
   .container {
-    margin: 1rem 1rem 3rem;
+    margin: 1rem;
+    border: 1px solid #aaaaaa;
     box-shadow: 0 1px 3px #aaaaaa;
     background: #ffffff;
   }
@@ -114,7 +126,6 @@
   .control {
     display: flex;
     align-items: center;
-    padding: 1rem 0;
   }
 
   .field {
@@ -151,15 +162,6 @@
     padding: .5rem;
     text-indent: 0;
     resize: vertical;
-  }
-
-  .btn {
-    display: flex;
-    align-items: center;
-    height: 30px;
-    padding: 0 1rem;
-    margin: 0 1rem;
-    text-decoration: none;
   }
 
   [type="file"] {
@@ -235,25 +237,19 @@
     </div>
   </div>
   <div class="control">
-    {#if slug}
-      <div class="global__btn global__btn_blue btn" on:click={onClickUpdate}>
-        Обновить
-      </div>
-    {:else}
-      <div class="global__btn global__btn_blue btn" on:click={onClickSave}>
-        Сохранить
-      </div>
-    {/if}
+    <Button color="blue" click={onClickSave}>Сохранить</Button>
 
     {#if slug}
-      <div class="global__btn btn" on:click={onClickTrash}>
-        <img src="icons/trash.svg" alt="edit" width="16" height="16" />
-      </div>
+    <Button click={onClickTrash}>
+      <img src="icons/trash.svg" alt="edit" width="16" height="16" />
+    </Button>
     {/if}
 
-    <label class="global__btn btn">
-      <img src="icons/upload.svg" alt="upload" width="16" height="16" />
-      <input type="file" on:input={onInputFile} multiple />
+    <label for={uuid}>
+      <Button>
+        <img src="icons/upload.svg" alt="upload" width="16" height="16" />
+        <input type="file" id={uuid} on:input={onInputFile} multiple />
+      </Button>
     </label>
   </div>
 </div>

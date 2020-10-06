@@ -1,5 +1,4 @@
 <script>
-	import Nav from '../components/Nav.svelte';
 	import Notification from '../components/Notification.svelte';
 </script>
 
@@ -21,6 +20,13 @@
     padding: 2.5rem 1rem;
     font-weight: normal;
     font-size: 1.5rem;
+  }
+
+	:global(h2) {
+		margin: 0;
+    padding: 1.5rem 1rem;
+    font-weight: normal;
+    font-size: 1.3rem;
   }
 
   :global(
@@ -46,12 +52,6 @@
     opacity: .9;
   }
 
-  :global(.global__btn_blue) {
-    border: 1px solid #2d77af;
-    background: linear-gradient(to bottom, #5192c3 7%, #4087bb 97%, #2d77af 100%);
-    color: #ffffff;
-  }
-
   :global(.global__input) {
     padding: 0;
     box-shadow: inset 0 1px 1px #dddddd;
@@ -70,13 +70,7 @@
     max-width: 1200px;
 		margin: 0 auto;
   }
-
-	main {
-		margin-top: 50px;
-	}
 </style>
-
-<Nav />
 
 <main>
 	<slot></slot>

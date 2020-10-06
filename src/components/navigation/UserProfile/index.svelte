@@ -5,6 +5,7 @@
   import store from '@store';
   import AccountMenu from './AccountMenu.svelte';
   import AuthorizationForm from './AuthorizationForm.svelte';
+  import Button from '../../Button.svelte';
 
   const props = {
     isVisibleMenu: false,
@@ -27,19 +28,14 @@
 <style>
   .container {
     position: relative;
-    margin: 1rem;
-  }
-
-  .btn {
-    height: 30px;
-    padding: 0 1rem;
   }
 </style>
 
 <div class="container">
-  <div class="btn global__btn" on:click={onClickAccount}>
+  <Button click={onClickAccount}>
     <img src="icons/user.svg" alt="account" width="16" height="16" />
-  </div>
+  </Button>
+
   <AccountMenu {props} />
 </div>
 

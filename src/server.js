@@ -1,17 +1,13 @@
 import sirv from 'sirv';
 import polka from 'polka';
-import helmet from 'helmet';
-import compression from 'compression';
+// import compression from 'compression';
 import * as sapper from '@sapper/server';
 
 const dev = process.env.NODE_ENV === 'development';
 
 polka()
 	.use(
-    helmet(),
-		compression({
-      threshold: 0
-    }),
+		// compression({ threshold: 0 }),
 		sirv('static', {
       dev
     }),

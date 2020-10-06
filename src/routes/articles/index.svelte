@@ -1,5 +1,7 @@
 <script>
   import * as sapper from '@sapper/app';
+  import Navigation from '../../components/navigation/Navigation.svelte';
+  import Footer from '../../components/footer/Footer.svelte';
   import ArticleCard from '../../components/ArticleCard.svelte';
   import Pagination from '../../components/Pagination.svelte';
 
@@ -42,9 +44,17 @@
   }
 </script>
 
+<style>
+  .pagination {
+    margin: 3rem 0;
+  }
+</style>
+
 <svelte:head>
 	<title>{title}</title>
 </svelte:head>
+
+<Navigation />
 
 <div class="global__container">
   <h1>{title}</h1>
@@ -53,5 +63,9 @@
     <ArticleCard {value} href="/articles/{value.id}" index={sheet * limit + index + 1} />
   {/each}
 
-  <Pagination />
+  <div class="pagination">
+    <Pagination />
+  </div>
 </div>
+
+<Footer />

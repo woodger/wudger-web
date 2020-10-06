@@ -1,6 +1,7 @@
 <script>
   import request from '@request';
   import store from '@store';
+  import Button from '../../Button.svelte';
 
   export let props;
 
@@ -45,18 +46,18 @@
     position: fixed;
     top: calc(50% - 200px);
     left: calc(50% - 150px);
-    margin: 1rem;
+    border: 1px solid #aaaaaa;
     box-shadow: 0 1px 3px #aaaaaa;
     background: #ffffff;
+  }
+
+  .inner {
+    padding: 1rem;
   }
 
   .title {
     margin: 2rem 1rem;
     font-size: 1.5rem;
-  }
-
-  .inner {
-    padding: 1rem;
   }
 
   .input {
@@ -82,12 +83,6 @@
     font-size: .9rem;
     color: #666666;
   }
-
-  .btn {
-    height: 30px;
-    padding: 0 1rem;
-    margin: 1rem;
-  }
 </style>
 
 {#if visible}
@@ -111,13 +106,8 @@
 
       <div class="row">
         <div class="control">
-          <button class="btn global__btn global__btn_blue" on:click={onClickNext}>
-            Далее
-          </button>
-
-          <button class="btn global__btn" on:click={onClickClose}>
-            Закрыть
-          </button>
+          <Button color="blue" click={onClickNext}>Далее</Button>
+          <Button click={onClickClose}>Закрыть</Button>
         </div>
       </div>
     </div>
