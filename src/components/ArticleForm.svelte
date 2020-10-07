@@ -31,8 +31,6 @@
     }
   });
 
-  const uuid = Date.now();
-
   async function onClickSave() {
     let res
 
@@ -240,15 +238,15 @@
     <Button color="blue" click={onClickSave}>Сохранить</Button>
 
     {#if slug}
-    <Button click={onClickTrash}>
-      <img src="icons/trash.svg" alt="edit" width="16" height="16" />
-    </Button>
+      <Button click={onClickTrash}>
+        <img src="icons/trash.svg" alt="edit" width="16" height="16" />
+      </Button>
     {/if}
 
-    <label for={uuid}>
+    <label>
+      <input type="file" on:input={onInputFile} multiple />
       <Button>
         <img src="icons/upload.svg" alt="upload" width="16" height="16" />
-        <input type="file" id={uuid} on:input={onInputFile} multiple />
       </Button>
     </label>
   </div>

@@ -34,11 +34,11 @@
 </style>
 
 {#if href}
-  <a class="btn link {color}" {href} on:click={click}>
+  <a class="btn link {color}" {href}>
     <slot></slot>
   </a>
 {:else}
-  <button class="btn {color}" on:click={click}>
+  <div class="btn {color}" on:click={click}>
     <slot></slot>
-  </button>
+  </div>
 {/if}
