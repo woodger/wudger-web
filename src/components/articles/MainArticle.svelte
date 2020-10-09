@@ -1,59 +1,18 @@
 <script>
-  import store from '@store';
-  import Button from './Button.svelte';
+  import Button from '../Button.svelte';
+  import OptionHandler from './OptionHandler.svelte';
 
-  export let title;
-  export let price;
-  export let madeYear;
-  export let descriotion;
-  export let activityType;
-  export let note;
+  export let props = {};
   export let pages = [];
 
-  let admin = false;
+  let options = [];
 
-  let props = [
-    {
-      name: 'Цена',
-      value: price > 0 ?
-        price : 'Бесплатно',
-      unit: '₽'
-    },
-    {
-      name: 'Создан',
-      value: madeYear,
-      unit: 'год'
-    },
-    {
-      name: 'Тип деятельности',
-      value: activityType
-    },
-    {
-      name: 'Описание',
-      value: descriotion
-    }
-  ];
-
-  $: if (admin) {
-    props = [
-      ...props,
-      {
-        name: 'Комментарий',
-        value: note
-      }
-    ];
+  function updateOptions(value) {
+    options = value;
   }
-
-  store['oauth.user.admin'].subscribe((value) => {
-    admin = value;
-  });
 </script>
 
 <style>
-  .props {
-    display: flex;
-  }
-
   .control {
     display: flex;
     align-items: center;
@@ -65,6 +24,10 @@
 
   .coll_50 {
     width: 60%;
+  }
+
+  .options {
+    display: flex;
   }
 
   .feature {
@@ -88,12 +51,13 @@
     background: #ffffff;
   }
 
-  .feature:nth-child(4) > :last-child {
-    color: #bf3030;
-  }
-
   .unit {
     padding-left: .1rem;
+  }
+
+  .descriotion {
+    width: 50%;
+    margin: 1rem;
   }
 
   .pages {
@@ -103,12 +67,10 @@
   }
 </style>
 
-<svelte:head>
-	<title>{title}</title>
-</svelte:head>
+<OptionHandler {props} update={updateOptions} />
 
 <div class="global__container">
-  <h1>{title}</h1>
+  <h1>{props.title}</h1>
 
   <div class="control">
     <div class="buy">
@@ -116,9 +78,9 @@
     </div>
   </div>
 
-  <div class="props">
+  <div class="options">
     <div class="coll_50">
-      {#each props as {name, value, unit}}
+      {#each options as {name, value, unit}}
         {#if value}
           <div class="feature">
             <div>
@@ -135,6 +97,10 @@
         {/if}
       {/each}
     </div>
+  </div>
+
+  <div class="descriotion">
+    {props.descriotion}
   </div>
 </div>
 

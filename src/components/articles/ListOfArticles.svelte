@@ -8,7 +8,7 @@
   import ArticleForm from './ArticleForm.svelte';
 
   export let title;
-  export let docs = [];
+  export let props = [];
 
   let slug;
   let query = {};
@@ -18,6 +18,10 @@
 
   $: if (formVisible === false) {
     slug = undefined;
+  }
+
+  $: if (admin === false) {
+    formVisible = false;
   }
 
   sapper.stores().page.subscribe((value) => {
@@ -31,7 +35,8 @@
 
   async function updateList() {
     const res = await request('/api/v1/articles', { query });
-    docs = (await res.json()).values;
+    const {values} = await res.json();
+    props = values;
   }
 
   function onClickForm(value) {
@@ -57,22 +62,22 @@
         <Button click={onClickForm()}>Добавить</Button>
       </div>
     </div>
-
-    {#if formVisible && !slug}
-      <ArticleForm update={updateList} />
-    {/if}
   {/if}
 
-  {#each docs as value, index (value.id)}
-    <ArticleCard {value} href="/articles/{value.id}" index={sheet + index}>
+  {#if formVisible && !slug}
+    <ArticleForm {slug} update={updateList} />
+  {/if}
+
+  {#each props as item, index (item.id)}
+    <ArticleCard props={item} index={sheet + index}>
       {#if admin}
-        <Button click={onClickForm(value.id)}>
+        <Button click={onClickForm(item.id)}>
           <img src="icons/edit.svg" alt="edit" width="16" height="16" />
         </Button>
       {/if}
     </ArticleCard>
 
-    {#if admin && formVisible && value.id === slug}
+    {#if formVisible && item.id === slug}
       <ArticleForm {slug} update={updateList} />
     {/if}
   {/each}

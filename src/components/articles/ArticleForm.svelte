@@ -4,8 +4,8 @@
   import store from '@store';
   import Button from '../Button.svelte';
 
-  export let slug = undefined;
-  export let update = undefined;
+  export let slug;
+  export let update;
 
   let original = {};
   let files = [];

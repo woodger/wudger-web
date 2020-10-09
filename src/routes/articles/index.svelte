@@ -2,10 +2,11 @@
   import * as sapper from '@sapper/app';
   import Navigation from '../../components/navigation/Navigation.svelte';
   import Footer from '../../components/footer/Footer.svelte';
-  import ListOfArticles from '../../components/list-of-articles/ListOfArticles.svelte';
+  import ListOfArticles from '../../components/articles/ListOfArticles.svelte';
 
+  export let props = [];
+  
   let title = 'Каталог';
-  export let docs = [];
 </script>
 
 <script context="module">
@@ -22,7 +23,7 @@
       const {values} = await res.json();
 
       return {
-        docs: values
+        props: values
       };
 		}
 
@@ -35,5 +36,5 @@
 </svelte:head>
 
 <Navigation />
-<ListOfArticles {title} {docs} />
+<ListOfArticles {title} {props} />
 <Footer />

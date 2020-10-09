@@ -1,8 +1,8 @@
 <script>
   import Navigation from '../../components/navigation/Navigation.svelte';
-  import Article from '../../components/Article.svelte';
+  import MainArticle from '../../components/articles/MainArticle.svelte';
 
-  export let doc = {};
+  export let props = {};
 </script>
 
 <script context="module">
@@ -12,7 +12,7 @@
 
     if (res.ok) {
       return {
-        doc: await res.json()
+        props: await res.json()
       };
 		}
 
@@ -21,8 +21,8 @@
 </script>
 
 <svelte:head>
-	<title>{doc.title}</title>
+	<title>{props.title}</title>
 </svelte:head>
 
 <Navigation />
-<Article {...doc} />
+<MainArticle {props} />
