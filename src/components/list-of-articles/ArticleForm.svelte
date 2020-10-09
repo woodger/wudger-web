@@ -2,12 +2,13 @@
   import { onMount } from 'svelte';
   import request from '@request';
   import store from '@store';
-  import Button from './Button.svelte';
+  import Button from '../Button.svelte';
 
   export let slug = undefined;
-  export let complite = undefined;
+  export let update = undefined;
 
   let original = {};
+  let files = [];
   let editable = {};
 
   onMount(async () => {
@@ -47,16 +48,17 @@
       });
     }
 
-    const {ok} = await res.json();
+    if (res.ok) {
+      const {ok} = await res.json();
 
-    if (ok === 1) {
-      await complite();
+      if (ok === 1) {
+        return await update();
+      }
     }
-    else {
-      store['notification.error'].set({
-        message: 'Упс... все сломалось!'
-      });
-    }
+
+    store['notification.error'].set({
+      message: 'Упс... все сломалось!'
+    });
   }
 
   async function onClickTrash() {
@@ -71,7 +73,7 @@
     const {ok, n} = await res.json();
 
     if (ok === 1 && n === 1) {
-      await complite();
+      await update();
     }
     else {
       store['notification.error'].set({
@@ -84,7 +86,7 @@
     editable[target.name] = target.value;
   }
 
-  async function onInputFile({target}) {
+  async function onUploadFile({target}) {
     const res = await request(`/api/v1/files`, {
       method: 'POST',
       data: {
@@ -92,18 +94,22 @@
       }
     });
 
-    const {ok} = await res.json();
+    if (res.status === 200) {
+      const {values} = await res.json();
 
-    if (ok === 1) {
-      store['notification.message'].set({
-        message: 'Файл загружен'
-      });
+      return files = [
+        ...files,
+        ...values
+      ];
     }
-    else {
-      store['notification.error'].set({
-        message: 'Упс... все сломалось!'
-      });
-    }
+
+    store['notification.error'].set({
+      message: 'Упс... все сломалось!'
+    });
+  }
+
+  async function onInputFileName({target}) {
+    // editable[target.name] = target.value;
   }
 </script>
 
@@ -115,15 +121,10 @@
     background: #ffffff;
   }
 
-  .values {
+  .fields {
     display: flex;
     flex-wrap: wrap;
     padding: 1rem 0;
-  }
-
-  .control {
-    display: flex;
-    align-items: center;
   }
 
   .field {
@@ -162,13 +163,27 @@
     resize: vertical;
   }
 
+  .files {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .file {
+    padding-bottom: 1rem;
+  }
+
+  .control {
+    display: flex;
+    align-items: center;
+  }
+
   [type="file"] {
     display: none;
   }
 </style>
 
 <div class="container">
-  <div class="values">
+  <div class="fields">
     <div class="field field_100">
       <div class="label">Наименование</div>
       <input
@@ -234,6 +249,25 @@
       <textarea class="textarea global__input">{original.descriotion}</textarea>
     </div>
   </div>
+
+  {#if files.length}
+    <div class="files">
+      <div class="field field_100">
+        <div class="label">Файлы</div>
+        {#each files as {id, name}, index (id)}
+          <div class="file">
+            <input
+              class="global__input input"
+              name="file"
+              value={name}
+              on:input={onInputFileName}
+            />
+          </div>
+        {/each}
+      </div>
+    </div>
+  {/if}
+
   <div class="control">
     <Button color="blue" click={onClickSave}>Сохранить</Button>
 
@@ -244,7 +278,7 @@
     {/if}
 
     <label>
-      <input type="file" on:input={onInputFile} multiple />
+      <input type="file" on:input={onUploadFile} multiple />
       <Button>
         <img src="icons/upload.svg" alt="upload" width="16" height="16" />
       </Button>

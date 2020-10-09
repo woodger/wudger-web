@@ -8,25 +8,26 @@
   let active = 0;
 
   sapper.stores().page.subscribe(({query, path}) => {
-    if (query.sheet) {
-      active = +query.sheet;
-    }
-
     const searchParams = new URLSearchParams();
 
     for (let i of Object.keys(query)) {
       searchParams.append(i, query[i]);
     }
 
+    active = +query.page | 0;
+
     tabs = [].map.call('%'.repeat(length), (i, index) => {
-      searchParams.set('sheet', index);
+      searchParams.set('page', index);
+
+      const href = index === 0 ?
+        path : path + '?' + searchParams;
 
       const color = index === active ?
         'blue' : undefined;
 
       return {
-        color,
-        href: path + '?' + searchParams
+        href,
+        color
       };
     });
   });
@@ -35,6 +36,7 @@
 <style>
   .container {
     display: flex;
+    margin: 3rem 0;
   }
 </style>
 

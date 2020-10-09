@@ -51,6 +51,7 @@
     top: 35px;
     right: 0;
     width: 250px;
+    border: 1px solid #aaaaaa;
     box-shadow: 0 1px 3px #aaaaaa;
     background: #ffffff;
   }

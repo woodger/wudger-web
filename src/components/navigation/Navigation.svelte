@@ -1,5 +1,5 @@
 <script>
-  import UserProfile from './UserProfile/index.svelte';
+  import UserProfile from './user-profile/UserProfile.svelte';
   import BlockControl from './BlockControl.svelte';
 
   export let title = undefined;
@@ -8,6 +8,7 @@
 <style>
   .container {
     background: url(/images/wallpapers/abstract.svg) repeat-x;
+    /* border-bottom: 1px solid #aaaaaa; */
     box-shadow: 0 1px 3px #aaaaaa;
   }
 
@@ -17,7 +18,7 @@
     height: 50px;
   }
 
-  .btn__right {
+  .btn_right {
     margin-left: auto;
   }
 
@@ -30,9 +31,9 @@
   }
 
   .control {
-    min-height: 16rem;
     display: flex;
     justify-content: center;
+    min-height: 16rem;
   }
 </style>
 
@@ -47,7 +48,7 @@
         <BlockControl />
       {/if}
 
-      <div class="btn__right">
+      <div class="btn_right">
         <UserProfile />
       </div>
     </div>

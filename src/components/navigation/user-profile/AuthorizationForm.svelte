@@ -21,15 +21,16 @@
     if (res.status === 200) {
       const pairs = await res.json();
       request.saveCredentials(pairs);
-
-      await props.getUserInfo();
       onClickClose();
+      
+      await props.getUserInfo();
+
+      return;
     }
-    else {
-      store['notification.message'].set({
-        message: 'Ошибка: Неверный логин или пароль'
-      });
-    }
+
+    store['notification.message'].set({
+      message: 'Ошибка: Неверный логин или пароль'
+    });
   }
 
   function onClickClose() {
@@ -51,7 +52,7 @@
     background: #ffffff;
   }
 
-  .inner {
+  .layout {
     padding: 1rem;
   }
 
@@ -60,22 +61,17 @@
     font-size: 1.5rem;
   }
 
-  .input {
-    width: 100%;
-    height: 2rem;
-  }
-
   .row {
     min-width: 250px
   }
 
-  .row-inner {
+  .row__inner {
     padding: .5rem 1rem;
   }
 
-  .control {
-    display: flex;
-    margin-top: 1rem;
+  .input {
+    width: 100%;
+    height: 2rem;
   }
 
   .label {
@@ -83,22 +79,27 @@
     font-size: .9rem;
     color: #666666;
   }
+
+  .control {
+    display: flex;
+    margin-top: 1rem;
+  }
 </style>
 
 {#if visible}
   <div class="container">
-    <div class="inner">
+    <div class="layout">
       <div class="title">Вход</div>
 
       <div class="row">
-        <div class="row-inner">
+        <div class="row__inner">
           <div class="label">Логин</div>
           <input class="input global__input" type="text" name="login" on:input={onInput}>
         </div>
       </div>
 
       <div class="row">
-        <div class="row-inner">
+        <div class="row__inner">
           <div class="label">Пароль</div>
           <input class="input global__input" type="password" name="password" on:input={onInput}>
         </div>

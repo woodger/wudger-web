@@ -1,7 +1,15 @@
 <script>
+  import store from '@store';
+
   export let value = {};
   export let index;
   export let href;
+
+  let admin = false;
+
+  store['oauth.user.admin'].subscribe((value) => {
+    admin = value;
+  });
 
   function crop(value = '', size = 200, dots = '...') {
     if (value.length < size) {
@@ -54,11 +62,11 @@
     margin: 0 1rem;
   }
 
-  .option_green {
+  .activity {
     color: #269926;
   }
 
-  .option_red {
+  .note {
     color: #bf3030;
   }
 
@@ -98,13 +106,13 @@
         </div>
 
         {#if value.activityType}
-          <div class="option option_green">
+          <div class="option activity">
             {value.activityType}
           </div>
         {/if}
 
-        {#if value.note}
-          <div class="option option_red">{value.note}</div>
+        {#if admin && value.note}
+          <div class="option note">{value.note}</div>
         {/if}
       </div>
     </div>
