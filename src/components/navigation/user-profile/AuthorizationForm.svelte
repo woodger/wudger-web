@@ -22,7 +22,7 @@
       const pairs = await res.json();
       request.saveCredentials(pairs);
       onClickClose();
-      
+
       await props.getUserInfo();
 
       return;
@@ -107,8 +107,8 @@
 
       <div class="row">
         <div class="control">
-          <Button color="blue" click={onClickNext}>Далее</Button>
-          <Button click={onClickClose}>Закрыть</Button>
+          <Button color="blue" onClick={onClickNext}>Далее</Button>
+          <Button onClick={onClickClose}>Закрыть</Button>
         </div>
       </div>
     </div>

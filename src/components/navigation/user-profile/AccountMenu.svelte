@@ -2,6 +2,7 @@
   import store from '@store';
   import request from '@request';
   import Button from '../../Button.svelte';
+  import Svg from '../../Svg.svelte';
 
   export let props;
 
@@ -77,15 +78,15 @@
     </div>
 
     <div class="control">
-      <Button click={close}>Мои покупки</Button>
+      <Button onClick={close}>Мои покупки</Button>
 
       {#if admin}
-        <Button click={onClickExit}>
-          <img src="icons/exit.svg" alt="exit" width="16" height="16" />
+        <Button onClick={onClickExit}>
+          <Svg src="icons/exit.svg" width="16px" height="16px" />
         </Button>
       {:else}
-        <Button click={onClickEnter}>
-          <img src="icons/enter.svg" alt="enter" width="16" height="16" />
+        <Button onClick={onClickEnter}>
+          <Svg src="icons/enter.svg" width="16px" height="16px" />
         </Button>
       {/if}
     </div>

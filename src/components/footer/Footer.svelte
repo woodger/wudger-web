@@ -1,6 +1,12 @@
 <script>
+  import Svg from '../Svg.svelte';
+
   const date = new Date();
   const year = date.getFullYear();
+
+  function onLoadIcon(svg) {
+    svg.style.setProperty('fill', '#ffffff');
+  }
 </script>
 
 <style>
@@ -14,10 +20,6 @@
 		list-style: none;
 	}
 
-	.section__list img {
-		fill: #ffffff;
-	}
-
   .copyright {
     text-align: right;
   }
@@ -26,13 +28,17 @@
 		padding: 0 0 0 1rem;
 	}
 
-	.seals {
+	/* .bottom {
 		background: #f4f4f4;
 	}
 
-  .seal {
+  .seals {
+    display: flex;
+	}
+
+  .seals > div {
     margin: 1rem;
-  }
+  } */
 </style>
 
 <div class="footer">
@@ -42,15 +48,27 @@
       <div class="section__content">
         <ul class="section__list">
           <li>
-						<img src="icons/vk.svg" alt="" width="16" height="16">
+            <Svg src="/icons/vk.svg"
+              width="16px"
+              height="16px"
+              onLoad="{onLoadIcon}"
+            />
 						<span>Татьяна Потёмкина</span>
 					</li>
           <li>
-						<img src="icons/phone.svg" alt="" width="16" height="16">
+            <Svg src="/icons/phone.svg"
+              width="16px"
+              height="16px"
+              onLoad="{onLoadIcon}"
+            />
 						<span>+7 (964) 925-77-05</span>
 					</li>
           <li>
-						<img src="icons/envelop.svg" alt="" width="16" height="16">
+            <Svg src="/icons/envelop.svg"
+              width="16px"
+              height="16px"
+              onLoad="{onLoadIcon}"
+            />
 						<span>wudger@ya.ru</span>
 					</li>
         </ul>
@@ -62,10 +80,16 @@
   </div>
 </div>
 
-<div class="seals">
-  <div class="global__container">
-    <img src="/images/seals/comodo.svg" alt="comodo" width="95" height="36" class="seal" />
-    <img src="/images/seals/aplusI.svg" alt="a++" width="90" height="36" class="seal" />
-    <img src="/images/seals/pci.svg" alt="pci" width="95" height="36" class="seal" />
+<!-- <div class="bottom">
+  <div class="global__container seals">
+    <div>
+      <Svg src="images/seals/comodo.svg" width="115px" height="36px" />
+    </div>
+    <div>
+      <Svg src="images/seals/aplus.svg" width="90px" height="36px" />
+    </div>
+    <div>
+      <Svg src="images/seals/pci.svg" width="95px" height="36px" />
+    </div>
   </div>
-</div>
+</div> -->

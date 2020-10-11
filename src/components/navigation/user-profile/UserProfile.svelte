@@ -6,6 +6,7 @@
   import AccountMenu from './AccountMenu.svelte';
   import AuthorizationForm from './AuthorizationForm.svelte';
   import Button from '../../Button.svelte';
+  import Svg from '../../Svg.svelte';
 
   const props = {
     isVisibleMenu: false,
@@ -32,8 +33,8 @@
 </style>
 
 <div class="container">
-  <Button click={onClickAccount}>
-    <img src="icons/user.svg" alt="account" width="16" height="16" />
+  <Button onClick={onClickAccount}>
+    <Svg src="icons/user.svg" width="16px" height="16px" />
   </Button>
 
   <AccountMenu {props} />

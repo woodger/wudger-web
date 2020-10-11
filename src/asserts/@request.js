@@ -14,11 +14,12 @@ const clearCredentials = () => {
 export default async function request(...args) {
   let counter = 0;
 
-  async function throttle(path, options = {}, auth = true) {
+  async function throttle(path, options = {}) {
     let {
       method = 'GET',
       query = {},
       headers = {},
+      auth = true,
       data
     } = options;
 
@@ -29,9 +30,9 @@ export default async function request(...args) {
 
       if (!token || token === String(undefined)) {
         const res = await throttle('/api/v1/users', {
-          method: 'POST'
-        },
-        false);
+          method: 'POST',
+          auth: false
+        });
 
         try {
           const pairs = await res.json();
@@ -83,9 +84,9 @@ export default async function request(...args) {
       const opie = localStorage.getItem(refreshToken);
 
       const res = await throttle(`/api/v1/oauth/${opie}`, {
-        method: 'POST'
-      },
-      false);
+        method: 'POST',
+        auth: false
+      });
 
       try {
         const pairs = await res.json();

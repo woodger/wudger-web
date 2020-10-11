@@ -2,10 +2,11 @@
   import * as sapper from '@sapper/app';
   import store from '@store';
   import request from '@request';
-  import Button from '../Button.svelte';
   import Pagination from '../Pagination.svelte';
   import ArticleCard from './ArticleCard.svelte';
   import ArticleForm from './ArticleForm.svelte';
+  import Button from '../Button.svelte';
+  import Svg from '../Svg.svelte';
 
   export let title;
   export let props = [];
@@ -39,10 +40,12 @@
     props = values;
   }
 
-  function onClickForm(value) {
-    return () => {
+  function onSwitchForm(value) {
+    return async () => {
       slug = value;
       formVisible = !formVisible;
+
+      await updateList();
     };
   }
 </script>
@@ -59,26 +62,24 @@
   {#if admin}
     <div class="control">
       <div class="btn">
-        <Button click={onClickForm()}>Добавить</Button>
+        <Button onClick={onSwitchForm()}>Добавить</Button>
       </div>
     </div>
   {/if}
 
   {#if formVisible && !slug}
-    <ArticleForm {slug} update={updateList} />
+    <ArticleForm onClose={onSwitchForm()} />
   {/if}
 
   {#each props as item, index (item.id)}
     <ArticleCard props={item} index={sheet + index}>
       {#if admin}
-        <Button click={onClickForm(item.id)}>
-          <img src="icons/edit.svg" alt="edit" width="16" height="16" />
-        </Button>
+        <Button onClick={onSwitchForm(item.id)}>Изменить</Button>
       {/if}
     </ArticleCard>
 
     {#if formVisible && item.id === slug}
-      <ArticleForm {slug} update={updateList} />
+      <ArticleForm props={item} onClose={onSwitchForm(item.id)} />
     {/if}
   {/each}
 

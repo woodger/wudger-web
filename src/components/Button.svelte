@@ -1,7 +1,7 @@
 <script>
-  export let color = undefined;
   export let href = undefined;
-  export let click = undefined;
+  export let color = undefined;
+  export let onClick = undefined;
 </script>
 
 <style>
@@ -38,7 +38,7 @@
     <slot></slot>
   </a>
 {:else}
-  <div class="btn {color}" on:click={click}>
+  <div class="btn {color}" on:click={onClick}>
     <slot></slot>
   </div>
 {/if}

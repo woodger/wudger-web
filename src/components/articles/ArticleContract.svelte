@@ -9,23 +9,23 @@
 
   $: update([
     {
-      name: 'Цена',
+      title: 'Цена',
       value: props.price > 0 ?
         props.price : 'Бесплатно',
       unit: props.price > 0 ?
         '₽' : undefined
     },
     {
-      name: 'Создан',
+      title: 'Создан',
       value: props.madeYear,
       unit: 'год'
     },
     {
-      name: 'Тип деятельности',
+      title: 'Тип деятельности',
       value: props.activityType
     },
     {
-      name: 'Комментарий',
+      title: 'Комментарий',
       value: props.note && admin ?
         props.note : undefined
     }

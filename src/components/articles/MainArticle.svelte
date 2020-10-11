@@ -1,6 +1,6 @@
 <script>
+  import ArticleContract from './ArticleContract.svelte';
   import Button from '../Button.svelte';
-  import OptionHandler from './OptionHandler.svelte';
 
   export let props = {};
   export let pages = [];
@@ -67,7 +67,7 @@
   }
 </style>
 
-<OptionHandler {props} update={updateOptions} />
+<ArticleContract {props} update={updateOptions} />
 
 <div class="global__container">
   <h1>{props.title}</h1>
@@ -80,11 +80,11 @@
 
   <div class="options">
     <div class="coll_50">
-      {#each options as {name, value, unit}}
+      {#each options as {title, value, unit} (title)}
         {#if value}
           <div class="feature">
             <div>
-              <span>{name}</span>
+              <span>{title}</span>
             </div>
             <div>
               <span>{value}</span>
@@ -99,9 +99,11 @@
     </div>
   </div>
 
-  <div class="descriotion">
-    {props.descriotion}
-  </div>
+  {#if props.descriotion}
+    <div class="descriotion">
+      {props.descriotion}
+    </div>
+  {/if}
 </div>
 
 <article class="pages">

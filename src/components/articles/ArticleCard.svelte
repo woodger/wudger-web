@@ -1,5 +1,5 @@
 <script>
-  import OptionHandler from './OptionHandler.svelte';
+  import ArticleContract from './ArticleContract.svelte';
 
   export let index;
   export let props;
@@ -78,7 +78,7 @@
   }
 </style>
 
-<OptionHandler {props} update={updateOptions} />
+<ArticleContract {props} update={updateOptions} />
 
 <div class="container">
   <div class="row">
@@ -97,7 +97,7 @@
       </div>
 
       <div class="option-group">
-        {#each options as {value, unit}}
+        {#each options as {title, value, unit} (title)}
           {#if value}
             <div class="option">
               <span>{value}</span>

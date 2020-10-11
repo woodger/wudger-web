@@ -1,50 +1,77 @@
 <script>
-  import { onMount } from 'svelte';
   import request from '@request';
   import store from '@store';
   import Button from '../Button.svelte';
 
-  export let slug;
-  export let update;
+  export let props = {};
+  export let onClose;
 
-  let original = {};
-  let files = [];
-  let editable = {};
+  let fields = {};
+  let files = props.files ? [
+    ...props.files
+  ] : [];
 
-  onMount(async () => {
-    if (slug) {
-      const res = await request(`/api/v1/articles/${slug}`);
-      original = await res.json();
-    }
-    else {
-      const date = new Date();
+  const now = new Date();
 
-      original = {
-        title: null,
-        price: 0,
-        madeYear: date.getFullYear(),
-        descriotion: null,
-        hidePages: null,
-        pages: [],
-        note: null,
-        activityType: null
-      };
-    }
-  });
+  const shema = {
+    title: {},
+    price: {
+      type: Number,
+      def: 0
+    },
+    madeYear: {
+      type: Number,
+      def: now.getFullYear()
+    },
+    descriotion: {},
+    activityType: {},
+    hidePages: {},
+    note: {}
+  };
+
+  for (const name of Object.keys(shema)) {
+    const {type = String, def = null} = shema[name];
+    const value = props[name];
+
+    fields[name] = value ?
+      type(value) : def;
+  }
+
+  function onInputText({target}) {
+    fields[target.name] = target.value;
+  }
+
+  async function onInputFileName() {}
 
   async function onClickSave() {
-    let res
+    for (const name of Object.keys(shema)) {
+      const {type = String, def = null} = shema[name];
+      let value = fields[name];
 
-    if (slug) {
-      res = await request(`/api/v1/articles/${slug}`, {
+      if (typeof value === 'string') {
+        value = value.trim();
+      }
+
+      fields[name] = value ?
+        type(value) : def;
+    }
+
+    const data = {
+      fields: JSON.stringify(fields)
+    };
+
+    let res;
+
+    if (props.id) {
+      res = await request(`/api/v1/articles/${props.id}`, {
         method: 'PUT',
-        data: editable
+        data
       })
     }
     else {
       res = await request(`/api/v1/articles`, {
         method: 'POST',
-        data: editable
+        data
       });
     }
 
@@ -52,7 +79,7 @@
       const {ok} = await res.json();
 
       if (ok === 1) {
-        return await update();
+        return await onClose();
       }
     }
 
@@ -66,27 +93,22 @@
       return;
     }
 
-    const res = await request(`/api/v1/articles/${slug}`, {
+    const res = await request(`/api/v1/articles/${props.id}`, {
       method: 'DELETE'
     });
 
     const {ok, n} = await res.json();
 
     if (ok === 1 && n === 1) {
-      await update();
+      return await onClose();
     }
-    else {
-      store['notification.error'].set({
-        message: 'Упс... все сломалось!'
-      });
-    }
+
+    store['notification.error'].set({
+      message: 'Упс... все сломалось!'
+    });
   }
 
-  function onInputText({target}) {
-    editable[target.name] = target.value;
-  }
-
-  async function onUploadFile({target}) {
+  async function onUploadFiles({target}) {
     const res = await request(`/api/v1/files`, {
       method: 'POST',
       data: {
@@ -106,10 +128,6 @@
     store['notification.error'].set({
       message: 'Упс... все сломалось!'
     });
-  }
-
-  async function onInputFileName({target}) {
-    // editable[target.name] = target.value;
   }
 </script>
 
@@ -169,7 +187,7 @@
   }
 
   .file {
-    padding-bottom: 1rem;
+    padding: 0 0 1rem;
   }
 
   .control {
@@ -189,7 +207,7 @@
       <input
         class="global__input input"
         name="title"
-        value={original.title}
+        value={fields.title}
         on:input={onInputText}
       />
     </div>
@@ -199,7 +217,7 @@
       <input
         class="global__input input"
         name="price"
-        value={original.price}
+        value={fields.price}
         on:input={onInputText}
       />
     </div>
@@ -209,7 +227,7 @@
       <input
         class="global__input input"
         name="madeYear"
-        value={original.madeYear}
+        value={fields.madeYear}
         on:input={onInputText}
       />
     </div>
@@ -219,7 +237,7 @@
       <input
         class="global__input input"
         name="activityType"
-        value={original.activityType}
+        value={fields.activityType}
         on:input={onInputText}
       />
     </div>
@@ -229,7 +247,7 @@
       <input
         class="global__input input"
         name="hidePages"
-        value={original.hidePages}
+        value={fields.hidePages}
         on:input={onInputText}
       />
     </div>
@@ -239,14 +257,18 @@
       <input
         class="global__input input"
         name="note"
-        value={original.note}
+        value={fields.note}
         on:input={onInputText}
       />
     </div>
 
     <div class="field field_100">
       <div class="label">Описание</div>
-      <textarea class="textarea global__input">{original.descriotion}</textarea>
+      <textarea
+        class="textarea global__input"
+        name="descriotion"
+        on:input={onInputText}
+      >{fields.descriotion}</textarea>
     </div>
   </div>
 
@@ -254,7 +276,7 @@
     <div class="files">
       <div class="field field_100">
         <div class="label">Файлы</div>
-        {#each files as {id, name}, index (id)}
+        {#each files as {id, name} (id)}
           <div class="file">
             <input
               class="global__input input"
@@ -269,16 +291,16 @@
   {/if}
 
   <div class="control">
-    <Button color="blue" click={onClickSave}>Сохранить</Button>
+    <Button color="blue" onClick={onClickSave}>Сохранить</Button>
 
-    {#if slug}
-      <Button click={onClickTrash}>
+    {#if props.id}
+      <Button onClick={onClickTrash}>
         <img src="icons/trash.svg" alt="edit" width="16" height="16" />
       </Button>
     {/if}
 
     <label>
-      <input type="file" on:input={onUploadFile} multiple />
+      <input type="file" on:input={onUploadFiles} multiple />
       <Button>
         <img src="icons/upload.svg" alt="upload" width="16" height="16" />
       </Button>

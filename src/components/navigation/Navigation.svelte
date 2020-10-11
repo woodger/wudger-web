@@ -1,6 +1,7 @@
 <script>
   import UserProfile from './user-profile/UserProfile.svelte';
   import BlockControl from './BlockControl.svelte';
+  import Svg from '../Svg.svelte';
 
   export let title = undefined;
 </script>
@@ -41,7 +42,7 @@
   <div class="global__container">
     <div class="navigation">
       <a class="logo" href="/">
-        <img src="images/logo.svg" alt="wudger.ru" width="128" height="32" />
+        <Svg src="images/logo.svg" width="128px" height="32px" />
       </a>
 
       {#if !title}
