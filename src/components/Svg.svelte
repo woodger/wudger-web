@@ -6,7 +6,7 @@
   export let height;
   export let onLoad = undefined;
 
-  let html;
+  let html = '';
 
   onMount(async () => {
     const res = await fetch(src);
@@ -35,8 +35,4 @@
   }
 </style>
 
-{#if html}
-  {@html html}
-{:else}
-  <div style="width:{width};height:{height}"></div>
-{/if}
+<div style="width:{width};height:{height}">{@html html}</div>

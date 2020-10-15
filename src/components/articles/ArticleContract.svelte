@@ -5,7 +5,6 @@
   export let update;
 
   let admin = false;
-  let options = [];
 
   $: update([
     {

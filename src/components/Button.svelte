@@ -16,6 +16,10 @@
     cursor: pointer;
   }
 
+  .btn:hover {
+    opacity: .9;
+  }
+
   .link {
     text-decoration: none;
   }
@@ -25,6 +29,10 @@
     background: linear-gradient(to bottom, #ffffff 97%, #aaaaaa 100%);
     color: #222222;
   }
+
+  /* .undefined:hover {
+    background: linear-gradient(to bottom, #ffffff 97%, #2d77af 100%);
+  } */
 
   .blue {
     border: 1px solid #2d77af;

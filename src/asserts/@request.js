@@ -11,6 +11,23 @@ const clearCredentials = () => {
   localStorage.removeItem(refreshToken);
 };
 
+// let body;
+//
+// if (data) {
+//   body = new FormData();
+//
+//   for (let [key, value] of Object.entries(data)) {
+//     if (value instanceof FileList) {
+//       for (let file of value) {
+//         body.append(key, file);
+//       }
+//     }
+//     else {
+//       body.append(key, value);
+//     }
+//   }
+// }
+
 export default async function request(...args) {
   let counter = 0;
 
@@ -20,7 +37,8 @@ export default async function request(...args) {
       query = {},
       headers = {},
       auth = true,
-      data
+      data,
+      body
     } = options;
 
     counter++;
@@ -55,23 +73,6 @@ export default async function request(...args) {
 
     for (let i of Object.keys(query)) {
       url.searchParams.set(i, query[i]);
-    }
-
-    let body;
-
-    if (data) {
-      body = new FormData();
-
-      for (let [key, value] of Object.entries(data)) {
-        if (value instanceof FileList) {
-          for (let file of value) {
-            body.append(key, file);
-          }
-        }
-        else {
-          body.append(key, value);
-        }
-      }
     }
 
     const res = await fetch(url, {

@@ -3,6 +3,7 @@
   import store from '@store';
   import request from '@request';
   import Pagination from '../Pagination.svelte';
+  // import BaseModal from '../modals/BaseModal.svelte';
   import ArticleCard from './ArticleCard.svelte';
   import ArticleForm from './ArticleForm.svelte';
   import Button from '../Button.svelte';
@@ -15,15 +16,10 @@
   let query = {};
   let sheet = 1;
   let admin = false;
-  let formVisible = false;
 
-  $: if (formVisible === false) {
-    slug = undefined;
-  }
-
-  $: if (admin === false) {
-    formVisible = false;
-  }
+  const add = {
+    title: 'Новый документ'
+  };
 
   sapper.stores().page.subscribe((value) => {
     query = value.query;
@@ -40,12 +36,13 @@
     props = values;
   }
 
-  function onSwitchForm(value) {
-    return async () => {
-      slug = value;
-      formVisible = !formVisible;
-
-      await updateList();
+  function onShowForm(value = {}) {
+    return () => {
+      store['modal'].set({
+        component: ArticleForm,
+        title: value.title,
+        props: value
+      });
     };
   }
 </script>
@@ -62,25 +59,17 @@
   {#if admin}
     <div class="control">
       <div class="btn">
-        <Button onClick={onSwitchForm()}>Добавить</Button>
+        <Button onClick={onShowForm(add)}>Добавить</Button>
       </div>
     </div>
-  {/if}
-
-  {#if formVisible && !slug}
-    <ArticleForm onClose={onSwitchForm()} />
   {/if}
 
   {#each props as item, index (item.id)}
     <ArticleCard props={item} index={sheet + index}>
       {#if admin}
-        <Button onClick={onSwitchForm(item.id)}>Изменить</Button>
+        <Button onClick={onShowForm(item)}>Изменить</Button>
       {/if}
     </ArticleCard>
-
-    {#if formVisible && item.id === slug}
-      <ArticleForm props={item} onClose={onSwitchForm(item.id)} />
-    {/if}
   {/each}
 
   <Pagination />

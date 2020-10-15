@@ -42,7 +42,7 @@
 
 {#if message}
   <div class="container">
-    <div class="message global__btn" transition:fade on:click={onClickClose}>
+    <div class="message" transition:fade on:click={onClickClose}>
       {message}
     </div>
   </div>

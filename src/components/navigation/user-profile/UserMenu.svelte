@@ -1,8 +1,10 @@
 <script>
+  import { onMount } from 'svelte';
   import store from '@store';
   import request from '@request';
-  import Button from '../../Button.svelte';
   import Svg from '../../Svg.svelte';
+  import Button from '../../Button.svelte';
+  import AuthorizationForm from './AuthorizationForm.svelte';
 
   export let props;
 
@@ -12,25 +14,49 @@
   $: username = admin ?
     'Админ' : 'Гость';
 
-  function close() {
-    props.isVisibleMenu = false;
+  onMount(getUserInfo);
+
+  async function getUserInfo() {
+    const res = await request('/api/v1/users/info');
+
+    if (!res.ok) {
+      store['notification.error'].set({
+        message: 'Упс .. Все сломалось'
+      });
+
+      return;
+    }
+
+    store['oauth.user.info'].set(
+      await res.json()
+    );
+  }
+
+  store['oauth.token'].subscribe((value) => {
+    if (value) {
+      request.saveCredentials(value);
+      getUserInfo();
+    }
+  });
+
+  function onClose() {
+    props.show = false;
   }
 
   function onClickEnter() {
-    store['oauth.form.visible'].set(true);
-    close();
+    store['modal'].set({
+      component: AuthorizationForm,
+      title: 'Авторизация'
+    });
+
+    onClose();
   }
 
   async function onClickExit() {
     request.clearCredentials();
+    await getUserInfo();
 
-    const res = await request('/api/v1/users/info');
-    const info = await res.json();
-
-    store['oauth.user.info'].set(info);
-    props.isVisibleMenu = false;
-
-    close();
+    onClose();
   }
 
   store['oauth.user.admin'].subscribe((value) => {
@@ -71,14 +97,14 @@
   }
 </style>
 
-{#if props.isVisibleMenu}
+{#if props.show}
   <div class="container">
     <div class="account">
       <div class="username">{username}</div>
     </div>
 
     <div class="control">
-      <Button onClick={close}>Мои покупки</Button>
+      <Button>Мои покупки</Button>
 
       {#if admin}
         <Button onClick={onClickExit}>
