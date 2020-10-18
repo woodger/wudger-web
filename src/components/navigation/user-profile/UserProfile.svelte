@@ -3,12 +3,10 @@
   import Button from '../../Button.svelte';
   import UserMenu from './UserMenu.svelte';
 
-  const props = {
-    show: false
-  };
+  let show = false;
 
   function onSwithMenu() {
-    props.show = !props.show;
+    show = !show;
   }
 </script>
 
@@ -23,5 +21,7 @@
     <Svg src="icons/user.svg" width="16px" height="16px" />
   </Button>
 
-  <UserMenu {props} />
+  {#if show}
+    <UserMenu onClose={onSwithMenu} />
+  {/if}
 </div>

@@ -3,7 +3,6 @@
   import store from '@store';
   import request from '@request';
   import Pagination from '../Pagination.svelte';
-  // import BaseModal from '../modals/BaseModal.svelte';
   import ArticleCard from './ArticleCard.svelte';
   import ArticleForm from './ArticleForm.svelte';
   import Button from '../Button.svelte';
@@ -39,7 +38,7 @@
   function onShowForm(value = {}) {
     return () => {
       store['modal'].set({
-        component: ArticleForm,
+        slot: ArticleForm,
         title: value.title,
         props: value
       });

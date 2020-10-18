@@ -14,14 +14,14 @@
       return {
         props: await res.json()
       };
-		}
+    }
 
     this.error(res.status);
   }
 </script>
 
 <svelte:head>
-	<title>{props.title}</title>
+  <title>{props.title}</title>
 </svelte:head>
 
 <Navigation />

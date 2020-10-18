@@ -3,14 +3,22 @@
   import Button from './Button.svelte';
   import Svg from './Svg.svelte';
 
-  let props;
+  let that;
 
   store['modal'].subscribe((value) => {
-    props = value;
+    that = value;
   });
 
+  function onCloseThat() {
+    if (that.onClose) {
+      that.onClose();
+    }
+
+    onClose();
+  }
+
   function onClose() {
-    props = undefined;
+    that = undefined;
   }
 </script>
 
@@ -43,14 +51,12 @@
   }
 </style>
 
-{#if props}
+{#if that}
   <div class="container">
     <div class="global__container">
       <div class="inner">
         <div class="control">
-          <div class="title">
-            {props.title}
-          </div>
+          <div class="title">{that.title}</div>
           <div class="btn_right">
             <Button onClick={onClose}>
               <Svg src="icons/close.svg" width="16px" height="16px" />
@@ -58,7 +64,7 @@
           </div>
         </div>
 
-        <svelte:component this={props.component} props={props.props} {onClose} />
+        <svelte:component this={that.component} {...that.props} onClose={onCloseThat} />
       </div>
     </div>
   </div>

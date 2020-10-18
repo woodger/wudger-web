@@ -1,7 +1,7 @@
 <script>
   export let href = undefined;
   export let color = undefined;
-  export let onClick = undefined;
+  export let onClick;
 </script>
 
 <style>
@@ -20,6 +20,11 @@
     opacity: .9;
   }
 
+  .btn:active {
+    border-color: #5192c3;
+    box-shadow: 0 0 2px #4f7dac;
+  }
+
   .link {
     text-decoration: none;
   }
@@ -30,10 +35,6 @@
     color: #222222;
   }
 
-  /* .undefined:hover {
-    background: linear-gradient(to bottom, #ffffff 97%, #2d77af 100%);
-  } */
-
   .blue {
     border: 1px solid #2d77af;
     background: linear-gradient(to bottom, #5192c3 7%, #4087bb 97%, #2d77af 100%);
@@ -43,10 +44,10 @@
 
 {#if href}
   <a class="btn link {color}" {href}>
-    <slot></slot>
+    <slot />
   </a>
 {:else}
   <div class="btn {color}" on:click={onClick}>
-    <slot></slot>
+    <slot />
   </div>
 {/if}

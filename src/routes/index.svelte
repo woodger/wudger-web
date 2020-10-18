@@ -33,7 +33,7 @@
 </style>
 
 <svelte:head>
-	<title>{title}</title>
+  <title>{title}</title>
 </svelte:head>
 
 <Navigation {title}/>

@@ -16,25 +16,25 @@
     color: #ffffff;
   }
 
-	.section__list {
-		list-style: none;
-	}
+  .section__list {
+    list-style: none;
+  }
 
   .copyright {
     text-align: right;
   }
 
-	li span {
-		padding: 0 0 0 1rem;
-	}
+  li span {
+    padding: 0 0 0 1rem;
+  }
 
-	/* .bottom {
-		background: #f4f4f4;
-	}
+  /* .bottom {
+    background: #f4f4f4;
+  }
 
   .seals {
     display: flex;
-	}
+  }
 
   .seals > div {
     margin: 1rem;
@@ -53,24 +53,24 @@
               height="16px"
               onLoad="{onLoadIcon}"
             />
-						<span>Татьяна Потёмкина</span>
-					</li>
+            <span>Татьяна Потёмкина</span>
+          </li>
           <li>
             <Svg src="/icons/phone.svg"
               width="16px"
               height="16px"
               onLoad="{onLoadIcon}"
             />
-						<span>+7 (964) 925-77-05</span>
-					</li>
+            <span>+7 (964) 925-77-05</span>
+          </li>
           <li>
             <Svg src="/icons/envelop.svg"
               width="16px"
               height="16px"
               onLoad="{onLoadIcon}"
             />
-						<span>wudger@ya.ru</span>
-					</li>
+            <span>wudger@ya.ru</span>
+          </li>
         </ul>
       </div>
     </div>

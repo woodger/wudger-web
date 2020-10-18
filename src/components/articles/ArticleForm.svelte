@@ -2,7 +2,11 @@
   import { onMount } from 'svelte';
   import request from '@request';
   import store from '@store';
+  import Svg from '../Svg.svelte';
   import Button from '../Button.svelte';
+  import InputText from '../InputText.svelte';
+  import InputFile from '../InputFile.svelte';
+  import TextArea from '../TextArea.svelte';
 
   export let props;
   export let onClose;
@@ -22,6 +26,10 @@
     },
     descriotion: {},
     activityType: {},
+    totalPages: {
+      type: Number,
+      def: 0
+    },
     hidePages: {},
     note: {},
     files: {
@@ -59,25 +67,18 @@
         type(value) : def;
     }
 
-    const body = JSON.stringify(data);
     let res;
 
     if (props.id) {
       res = await request(`/api/v1/articles/${props.id}`, {
         method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body
+        body: data
       })
     }
     else {
       res = await request(`/api/v1/articles`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body
+        body: data
       });
     }
 
@@ -115,11 +116,15 @@
   }
 
   async function onUploadFiles({target}) {
+    const body = new FormData();
+
+    for (const value of target.files) {
+      body.append('uploads', value);
+    }
+
     const res = await request(`/api/v1/files`, {
       method: 'POST',
-      data: {
-        files: target.files
-      }
+      body: 'true'
     });
 
     if (!res.ok) {
@@ -167,18 +172,12 @@
     padding: 1rem 0;
   }
 
-  .field {
-    margin: 0 1rem .5rem;
-  }
-
   .field_10 {
     width: 10%;
-    min-width: 10rem;
   }
 
   .field_20 {
     width: 20%;
-    min-width: 20rem;
   }
 
   .field_100 {
@@ -186,20 +185,8 @@
   }
 
   .label {
-    margin: 0 0 .5rem;
+    margin: 0 1rem .5rem;
     color: #999999;
-  }
-
-  .input {
-    width: 100%;
-  }
-
-  .textarea {
-    min-height: 5rem;
-    width: 100%;
-    padding: .5rem;
-    text-indent: 0;
-    resize: vertical;
   }
 
   .files {
@@ -215,99 +202,63 @@
     display: flex;
     align-items: center;
   }
-
-  [type="file"] {
-    display: none;
-  }
 </style>
 
 
   <div>
     <div class="fields">
-      <div class="field field_100">
+      <div class="field_100">
         <div class="label">Наименование</div>
-        <input
-          class="global__input input"
-          name="title"
-          value={fields.title}
-          on:input={onInputText}
-        />
+        <InputText name="title" value={fields.title} onInput={onInputText} />
       </div>
 
-      <div class="field field_10">
+      <div class="field_10">
         <div class="label">Цена, ₽</div>
-        <input
-          class="global__input input"
-          name="price"
-          value={fields.price}
-          on:input={onInputText}
-        />
+        <InputText name="price" value={fields.price} onInput={onInputText} />
       </div>
 
-      <div class="field field_10">
+      <div class="field_10">
         <div class="label">Создан, год</div>
-        <input
-          class="global__input input"
-          name="madeYear"
-          value={fields.madeYear}
-          on:input={onInputText}
-        />
+        <InputText name="madeYear" value={fields.madeYear} onInput={onInputText} />
       </div>
 
-      <div class="field field_20">
+      <div class="field_20">
         <div class="label">Тип деятельности</div>
-        <input
-          class="global__input input"
-          name="activityType"
-          value={fields.activityType}
-          on:input={onInputText}
-        />
+        <InputText name="activityType" value={fields.activityType} onInput={onInputText} />
       </div>
 
-      <div class="field field_20">
+      <div class="field_10">
+        <div class="label">Объем, стр.</div>
+        <InputText value={fields.totalPages} disabled />
+      </div>
+
+      <div class="field_20">
         <div class="label">Скрыть страницы</div>
-        <input
-          class="global__input input"
-          name="hidePages"
-          value={fields.hidePages}
-          on:input={onInputText}
-        />
+        <InputText name="hidePages" value={fields.hidePages} onInput={onInputText} />
       </div>
 
-      <div class="field field_20">
+      <div class="field_20">
         <div class="label">Комментарий</div>
-        <input
-          class="global__input input"
-          name="note"
-          value={fields.note}
-          on:input={onInputText}
-        />
+        <InputText name="note" value={fields.note} onInput={onInputText} />
       </div>
 
-      <div class="field field_100">
+      <div class="field_100">
         <div class="label">Описание</div>
-        <textarea
-          class="global__input textarea"
-          name="descriotion"
-          on:input={onInputText}
-        >{fields.descriotion}</textarea>
+        <TextArea name="descriotion" value={fields.descriotion} onInput={onInputText} />
       </div>
     </div>
 
     <div class="files">
-      <div class="field field_100">
+      <div class="field_100">
         <div class="label">Файлы</div>
         <div class="files__inner">
+
           {#each fields.files as {id, name} (id)}
             <div class="file">
-              <input
-                class="global__input input"
-                name="file"
-                value={name}
-                on:input={onInputFileName}
-              />
+              <InputText name="file" value={name} onInput={onInputFileName} />
             </div>
           {/each}
+
         </div>
       </div>
     </div>
@@ -317,15 +268,10 @@
 
       {#if props.id}
         <Button onClick={onClickTrash}>
-          <img src="icons/trash.svg" alt="edit" width="16" height="16" />
+          <Svg src="icons/trash.svg" width="16px" height="16px" />
         </Button>
       {/if}
 
-      <label>
-        <input type="file" on:input={onUploadFiles} multiple />
-        <Button>
-          <img src="icons/upload.svg" alt="upload" width="16" height="16" />
-        </Button>
-      </label>
+      <InputFile onInput={onUploadFiles} />
     </div>
   </div>

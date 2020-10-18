@@ -6,70 +6,61 @@
   import Button from '../../Button.svelte';
   import AuthorizationForm from './AuthorizationForm.svelte';
 
-  export let props;
+  export let onClose;
 
   let admin;
   let username;
+  let modal;
 
   $: username = admin ?
     'Админ' : 'Гость';
 
-  onMount(getUserInfo);
+  onMount(async () => {
+    await getUserInfo();
 
-  async function getUserInfo() {
-    const res = await request('/api/v1/users/info');
-
-    if (!res.ok) {
-      store['notification.error'].set({
-        message: 'Упс .. Все сломалось'
-      });
-
-      return;
-    }
-
-    store['oauth.user.info'].set(
-      await res.json()
-    );
-  }
-
-  store['oauth.token'].subscribe((value) => {
-    if (value) {
-      request.saveCredentials(value);
-      getUserInfo();
-    }
+    store['modal'].subscribe((value) => {
+      if (value) {
+        modal = value;
+      }
+    });
   });
-
-  function onClose() {
-    props.show = false;
-  }
 
   function onClickEnter() {
     store['modal'].set({
+      title: 'Авторизация',
       component: AuthorizationForm,
-      title: 'Авторизация'
+      onClose: getUserInfo
     });
 
     onClose();
   }
 
+  store['user.info'].subscribe((value) => {
+    if (value) {
+      admin = value.groups.includes('admin');
+    }
+  });
+
+  async function getUserInfo() {
+    const res = await request(`/api/v1/oauth`);
+
+    if (!res.ok) {
+      return store['notification.error'].set({
+        message: 'Упс .. Все сломалось'
+      });
+    }
+
+    store['user.info'].set(
+      await res.json()
+    );
+  }
+
   async function onClickExit() {
-    request.clearCredentials();
+    request.clearAll();
     await getUserInfo();
 
     onClose();
   }
-
-  store['oauth.user.admin'].subscribe((value) => {
-    admin = value;
-  });
-
-  store['oauth.user.info'].subscribe((value) => {
-    if (value !== undefined) {
-      store['oauth.user.admin'].set(
-        value.groups.includes('admin')
-      );
-    }
-  });
 </script>
 
 <style>
@@ -97,24 +88,22 @@
   }
 </style>
 
-{#if props.show}
-  <div class="container">
-    <div class="account">
-      <div class="username">{username}</div>
-    </div>
-
-    <div class="control">
-      <Button>Мои покупки</Button>
-
-      {#if admin}
-        <Button onClick={onClickExit}>
-          <Svg src="icons/exit.svg" width="16px" height="16px" />
-        </Button>
-      {:else}
-        <Button onClick={onClickEnter}>
-          <Svg src="icons/enter.svg" width="16px" height="16px" />
-        </Button>
-      {/if}
-    </div>
+<div class="container">
+  <div class="account">
+    <div class="username">{username}</div>
   </div>
-{/if}
+
+  <div class="control">
+    <Button>Мои покупки</Button>
+
+    {#if admin}
+      <Button onClick={onClickExit}>
+        <Svg src="icons/exit.svg" width="16px" height="16px" />
+      </Button>
+    {:else}
+      <Button onClick={onClickEnter}>
+        <Svg src="icons/enter.svg" width="16px" height="16px" />
+      </Button>
+    {/if}
+  </div>
+</div>

@@ -4,7 +4,7 @@
   export let src;
   export let width;
   export let height;
-  export let onLoad = undefined;
+  export let onLoad;
 
   let html = '';
 

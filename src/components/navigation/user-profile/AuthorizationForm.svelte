@@ -1,7 +1,8 @@
 <script>
-  import request from '@request';
   import store from '@store';
+  import request from '@request';
   import Button from '../../Button.svelte';
+  import InputText from '../../InputText.svelte';
 
   export let onClose;
 
@@ -10,7 +11,7 @@
   async function onClickNext() {
     const res = await request('/api/v1/oauth', {
       method: 'POST',
-      data: fields
+      body: fields
     });
 
     if (!res.ok) {
@@ -21,7 +22,7 @@
       return;
     }
 
-    store['oauth.token'].set(
+    request.setItems(
       await res.json()
     );
 
@@ -41,19 +42,15 @@
   }
 
   .field {
-    padding: .5rem 1rem;
+    /* padding: .5rem 1rem; */
   }
 
-  .input {
-    width: 100%;
-    height: 2rem;
-  }
-
-  .label {
+  /* .label {
+    margin: 0 1rem;
     line-height: 2rem;
     font-size: .9rem;
     color: #666666;
-  }
+  } */
 
   .control {
     display: flex;
@@ -63,13 +60,13 @@
 <div>
   <div class="fields">
     <div class="field">
-      <div class="label">Логин</div>
-      <input class="input global__input" type="text" name="login" on:input={onInput}>
+      <!-- <div class="label">Логин</div> -->
+      <InputText name="login" label="Логин" {onInput} />
     </div>
 
     <div class="field">
-      <div class="label">Пароль</div>
-      <input class="input global__input" type="password" name="password" on:input={onInput}>
+      <!-- <div class="label">Пароль</div> -->
+      <InputText type="password" name="password" label="Пароль" {onInput} />
     </div>
   </div>
 

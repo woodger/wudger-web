@@ -1,66 +1,40 @@
-const accessToken = 'accessToken';
-const refreshToken = 'refreshToken';
+import Coyote from './coyote.js';
 
-const saveCredentials = (pairs) => {
-  localStorage.setItem(accessToken, pairs.accessToken);
-  localStorage.setItem(refreshToken, pairs.refreshToken);
-};
+const {getItem, setItems, clearAll} = new Coyote();
 
-const clearCredentials = () => {
-  localStorage.removeItem(accessToken);
-  localStorage.removeItem(refreshToken);
-};
-
-// let body;
-//
-// if (data) {
-//   body = new FormData();
-//
-//   for (let [key, value] of Object.entries(data)) {
-//     if (value instanceof FileList) {
-//       for (let file of value) {
-//         body.append(key, file);
-//       }
-//     }
-//     else {
-//       body.append(key, value);
-//     }
-//   }
-// }
+Object.assign(request, {
+  getItem,
+  setItems,
+  clearAll
+});
 
 export default async function request(...args) {
   let counter = 0;
 
-  async function throttle(path, options = {}) {
+  async function throttle(path, options = {}, auth = true) {
     let {
       method = 'GET',
       query = {},
       headers = {},
-      auth = true,
-      data,
       body
     } = options;
 
     counter++;
 
     if (auth) {
-      let token = localStorage.getItem(accessToken);
+      let token = request.getItem('accessToken');
 
       if (!token || token === String(undefined)) {
         const res = await throttle('/api/v1/users', {
-          method: 'POST',
-          auth: false
-        });
+          method: 'POST'
+        },
+        false);
 
-        try {
-          const pairs = await res.json();
-          saveCredentials(pairs);
+        request.setItems(
+          await res.json()
+        );
 
-          token = localStorage.getItem(accessToken);
-        }
-        catch (err) {
-          return res;
-        }
+        token = request.getItem('accessToken');
       }
 
       headers = {
@@ -75,6 +49,15 @@ export default async function request(...args) {
       url.searchParams.set(i, query[i]);
     }
 
+    if (typeof body === 'object' && body instanceof FormData === false) {
+      headers = {
+        ...headers,
+        'Content-Type': 'application/json'
+      };
+
+      body = JSON.stringify(body);
+    }
+
     const res = await fetch(url, {
       method,
       headers,
@@ -82,20 +65,16 @@ export default async function request(...args) {
     });
 
     if (res.statusText === 'JWT Expired' && counter === 1) {
-      const opie = localStorage.getItem(refreshToken);
+      const opie = request.getItem('refreshToken');
 
       const res = await throttle(`/api/v1/oauth/${opie}`, {
-        method: 'POST',
-        auth: false
-      });
+        method: 'POST'
+      },
+      false);
 
-      try {
-        const pairs = await res.json();
-        saveCredentials(pairs);
-      }
-      catch (err) {
-        return res;
-      }
+      request.setItems(
+        await res.json()
+      );
 
       return await throttle(...args);
     }
@@ -105,6 +84,3 @@ export default async function request(...args) {
 
   return await throttle(...args);
 }
-
-request.saveCredentials = saveCredentials;
-request.clearCredentials = clearCredentials;

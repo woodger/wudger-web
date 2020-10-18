@@ -5,7 +5,7 @@
   import ListOfArticles from '../../components/articles/ListOfArticles.svelte';
 
   export let props = [];
-  
+
   let title = 'Каталог';
 </script>
 
@@ -25,14 +25,14 @@
       return {
         props: values
       };
-		}
+    }
 
     this.error(res.status);
   }
 </script>
 
 <svelte:head>
-	<title>{title}</title>
+  <title>{title}</title>
 </svelte:head>
 
 <Navigation />
