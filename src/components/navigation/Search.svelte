@@ -1,6 +1,6 @@
 <script>
   import Button from '../Button.svelte';
-  import InputText from '../InputText.svelte';
+  import Input from '../Input.svelte';
 </script>
 
 <style>
@@ -16,7 +16,7 @@
 <div>
   <div class="inner">
     <div class="input">
-      <InputText placeholder="Поиск ..." />
+      <Input placeholder="Поиск ..." />
     </div>
     <Button>Найти</Button>
   </div>

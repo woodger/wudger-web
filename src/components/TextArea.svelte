@@ -1,6 +1,9 @@
 <script>
+  import Label from './Label.svelte';
+
   export let name;
   export let value = null;
+  export let label = null;
   export let onInput;
 </script>
 
@@ -30,5 +33,8 @@
 </style>
 
 <div class="container">
+  {#if label}
+    <Label>{label}</Label>
+  {/if}
   <textarea class="textarea" {name} on:input={onInput}>{value}</textarea>
 </div>

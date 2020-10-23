@@ -16,8 +16,6 @@
     'Админ' : 'Гость';
 
   onMount(async () => {
-    await getUserInfo();
-
     store['modal'].subscribe((value) => {
       if (value) {
         modal = value;
@@ -29,36 +27,16 @@
     store['modal'].set({
       title: 'Авторизация',
       component: AuthorizationForm,
-      onClose: getUserInfo
+      onClose
     });
-
-    onClose();
   }
 
-  store['user.info'].subscribe((value) => {
-    if (value) {
-      admin = value.groups.includes('admin');
-    }
+  store['user.admin'].subscribe((value) => {
+    admin = value;
   });
-
-  async function getUserInfo() {
-    const res = await request(`/api/v1/oauth`);
-
-    if (!res.ok) {
-      return store['notification.error'].set({
-        message: 'Упс .. Все сломалось'
-      });
-    }
-
-    store['user.info'].set(
-      await res.json()
-    );
-  }
 
   async function onClickExit() {
     request.clearAll();
-    await getUserInfo();
-
     onClose();
   }
 </script>

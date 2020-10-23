@@ -1,9 +1,11 @@
 <script>
+  import Label from './Label.svelte';
+
   export let name;
-  export let type = 'text';
+  export let type;
+  export let label;
+  export let placeholder;
   export let value = null;
-  export let label = null;
-  export let placeholder = null;
   export let disabled = false;
   export let onInput;
 </script>
@@ -11,12 +13,6 @@
 <style>
   .container {
     margin: .5rem 1rem;
-  }
-
-  .label {
-    line-height: 2rem;
-    font-size: .9rem;
-    color: #666666;
   }
 
   .input {
@@ -44,7 +40,7 @@
 
 <div class="container">
   {#if label}
-    <div class="label">{label}</div>
+    <Label>{label}</Label>
   {/if}
   <input class="input" {type} {name} {value} {disabled} {placeholder} on:input={onInput} />
 </div>

@@ -16,31 +16,35 @@
   let sheet = 1;
   let admin = false;
 
-  const add = {
-    title: 'Новый документ'
-  };
-
   sapper.stores().page.subscribe((value) => {
     query = value.query;
     sheet = 1 + (+query.page | 0) * (+query.limit | 10);
   });
 
-  store['oauth.user.admin'].subscribe((value) => {
+  store['user.admin'].subscribe((value) => {
     admin = value;
   });
 
   async function updateList() {
     const res = await request('/api/v1/articles', { query });
+
+    if (!res.ok) {
+      return store['notification.error'].set({
+        message: 'Упс .. Все сломалось'
+      });
+    }
+
     const {values} = await res.json();
     props = values;
   }
 
-  function onShowForm(value = {}) {
+  function onShowForm({ id, title }) {
     return () => {
       store['modal'].set({
-        slot: ArticleForm,
-        title: value.title,
-        props: value
+        title,
+        component: ArticleForm,
+        props: { id },
+        onClose: updateList
       });
     };
   }
@@ -58,15 +62,17 @@
   {#if admin}
     <div class="control">
       <div class="btn">
-        <Button onClick={onShowForm(add)}>Добавить</Button>
+        <Button onClick={onShowForm({ title: 'Новый документ' })}>
+          Добавить
+        </Button>
       </div>
     </div>
   {/if}
 
-  {#each props as item, index (item.id)}
-    <ArticleCard props={item} index={sheet + index}>
+  {#each props as dct, index (dct.id)}
+    <ArticleCard props={dct} index={sheet + index}>
       {#if admin}
-        <Button onClick={onShowForm(item)}>Изменить</Button>
+        <Button onClick={onShowForm(dct)}>Изменить</Button>
       {/if}
     </ArticleCard>
   {/each}

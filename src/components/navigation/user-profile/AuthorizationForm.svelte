@@ -2,16 +2,16 @@
   import store from '@store';
   import request from '@request';
   import Button from '../../Button.svelte';
-  import InputText from '../../InputText.svelte';
+  import Input from '../../Input.svelte';
 
   export let onClose;
 
-  const fields = {};
+  const body = {};
 
   async function onClickNext() {
     const res = await request('/api/v1/oauth', {
       method: 'POST',
-      body: fields
+      body
     });
 
     if (!res.ok) {
@@ -30,7 +30,7 @@
   }
 
   function onInput({target}) {
-    fields[target.name] = target.value;
+    body[target.name] = target.value;
   }
 </script>
 
@@ -41,17 +41,6 @@
     padding: 1rem 0;
   }
 
-  .field {
-    /* padding: .5rem 1rem; */
-  }
-
-  /* .label {
-    margin: 0 1rem;
-    line-height: 2rem;
-    font-size: .9rem;
-    color: #666666;
-  } */
-
   .control {
     display: flex;
   }
@@ -60,13 +49,11 @@
 <div>
   <div class="fields">
     <div class="field">
-      <!-- <div class="label">Логин</div> -->
-      <InputText name="login" label="Логин" {onInput} />
+      <Input name="login" label="Логин" {onInput} />
     </div>
 
     <div class="field">
-      <!-- <div class="label">Пароль</div> -->
-      <InputText type="password" name="password" label="Пароль" {onInput} />
+      <Input type="password" name="password" label="Пароль" {onInput} />
     </div>
   </div>
 

@@ -4,73 +4,96 @@
   import store from '@store';
   import Svg from '../Svg.svelte';
   import Button from '../Button.svelte';
-  import InputText from '../InputText.svelte';
+  import Input from '../Input.svelte';
   import InputFile from '../InputFile.svelte';
   import TextArea from '../TextArea.svelte';
+  import Loader from '../Loader.svelte';
+  import { shema } from './articleContract.js';
 
-  export let props;
+  export let id;
   export let onClose;
 
-  const fields = {};
-  const data = {};
-
-  const shema = {
-    title: {},
-    price: {
-      type: Number,
-      def: 0
-    },
-    madeYear: {
-      type: Number,
-      def: getYearNow()
-    },
-    descriotion: {},
-    activityType: {},
-    totalPages: {
-      type: Number,
-      def: 0
-    },
-    hidePages: {},
-    note: {},
-    files: {
-      type(value) {
-        return value;
-      },
-      def: []
-    }
+  const data = {
+    files: []
   };
 
-  $: for (const name of Object.keys(shema)) {
-    const {type = String, def = null} = shema[name];
-    const value = props[name];
+  const options = [
+    {
+      name: 'title',
+      size: 100
+    },
+    {
+      name: 'price',
+      size: 20
+    },
+    {
+      name: 'madeYear',
+      size: 20
+    },
+    {
+      name: 'hidePages',
+      size: 30
+    },
+    {
+      name: 'activityType',
+      size: 30
+    },
+    {
+      name: 'totalPages',
+      disabled: true,
+      size: 20
+    },
+    {
+      name: 'note',
+      size: 30
+    }
+  ];
 
-    fields[name] = value ?
-      type(value) : def;
+  let dct;
+
+  onMount(async () => {
+    dct = id ?
+      await getArticleById() : {};
+  });
+
+  async function getArticleById() {
+    const res = await request(`/api/v1/articles/${id}`);
+
+    if (!res.ok) {
+      return store['notification.error'].set({
+        message: 'Упс .. Все сломалось'
+      });
+    }
+
+    return await res.json();
+  }
+
+  function getLabel(name) {
+    const {descriotion, unit} = shema[name];
+
+    return unit ?
+      `${descriotion}, ${unit}` : descriotion;
   }
 
   function onInputText({target}) {
     data[target.name] = target.value;
   }
 
-  async function onInputFileName() {}
-
   async function onClickSave() {
-    for (const name of Object.keys(shema)) {
-      const {type = String, def = null} = shema[name];
-      let value = data[name];
+    for (const key of Object.keys(data)) {
+      if (key in shema) {
+        const {type} = shema[key];
+        const value = data[key].trim();
 
-      if (typeof value === 'string') {
-        value = value.trim();
+        data[key] = type === 'number' ?
+          Number(value) : value;
       }
-
-      data[name] = value ?
-        type(value) : def;
     }
 
     let res;
 
-    if (props.id) {
-      res = await request(`/api/v1/articles/${props.id}`, {
+    if (id) {
+      res = await request(`/api/v1/articles/${id}`, {
         method: 'PUT',
         body: data
       })
@@ -86,7 +109,7 @@
       const {ok} = await res.json();
 
       if (ok === 1) {
-        return await onClose();
+        return onClose();
       }
     }
 
@@ -100,14 +123,14 @@
       return;
     }
 
-    const res = await request(`/api/v1/articles/${props.id}`, {
+    const res = await request(`/api/v1/articles/${id}`, {
       method: 'DELETE'
     });
 
     const {ok, n} = await res.json();
 
     if (ok === 1 && n === 1) {
-      return await onClose();
+      return onClose();
     }
 
     store['notification.error'].set({
@@ -115,54 +138,78 @@
     });
   }
 
-  async function onUploadFiles({target}) {
-    const body = new FormData();
+  async function onUploadFiles({target}) {}
 
-    for (const value of target.files) {
-      body.append('uploads', value);
-    }
+  // async function onInputFileName() {}
+  //
+  // async function onClickSave() {
+  //   for (const name of Object.keys(shema)) {
+  //     const {type = String, def = null} = shema[name];
+  //     let value = data[name];
+  //
+  //     if (typeof value === 'string') {
+  //       value = value.trim();
+  //     }
+  //
+  //     data[name] = value ?
+  //       type(value) : def;
+  //   }
+  //
+  //   let res;
+  //
+  //   if (id) {
+  //     res = await request(`/api/v1/articles/${id}`, {
+  //       method: 'PUT',
+  //       body: data
+  //     })
+  //   }
+  //   else {
+  //     res = await request(`/api/v1/articles`, {
+  //       method: 'POST',
+  //       body: data
+  //     });
+  //   }
+  //
+  //   if (res.ok) {
+  //     const {ok} = await res.json();
+  //
+  //     if (ok === 1) {
+  //       return await onClose();
+  //     }
+  //   }
+  //
+  //   store['notification.error'].set({
+  //     message: 'Упс... все сломалось!'
+  //   });
+  // }
+  //
 
-    const res = await request(`/api/v1/files`, {
-      method: 'POST',
-      body: 'true'
-    });
-
-    if (!res.ok) {
-      return store['notification.error'].set({
-        message: 'Упс... все сломалось!'
-      });
-    }
-
-    const {values} = await res.json();
-
-    fields.files = [
-      ...fields.files,
-      ...values
-    ];
-  }
-
-  function getYearNow() {
-    const now = new Date();
-    const year = now.getFullYear();
-
-    return year;
-  }
-
-  async function getArticleById() {
-    if (props.id) {
-      const res = await request(`/api/v1/articles/${props.id}`);
-
-      if (!res.ok) {
-        return store['notification.error'].set({
-          message: 'Упс... все сломалось!'
-        });
-      }
-
-      props = await res.json();
-    }
-  }
-
-  onMount(getArticleById);
+  //
+  // async function onUploadFiles({target}) {
+  //   const body = new FormData();
+  //
+  //   for (const value of target.files) {
+  //     body.append('uploads', value);
+  //   }
+  //
+  //   const res = await request(`/api/v1/files`, {
+  //     method: 'POST',
+  //     body: 'true'
+  //   });
+  //
+  //   if (!res.ok) {
+  //     return store['notification.error'].set({
+  //       message: 'Упс... все сломалось!'
+  //     });
+  //   }
+  //
+  //   const {values} = await res.json();
+  //
+  //   fields.files = [
+  //     ...fields.files,
+  //     ...values
+  //   ];
+  // }
 </script>
 
 <style>
@@ -172,23 +219,19 @@
     padding: 1rem 0;
   }
 
-  .field_10 {
-    width: 10%;
+  .field_100 {
+    width: 100%;
+  }
+
+  .field_30 {
+    width: 30%;
   }
 
   .field_20 {
     width: 20%;
   }
 
-  .field_100 {
-    width: 100%;
-  }
-
-  .label {
-    margin: 0 1rem .5rem;
-    color: #999999;
-  }
-
+  /*
   .files {
     display: flex;
     flex-wrap: wrap;
@@ -196,7 +239,7 @@
 
   .file {
     margin: 0 0 1rem;
-  }
+  } */
 
   .control {
     display: flex;
@@ -204,74 +247,55 @@
   }
 </style>
 
-
+<Loader spin={!dct}>
   <div>
     <div class="fields">
-      <div class="field_100">
-        <div class="label">Наименование</div>
-        <InputText name="title" value={fields.title} onInput={onInputText} />
-      </div>
-
-      <div class="field_10">
-        <div class="label">Цена, ₽</div>
-        <InputText name="price" value={fields.price} onInput={onInputText} />
-      </div>
-
-      <div class="field_10">
-        <div class="label">Создан, год</div>
-        <InputText name="madeYear" value={fields.madeYear} onInput={onInputText} />
-      </div>
-
-      <div class="field_20">
-        <div class="label">Тип деятельности</div>
-        <InputText name="activityType" value={fields.activityType} onInput={onInputText} />
-      </div>
-
-      <div class="field_10">
-        <div class="label">Объем, стр.</div>
-        <InputText value={fields.totalPages} disabled />
-      </div>
-
-      <div class="field_20">
-        <div class="label">Скрыть страницы</div>
-        <InputText name="hidePages" value={fields.hidePages} onInput={onInputText} />
-      </div>
-
-      <div class="field_20">
-        <div class="label">Комментарий</div>
-        <InputText name="note" value={fields.note} onInput={onInputText} />
-      </div>
+      {#each options as {name, disabled, size} (name)}
+        <div class="field_{size}">
+          <Input
+            {name}
+            {disabled}
+            type={shema[name].type}
+            value={dct[name]}
+            label={getLabel(name)}
+            onInput={onInputText}
+          />
+        </div>
+      {/each}
 
       <div class="field_100">
-        <div class="label">Описание</div>
-        <TextArea name="descriotion" value={fields.descriotion} onInput={onInputText} />
+        <TextArea
+          name="descriotion"
+          value={dct.descriotion}
+          label={getLabel('descriotion')}
+          onInput={onInputText}
+        />
       </div>
     </div>
-
-    <div class="files">
+    <!-- <div class="files">
       <div class="field_100">
         <div class="label">Файлы</div>
         <div class="files__inner">
 
           {#each fields.files as {id, name} (id)}
             <div class="file">
-              <InputText name="file" value={name} onInput={onInputFileName} />
+              <Input name="file" value={name} onInput={onInputFileName} />
             </div>
           {/each}
 
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="control">
       <Button color="blue" onClick={onClickSave}>Сохранить</Button>
+      <InputFile onInput={onUploadFiles} />
 
-      {#if props.id}
+      {#if id}
         <Button onClick={onClickTrash}>
           <Svg src="icons/trash.svg" width="16px" height="16px" />
         </Button>
       {/if}
-
-      <InputFile onInput={onUploadFiles} />
     </div>
   </div>
+</Loader>
