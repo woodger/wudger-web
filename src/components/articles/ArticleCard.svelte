@@ -59,7 +59,7 @@
     font-size: 1.2rem;
   }
 
-  .descriotion {
+  .description {
     margin: 1rem;
   }
 
@@ -92,8 +92,8 @@
         <a href="/articles/{props.id}">{props.title}</a>
       </div>
 
-      <div class="descriotion">
-        {crop(props.descriotion)}
+      <div class="description">
+        {crop(props.description)}
       </div>
 
       <div class="option-group">

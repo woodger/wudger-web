@@ -8,14 +8,13 @@
   import InputFile from '../InputFile.svelte';
   import TextArea from '../TextArea.svelte';
   import Loader from '../Loader.svelte';
-  import { shema } from './articleContract.js';
+  // import { shema } from './articleContract.js';
 
   export let id;
   export let onClose;
 
-  const data = {
-    files: []
-  };
+  let shema;
+  let body;
 
   const options = [
     {
@@ -49,12 +48,24 @@
     }
   ];
 
-  let dct;
-
   onMount(async () => {
-    dct = id ?
+    shema = await getShema();
+
+    body = id ?
       await getArticleById() : {};
   });
+
+  async function getShema() {
+    const res = await request(`/api/v1/files/schemes/article.json`);
+
+    if (!res.ok) {
+      return store['notification.error'].set({
+        message: 'Упс .. Все сломалось'
+      });
+    }
+
+    return await res.json();
+  }
 
   async function getArticleById() {
     const res = await request(`/api/v1/articles/${id}`);
@@ -69,24 +80,31 @@
   }
 
   function getLabel(name) {
-    const {descriotion, unit} = shema[name];
+    return shema.properties[name].description;
+  }
 
-    return unit ?
-      `${descriotion}, ${unit}` : descriotion;
+  function getType(name) {
+    return shema.properties[name].type;
   }
 
   function onInputText({target}) {
-    data[target.name] = target.value;
+    body[target.name] = target.value;
   }
 
   async function onClickSave() {
-    for (const key of Object.keys(data)) {
-      if (key in shema) {
-        const {type} = shema[key];
-        const value = data[key].trim();
+    // for (const key of Object.keys(body)) {
+    //   if (key in shema) {
+    //     const {type} = shema[key];
+    //     const value = body[key].trim();
+    //
+    //     body[key] = type === 'number' ?
+    //       Number(value) : value;
+    //   }
+    // }
 
-        data[key] = type === 'number' ?
-          Number(value) : value;
+    for (const key of Object.keys(body)) {
+      if (shema.properties[key] === undefined) {
+        delete body[key];
       }
     }
 
@@ -95,13 +113,13 @@
     if (id) {
       res = await request(`/api/v1/articles/${id}`, {
         method: 'PUT',
-        body: data
+        body
       })
     }
     else {
       res = await request(`/api/v1/articles`, {
         method: 'POST',
-        body: data
+        body
       });
     }
 
@@ -247,7 +265,7 @@
   }
 </style>
 
-<Loader spin={!dct}>
+<Loader spin={!body}>
   <div>
     <div class="fields">
       {#each options as {name, disabled, size} (name)}
@@ -255,8 +273,8 @@
           <Input
             {name}
             {disabled}
-            type={shema[name].type}
-            value={dct[name]}
+            type={getType(name)}
+            value={body[name]}
             label={getLabel(name)}
             onInput={onInputText}
           />
@@ -265,9 +283,9 @@
 
       <div class="field_100">
         <TextArea
-          name="descriotion"
-          value={dct.descriotion}
-          label={getLabel('descriotion')}
+          name="description"
+          value={body.description}
+          label={getLabel('description')}
           onInput={onInputText}
         />
       </div>

@@ -1,33 +1,33 @@
 const shema = {
   title: {
-    descriotion: 'Наименование'
+    description: 'Наименование'
   },
   price: {
     type: 'number',
-    descriotion: 'Цена',
+    description: 'Цена',
     unit: '₽'
   },
   madeYear: {
     type: 'number',
-    descriotion: 'Создан',
+    description: 'Создан',
     unit: 'год'
   },
   activityType: {
-    descriotion: 'Тип деятельности'
+    description: 'Тип деятельности'
   },
-  descriotion: {
-    descriotion: 'Описание'
+  descripotion: {
+    description: 'Описание'
   },
   totalPages: {
     type: 'number',
-    descriotion: 'Объем',
+    description: 'Объем',
     unit: 'стр.'
   },
   hidePages: {
-    descriotion: 'Скрыть страницы'
+    description: 'Скрыть страницы'
   },
   note: {
-    descriotion: 'Комментарий'
+    description: 'Комментарий'
   }
 };
 

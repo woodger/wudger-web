@@ -55,7 +55,7 @@
     padding-left: .1rem;
   }
 
-  .descriotion {
+  .description {
     width: 50%;
     margin: 1rem;
   }
@@ -99,9 +99,9 @@
     </div>
   </div>
 
-  {#if props.descriotion}
-    <div class="descriotion">
-      {props.descriotion}
+  {#if props.description}
+    <div class="description">
+      {props.description}
     </div>
   {/if}
 </div>
