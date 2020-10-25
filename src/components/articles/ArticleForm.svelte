@@ -8,7 +8,6 @@
   import InputFile from '../InputFile.svelte';
   import TextArea from '../TextArea.svelte';
   import Loader from '../Loader.svelte';
-  // import { shema } from './articleContract.js';
 
   export let id;
   export let onClose;
@@ -52,31 +51,30 @@
     shema = await getShema();
 
     body = id ?
-      await getArticleById() : {};
+      await getArticleById() : createNewArticle();
   });
 
-  async function getShema() {
-    const res = await request(`/api/v1/files/schemes/article.json`);
+  function createNewArticle() {
+    const dct = {};
 
-    if (!res.ok) {
-      return store['notification.error'].set({
-        message: 'Упс .. Все сломалось'
-      });
+    for (const key of Object.keys(shema.properties)) {
+      dct[key] = shema.properties[key].default;
     }
 
-    return await res.json();
+    if ('madeYear' in dct) {
+      const date = new Date();
+      dct.madeYear = date.getFullYear();
+    }
+
+    return dct;
+  }
+
+  async function getShema() {
+    return request(`/api/v1/static/schemes/article.json`);
   }
 
   async function getArticleById() {
-    const res = await request(`/api/v1/articles/${id}`);
-
-    if (!res.ok) {
-      return store['notification.error'].set({
-        message: 'Упс .. Все сломалось'
-      });
-    }
-
-    return await res.json();
+    return await request(`/api/v1/articles/${id}`);
   }
 
   function getLabel(name) {
@@ -92,48 +90,29 @@
   }
 
   async function onClickSave() {
-    // for (const key of Object.keys(body)) {
-    //   if (key in shema) {
-    //     const {type} = shema[key];
-    //     const value = body[key].trim();
-    //
-    //     body[key] = type === 'number' ?
-    //       Number(value) : value;
-    //   }
-    // }
-
     for (const key of Object.keys(body)) {
       if (shema.properties[key] === undefined) {
         delete body[key];
       }
+      else if (shema.properties[key].type === 'number') {
+        body[key] = +body[key];
+      }
     }
 
-    let res;
-
     if (id) {
-      res = await request(`/api/v1/articles/${id}`, {
+      await request(`/api/v1/articles/${id}`, {
         method: 'PUT',
         body
       })
     }
     else {
-      res = await request(`/api/v1/articles`, {
+      await request(`/api/v1/articles`, {
         method: 'POST',
         body
       });
     }
 
-    if (res.ok) {
-      const {ok} = await res.json();
-
-      if (ok === 1) {
-        return onClose();
-      }
-    }
-
-    store['notification.error'].set({
-      message: 'Упс... все сломалось!'
-    });
+    onClose();
   }
 
   async function onClickTrash() {
@@ -141,19 +120,11 @@
       return;
     }
 
-    const res = await request(`/api/v1/articles/${id}`, {
+    await request(`/api/v1/articles/${id}`, {
       method: 'DELETE'
     });
 
-    const {ok, n} = await res.json();
-
-    if (ok === 1 && n === 1) {
-      return onClose();
-    }
-
-    store['notification.error'].set({
-      message: 'Упс... все сломалось!'
-    });
+    onClose();
   }
 
   async function onUploadFiles({target}) {}

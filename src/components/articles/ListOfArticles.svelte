@@ -26,15 +26,7 @@
   });
 
   async function updateList() {
-    const res = await request('/api/v1/articles', { query });
-
-    if (!res.ok) {
-      return store['notification.error'].set({
-        message: 'Упс .. Все сломалось'
-      });
-    }
-
-    const {values} = await res.json();
+    const {values} = await request('/api/v1/articles', { query });
     props = values;
   }
 

@@ -2,23 +2,17 @@
   import { fade } from 'svelte/transition';
   import store from '@store';
 
-  let message;
+  let message = undefined;
+  let type;
 
-  store['notification.message'].subscribe((value) => {
+  store.notification.subscribe((value) => {
     if (value) {
+      type = value.type;
       message = value.message;
-      setTimeout(onClickClose, 3e4);
     }
   });
 
-  store['notification.error'].subscribe((value) => {
-    if (value) {
-      message = value.message;
-      setTimeout(onClickClose, 3e4);
-    }
-  });
-
-  function onClickClose() {
+  function onClose() {
     message = undefined;
   }
 </script>
@@ -30,18 +24,26 @@
     right: 0;
   }
 
-  .message {
-    width: 300px;
-    min-height: 30px;
+  .notification {
+    /* width: 300px; */
     margin: 1.5rem 1rem;
-    padding: 0 1rem;
+    padding: .5rem 1rem;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+
+  .undefined {
     background: linear-gradient(to bottom, #f4f4f4 97%, #aaaaaa 100%);
+  }
+
+  .error {
+    background: linear-gradient(to bottom, #ffa097 97%, #af2d2d 100%);
   }
 </style>
 
 {#if message}
   <div class="container">
-    <div class="message" transition:fade on:click={onClickClose}>
+    <div class="notification {type}" transition:fade on:click={onClose}>
       {message}
     </div>
   </div>

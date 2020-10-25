@@ -12,16 +12,7 @@
 
   async function getUserInfo() {
     const res = await request(`/api/v1/oauth`);
-
-    if (!res.ok) {
-      return store['notification.error'].set({
-        message: 'Упс .. Все сломалось'
-      });
-    }
-
-    store['user.info'].set(
-      await res.json()
-    );
+    store['user.info'].set(res);
   }
 
   store['user.info'].subscribe((value) => {

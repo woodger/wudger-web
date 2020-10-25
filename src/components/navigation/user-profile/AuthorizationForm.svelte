@@ -14,18 +14,7 @@
       body
     });
 
-    if (!res.ok) {
-      store['notification.error'].set({
-        message: 'Ошибка: Неверный логин или пароль'
-      });
-
-      return;
-    }
-
-    request.setItems(
-      await res.json()
-    );
-
+    request.setItems(res);
     onClose();
   }
 

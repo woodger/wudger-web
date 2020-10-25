@@ -1,3 +1,4 @@
+import store from '@store';
 import Coyote from './coyote.js';
 
 const {getItem, setItems, clearAll} = new Coyote();
@@ -7,6 +8,8 @@ Object.assign(request, {
   setItems,
   clearAll
 });
+
+// Content-Type: application/json;
 
 export default async function request(...args) {
   let counter = 0;
@@ -22,7 +25,7 @@ export default async function request(...args) {
     counter++;
 
     if (auth) {
-      let token = request.getItem('accessToken');
+      let token = getItem('accessToken');
 
       if (!token || token === String(undefined)) {
         const res = await throttle('/api/v1/users', {
@@ -30,11 +33,8 @@ export default async function request(...args) {
         },
         false);
 
-        request.setItems(
-          await res.json()
-        );
-
-        token = request.getItem('accessToken');
+        setItems(res);
+        token = getItem('accessToken');
       }
 
       headers = {
@@ -65,21 +65,25 @@ export default async function request(...args) {
     });
 
     if (res.statusText === 'JWT Expired' && counter === 1) {
-      const opie = request.getItem('refreshToken');
+      const opie = getItem('refreshToken');
 
       const res = await throttle(`/api/v1/oauth/${opie}`, {
         method: 'POST'
       },
       false);
 
-      request.setItems(
-        await res.json()
-      );
-
+      setItems(res);
       return await throttle(...args);
     }
 
-    return res;
+    if (res.ok === false) {
+      return store.notification.set({
+        type: 'error',
+        message: await res.text()
+      });
+    }
+
+    return await res.json();
   }
 
   return await throttle(...args);
