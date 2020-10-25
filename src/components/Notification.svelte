@@ -25,8 +25,7 @@
   }
 
   .notification {
-    /* width: 300px; */
-    margin: 1.5rem 1rem;
+    margin: 1rem;
     padding: .5rem 1rem;
     border-radius: 3px;
     cursor: pointer;
