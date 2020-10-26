@@ -1,6 +1,6 @@
 <script>
   import { fade } from 'svelte/transition';
-  import store from '@store';
+  import { store } from '@toolkit';
 
   let message = undefined;
   let type;

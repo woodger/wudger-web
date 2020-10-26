@@ -1,9 +1,8 @@
 <script>
   import { onMount } from 'svelte';
-  import store from '@store';
-  import request from '@request';
-  import Svg from '../../Svg.svelte';
-  import Button from '../../Button.svelte';
+  import { store, request } from '@toolkit';
+  import Svg from '../Svg.svelte';
+  import Button from '../Button.svelte';
   import AuthorizationForm from './AuthorizationForm.svelte';
 
   export let onClose;

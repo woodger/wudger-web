@@ -1,5 +1,5 @@
 <script>
-  import store from '@store';
+  import { store } from '@toolkit';
   import Button from './Button.svelte';
   import Svg from './Svg.svelte';
 

@@ -1,57 +1,52 @@
 <script>
   import { onMount } from 'svelte';
-  import request from '@request';
-  import store from '@store';
+  import { store, request, contract } from '@toolkit';
   import Svg from '../Svg.svelte';
   import Button from '../Button.svelte';
   import Input from '../Input.svelte';
   import InputFile from '../InputFile.svelte';
   import TextArea from '../TextArea.svelte';
   import Loader from '../Loader.svelte';
+  import Label from '../Label.svelte';
 
   export let id;
   export let onClose;
 
+  let show = false;
   let shema;
   let body;
 
-  const options = [
-    {
-      name: 'title',
-      size: 100
-    },
-    {
-      name: 'price',
-      size: 20
-    },
-    {
-      name: 'madeYear',
-      size: 20
-    },
-    {
-      name: 'hidePages',
-      size: 30
-    },
-    {
-      name: 'activityType',
-      size: 30
-    },
-    {
-      name: 'totalPages',
-      disabled: true,
-      size: 20
-    },
-    {
-      name: 'note',
-      size: 30
-    }
-  ];
+  const options = [{
+    name: 'title',
+    size: 100
+  }, {
+    name: 'price',
+    size: 20
+  }, {
+    name: 'madeYear',
+    size: 20
+  }, {
+    name: 'hidePages',
+    size: 30
+  }, {
+    name: 'activityType',
+    size: 30
+  }, {
+    name: 'totalPages',
+    disabled: true,
+    size: 20
+  }, {
+    name: 'note',
+    size: 30
+  }];
 
   onMount(async () => {
-    shema = await getShema();
+    shema = await request(`/api/v1/static/schemes/article.json`);
 
     body = id ?
-      await getArticleById() : createNewArticle();
+      await request(`/api/v1/articles/${id}`) : createNewArticle();
+
+    show = true;
   });
 
   function createNewArticle() {
@@ -69,14 +64,6 @@
     return dct;
   }
 
-  async function getShema() {
-    return request(`/api/v1/static/schemes/article.json`);
-  }
-
-  async function getArticleById() {
-    return await request(`/api/v1/articles/${id}`);
-  }
-
   function getLabel(name) {
     return shema.properties[name].description;
   }
@@ -90,62 +77,19 @@
   }
 
   async function onClickSave() {
-    for (const key of Object.keys(body)) {
-      const rule = shema.properties[key];
-
-      if (rule === undefined) {
-        delete body[key];
-        continue;
-      }
-
-      let value = body[key];
-
-      if (typeof body[key] === 'string') {
-        value = body[key].trim();
-      }
-
-      if (typeof rule.type === 'string') {
-        if (rule.type === 'string') {
-          body[key] = value + '';
-        }
-        else if (rule.type === 'number') {
-          body[key] = +value;
-        }
-        else if (rule.type === 'null') {
-          body[key] = null;
-        }
-
-        continue;
-      }
-
-      for (const type of rule.type) {
-        if (value === '') {
-          body[key] = rule.default;
-          break;
-        }
-
-        if (rule.type === 'string') {
-          body[key] = value + '';
-        }
-        else if (type === 'number') {
-          body[key] = +value;
-        }
-        else if (rule.type === 'null') {
-          body[key] = null;
-        }
-      }
-    }
+    const data = contract(shema, body);
 
     if (id) {
       await request(`/api/v1/articles/${id}`, {
         method: 'PUT',
-        body
+        body: data
       })
     }
     else {
       await request(`/api/v1/articles`, {
         method: 'POST',
-        body
+        shema,
+        body: data
       });
     }
 
@@ -164,78 +108,28 @@
     onClose();
   }
 
-  async function onUploadFiles({target}) {}
+  function getExtname(name) {
+    return name.substr(name.lastIndexOf('.'));
+  }
 
-  // async function onInputFileName() {}
-  //
-  // async function onClickSave() {
-  //   for (const name of Object.keys(shema)) {
-  //     const {type = String, def = null} = shema[name];
-  //     let value = data[name];
-  //
-  //     if (typeof value === 'string') {
-  //       value = value.trim();
-  //     }
-  //
-  //     data[name] = value ?
-  //       type(value) : def;
-  //   }
-  //
-  //   let res;
-  //
-  //   if (id) {
-  //     res = await request(`/api/v1/articles/${id}`, {
-  //       method: 'PUT',
-  //       body: data
-  //     })
-  //   }
-  //   else {
-  //     res = await request(`/api/v1/articles`, {
-  //       method: 'POST',
-  //       body: data
-  //     });
-  //   }
-  //
-  //   if (res.ok) {
-  //     const {ok} = await res.json();
-  //
-  //     if (ok === 1) {
-  //       return await onClose();
-  //     }
-  //   }
-  //
-  //   store['notification.error'].set({
-  //     message: 'Упс... все сломалось!'
-  //   });
-  // }
-  //
+  function getFilename(name) {
+    return name.substr(0, name.lastIndexOf('.'));
+  }
 
-  //
-  // async function onUploadFiles({target}) {
-  //   const body = new FormData();
-  //
-  //   for (const value of target.files) {
-  //     body.append('uploads', value);
-  //   }
-  //
-  //   const res = await request(`/api/v1/files`, {
-  //     method: 'POST',
-  //     body: 'true'
-  //   });
-  //
-  //   if (!res.ok) {
-  //     return store['notification.error'].set({
-  //       message: 'Упс... все сломалось!'
-  //     });
-  //   }
-  //
-  //   const {values} = await res.json();
-  //
-  //   fields.files = [
-  //     ...fields.files,
-  //     ...values
-  //   ];
-  // }
+  async function onUploadFiles({target}) {
+    //   const body = new FormData();
+    //
+    //   for (const value of target.files) {
+    //     body.append('uploads', value);
+    //   }
+    //
+    //   const res = await request(`/api/v1/files`, {
+    //     method: 'POST',
+    //     body: 'true'
+    //   });
+  }
+
+  async function onInputFileName() {}
 </script>
 
 <style>
@@ -257,15 +151,14 @@
     width: 20%;
   }
 
-  /*
-  .files {
-    display: flex;
-    flex-wrap: wrap;
-  }
+  /* .files {
+    padding: 1rem 0;
+    background: #f4f4f4;
+  } */
 
   .file {
     margin: 0 0 1rem;
-  } */
+  }
 
   .control {
     display: flex;
@@ -273,7 +166,7 @@
   }
 </style>
 
-<Loader spin={!body}>
+<Loader spin={!show}>
   <div>
     <div class="fields">
       {#each options as {name, disabled, size} (name)}
@@ -298,20 +191,23 @@
         />
       </div>
     </div>
-    <!-- <div class="files">
-      <div class="field_100">
-        <div class="label">Файлы</div>
-        <div class="files__inner">
 
-          {#each fields.files as {id, name} (id)}
+    {#if body.files.length}
+      <div class="files">
+        <div>
+          {#each body.files as {id, name} (id)}
             <div class="file">
-              <Input name="file" value={name} onInput={onInputFileName} />
+              <Input
+                name="attachment"
+                value={getFilename(name)}
+                label={getExtname(name)}
+                onInput={onInputFileName}
+              />
             </div>
           {/each}
-
         </div>
       </div>
-    </div> -->
+    {/if}
 
     <div class="control">
       <Button color="blue" onClick={onClickSave}>Сохранить</Button>

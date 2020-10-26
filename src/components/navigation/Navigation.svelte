@@ -1,7 +1,7 @@
 <script>
-  import UserProfile from './user-profile/UserProfile.svelte';
-  import BlockControl from './BlockControl.svelte';
   import Svg from '../Svg.svelte';
+  import UserProfile from '../user-profile/UserProfile.svelte';
+  import BlockControl from './BlockControl.svelte';
 
   export let title = undefined;
 </script>

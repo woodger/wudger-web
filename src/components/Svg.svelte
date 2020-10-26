@@ -7,6 +7,7 @@
   export let onLoad;
 
   let html = '';
+  let style;
 
   onMount(async () => {
     const res = await fetch(src);
@@ -27,6 +28,8 @@
       html = frame.innerHTML;
     }
   });
+
+  $: style = `width: ${width}; height: ${height}`;
 </script>
 
 <style>
@@ -35,4 +38,6 @@
   }
 </style>
 
-<div style="width:{width};height:{height}">{@html html}</div>
+<div {style}>
+  {@html html}
+</div>

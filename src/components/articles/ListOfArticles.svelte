@@ -1,7 +1,6 @@
 <script>
   import * as sapper from '@sapper/app';
-  import store from '@store';
-  import request from '@request';
+  import { store, request } from '@toolkit';
   import Pagination from '../Pagination.svelte';
   import ArticleCard from './ArticleCard.svelte';
   import ArticleForm from './ArticleForm.svelte';

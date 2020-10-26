@@ -20,12 +20,8 @@ const onwarn = (warning, onwarn) =>
 
 const customResolver = {
   entries: [{
-    find: '@store',
-    replacement: __dirname + '/src/asserts/@store'
-  },
-  {
-    find: '@request',
-    replacement: __dirname + '/src/asserts/@request'
+    find: '@toolkit',
+    replacement: __dirname + '/src/toolkit/@index'
   }]
 };
 

@@ -1,4 +1,4 @@
-import store from '@store';
+import store from './store.js';
 import Coyote from './coyote.js';
 
 const {getItem, setItems, clearAll} = new Coyote();
@@ -8,8 +8,6 @@ Object.assign(request, {
   setItems,
   clearAll
 });
-
-// Content-Type: application/json;
 
 export default async function request(...args) {
   let counter = 0;
