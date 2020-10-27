@@ -1,7 +1,6 @@
 <script>
   import Label from './Label.svelte';
 
-  export let name;
   export let type;
   export let label;
   export let placeholder;
@@ -19,7 +18,7 @@
     box-sizing: border-box;
     width: 100%;
     height: 32px;
-    padding: 0;
+    padding: 0 .5rem 0 0;
     text-indent: .5rem;
     box-shadow: inset 0 1px 1px #dddddd;
     border: 1px solid #aaaaaa;
@@ -42,5 +41,5 @@
   {#if label}
     <Label>{label}</Label>
   {/if}
-  <input class="input" {type} {name} {value} {disabled} {placeholder} on:input={onInput} />
+  <input class="input" {type} {value} {disabled} {placeholder} on:input={onInput} />
 </div>

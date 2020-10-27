@@ -8,7 +8,7 @@
   export let onClose;
 
   let show = false;
-  let body = {};
+  let data = {};
   let shema;
 
   onMount(async () => {
@@ -17,19 +17,21 @@
   });
 
   async function onClickNext() {
-    const data = contract(shema, body);
+    const body = contract(shema, data);
 
     const res = await request('/api/v1/oauth', {
       method: 'POST',
-      body: data
+      body
     });
 
     request.setItems(res);
     onClose();
   }
 
-  function onInput({target}) {
-    body[target.name] = target.value;
+  function onInputText(name) {
+    return ({target}) => {
+      data[name] = target.value;
+    }
   }
 </script>
 
@@ -42,6 +44,7 @@
 
   .control {
     display: flex;
+    padding: .5rem 0;
   }
 </style>
 
@@ -49,11 +52,18 @@
   <div>
     <div class="fields">
       <div class="field">
-        <Input name="login" label="Логин" {onInput} />
+        <Input
+          label="Логин"
+          onInput={onInputText('login')}
+        />
       </div>
 
       <div class="field">
-        <Input type="password" name="password" label="Пароль" {onInput} />
+        <Input
+          label="Пароль"
+          type="password"
+          onInput={onInputText('password')}
+        />
       </div>
     </div>
 

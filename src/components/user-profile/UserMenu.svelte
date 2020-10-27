@@ -22,11 +22,19 @@
     });
   });
 
+  async function getUserInfo() {
+    store['user.info'].set(
+      await request(`/api/v1/oauth`)
+    );
+
+    onClose();
+  }
+
   function onClickEnter() {
     store['modal'].set({
       title: 'Авторизация',
       component: AuthorizationForm,
-      onClose
+      onClose: getUserInfo
     });
   }
 
@@ -36,19 +44,13 @@
 
   async function onClickExit() {
     request.clearAll();
-    onClose();
+    await getUserInfo();
   }
 </script>
 
 <style>
   .container {
-    position: absolute;
-    top: 35px;
-    right: 0;
     width: 250px;
-    border: 1px solid #aaaaaa;
-    box-shadow: 0 1px 3px #aaaaaa;
-    background: #ffffff;
   }
 
   .account {

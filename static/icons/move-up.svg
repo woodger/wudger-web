@@ -1,0 +1,12 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+<path d="M704 512v384h64v-384h160l-192-192-192 192z"></path>
+<path d="M64 192h96v64h-96v-64z"></path>
+<path d="M192 192h96v64h-96v-64z"></path>
+<path d="M320 192h64v96h-64v-96z"></path>
+<path d="M64 416h64v96h-64v-96z"></path>
+<path d="M160 448h96v64h-96v-64z"></path>
+<path d="M288 448h96v64h-96v-64z"></path>
+<path d="M64 288h64v96h-64v-96z"></path>
+<path d="M320 320h64v96h-64v-96z"></path>
+<path d="M320 704v192h-192v-192h192zM384 640h-320v320h320v-320z"></path>
+</svg>

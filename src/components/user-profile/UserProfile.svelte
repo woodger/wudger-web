@@ -1,47 +1,27 @@
 <script>
   import { onMount } from 'svelte';
   import { store, request } from '@toolkit';
+  import Switch from '../Switch.svelte';
   import Svg from '../Svg.svelte';
-  import Button from '../Button.svelte';
   import UserMenu from './UserMenu.svelte';
-
-  let show = false;
 
   onMount(getUserInfo);
 
   async function getUserInfo() {
-    const res = await request(`/api/v1/oauth`);
-    store['user.info'].set(res);
+    store['user.info'].set(
+      await request(`/api/v1/oauth`)
+    );
   }
 
   store['user.info'].subscribe((value) => {
-    store['user.admin'].set(
-      value && value.groups.includes('admin')
-    );
+    if (value) {
+      store['user.admin'].set(
+        value.groups.includes('admin')
+      );
+    }
   });
-
-  function onSwithMenu() {
-    show = !show;
-  }
-
-  async function onCloseUserMenu() {
-    show = false;
-    await getUserInfo();
-  }
 </script>
 
-<style>
-  .container {
-    position: relative;
-  }
-</style>
-
-<div class="container">
-  <Button onClick={onSwithMenu}>
-    <Svg src="icons/user.svg" width="16px" height="16px" />
-  </Button>
-
-  {#if show}
-    <UserMenu onClose={onCloseUserMenu} />
-  {/if}
-</div>
+<Switch popup={UserMenu}>
+  <Svg src="icons/user.svg" width="16px" height="16px" />
+</Switch>

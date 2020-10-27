@@ -9,7 +9,7 @@
     display: flex;
     align-items: center;
     height: 30px;
-    margin: 1rem;
+    margin: .5rem 1rem;
     padding: 0 1rem;
     border-radius: 3px;
     outline: none;

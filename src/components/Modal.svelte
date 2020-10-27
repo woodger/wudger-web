@@ -48,6 +48,7 @@
 
   .btn_right {
     margin-left: auto;
+    padding: .5rem 0;
   }
 </style>
 
