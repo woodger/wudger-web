@@ -15,7 +15,7 @@
   <label>
     <input type="file" class="file" on:input={onInput} multiple />
     <Button>
-      <Svg src="icons/upload.svg" width="16px" height="16px" />
+      <Svg src="icons/attachment.svg" width="16px" height="16px" />
     </Button>
   </label>
 </div>

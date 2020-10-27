@@ -22,6 +22,6 @@
   });
 </script>
 
-<Switch popup={UserMenu}>
+<Switch component={UserMenu}>
   <Svg src="icons/user.svg" width="16px" height="16px" />
 </Switch>

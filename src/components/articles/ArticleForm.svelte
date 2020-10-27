@@ -65,11 +65,15 @@
   }
 
   function getLabel(name) {
-    return shema.properties[name].description;
+    if (shema.properties[name]) {
+      return shema.properties[name].description;
+    }
   }
 
   function getType(name) {
-    return shema.properties[name].type;
+    if (shema.properties[name]) {
+      return shema.properties[name].type;
+    }
   }
 
   function onInputText(name) {
@@ -139,19 +143,29 @@
   function onInputFileName(name, index) {
     return ({target}) => {
       data.files[index].name = target.value + getExtname(name);
+
+      if (!target.value.length && confirm('Удалить?')) {
+        data.files = data.files.filter((i, key) =>
+          index !== key
+        );
+      }
     }
   }
 
-  let fileControl;
+  function onMoveFiles() {
+    const first = data.files.splice(0, 1);
 
-  function onMoveFiles() {}
+    data.files = [
+      ...data.files,
+      ...first
+    ];
+  }
 </script>
 
 <style>
   .options {
     display: flex;
     flex-wrap: wrap;
-    padding: 1rem 0;
   }
 
   .field_100 {
@@ -166,11 +180,6 @@
     width: 20%;
   }
 
-  /* .files {
-    padding: 1rem 0;
-    background: #f4f4f4;
-  } */
-
   .fieldset {
     margin: 0 1rem;
   }
@@ -178,7 +187,7 @@
   .file {
     display: flex;
     align-items: flex-end;
-    margin: 0 0 1rem;
+    margin: 0 0 .5rem;
   }
 
   .form__control {
@@ -204,43 +213,6 @@
       {/each}
     </div>
 
-    {#if data.files.length}
-      <div class="files">
-        <div class="fieldset">
-          <Label>{getLabel('files')}</Label>
-        </div>
-
-        {#each data.files as {id, name}, index (id)}
-          <div class="file">
-            {#if index}
-              <Button>
-                <Svg src="icons/shift.svg" width="16px" height="16px" />
-              </Button>
-            {:else}
-              <Button>
-                <Svg src="icons/checkmark.svg" width="16px" height="16px" />
-              </Button>
-            {/if}
-
-            <div class="field_100">
-              <Input
-                value={getFilename(name)}
-                onInput={onInputFileName(name, index)}
-              />
-            </div>
-            <Input
-              disabled
-              value={getExtname(name)}
-            />
-
-            <Button>
-              <Svg src="icons/blocked.svg" width="16px" height="16px" />
-            </Button>
-          </div>
-        {/each}
-      </div>
-    {/if}
-
     <div class="field_100">
       <TextArea
         value={data.description}
@@ -249,9 +221,33 @@
       />
     </div>
 
+    {#if data.files.length}
+      <div>
+        <div class="fieldset">
+          <Label>{getLabel('files')}</Label>
+        </div>
+
+        <div class="files">
+          {#each data.files as {id, name}, index (id)}
+            <div class="file">
+              <div class="field_100">
+                <Input
+                  value={getFilename(name)}
+                  onInput={onInputFileName(name, index)}
+                />
+              </div>
+              <Input
+                disabled
+                value={getExtname(name)}
+              />
+            </div>
+          {/each}
+        </div>
+      </div>
+    {/if}
+
     <div class="form__control">
       <Button color="blue" onClick={onClickSave}>Сохранить</Button>
-      <InputFile onInput={onUploadFiles} />
 
       {#if id}
         <Button onClick={onClickTrash}>
@@ -259,11 +255,13 @@
         </Button>
       {/if}
 
-      <!-- {#if data.files.length > 1}
+      <InputFile onInput={onUploadFiles} />
+
+      {#if data.files.length > 1}
         <Button onClick={onMoveFiles}>
           <Svg src="icons/eject.svg" width="16px" height="16px" />
         </Button>
-      {/if} -->
+      {/if}
     </div>
   </div>
 </Loader>

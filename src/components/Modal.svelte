@@ -4,6 +4,13 @@
   import Svg from './Svg.svelte';
 
   let that;
+  let inner;
+  let y;
+
+  $: if (inner) {
+    const height = y - inner.offsetTop - 14;
+    inner.style.setProperty('max-height', height + 'px');
+  }
 
   store['modal'].subscribe((value) => {
     that = value;
@@ -33,8 +40,9 @@
   }
 
   .inner {
-    margin: 5rem 1rem;
+    margin: 1rem;
     background: #ffffff;
+    overflow-y: auto;
   }
 
   .control {
@@ -52,6 +60,8 @@
   }
 </style>
 
+<svelte:window bind:innerHeight={y} />
+
 {#if that}
   <div class="container">
     <div class="global__container">
@@ -65,7 +75,13 @@
           </div>
         </div>
 
-        <svelte:component this={that.component} {...that.props} onClose={onCloseThat} />
+        <div bind:this={inner} class="inserted">
+          <svelte:component
+            {...that.props}
+            this={that.component}
+            onClose={onCloseThat}
+          />
+        </div>
       </div>
     </div>
   </div>

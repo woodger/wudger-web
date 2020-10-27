@@ -2,7 +2,7 @@
   import Button from './Button.svelte';
 
   export let show = false;
-  export let popup;
+  export let component;
   export let onClose;
 
   function onSwitch() {
@@ -41,7 +41,7 @@
 
   {#if show}
     <div class="popup">
-      <svelte:component this={popup} onClose={onProxy} />
+      <svelte:component this={component} onClose={onProxy} />
     </div>
   {/if}
 </div>
