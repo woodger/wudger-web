@@ -1,7 +1,7 @@
 
-export default function contract(shema, body) {
+export default function contract(schema, body) {
   for (const key of Object.keys(body)) {
-    const rule = shema.properties[key];
+    const rule = schema.properties[key];
 
     if (rule === undefined) {
       delete body[key];

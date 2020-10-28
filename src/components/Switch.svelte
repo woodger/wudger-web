@@ -3,18 +3,9 @@
 
   export let show = false;
   export let component;
-  export let onClose;
 
   function onSwitch() {
     show = !show;
-  }
-
-  async function onProxy() {
-    onSwitch();
-
-    if (onClose) {
-      onClose();
-    }
   }
 </script>
 
@@ -41,7 +32,7 @@
 
   {#if show}
     <div class="popup">
-      <svelte:component this={component} onClose={onProxy} />
+      <svelte:component this={component} onClose={onSwitch} />
     </div>
   {/if}
 </div>

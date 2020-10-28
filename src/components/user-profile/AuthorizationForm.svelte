@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { store, request, contract } from '@toolkit';
+  import { request, contract } from '@toolkit';
   import Button from '../Button.svelte';
   import Input from '../Input.svelte';
   import Loader from '../Loader.svelte';
@@ -8,16 +8,16 @@
   export let onClose;
 
   let show = false;
-  let data = {};
-  let shema;
+  let values = {};
+  let schema;
 
   onMount(async () => {
-    shema = await request(`/api/v1/static/schemes/user.json`);
+    schema = await request(`/api/v1/static/schemes/user.json`);
     show = true;
   });
 
   async function onClickNext() {
-    const body = contract(shema, data);
+    const body = contract(schema, values);
 
     const res = await request('/api/v1/oauth', {
       method: 'POST',
@@ -30,7 +30,7 @@
 
   function onInputText(name) {
     return ({target}) => {
-      data[name] = target.value;
+      values[name] = target.value;
     }
   }
 </script>

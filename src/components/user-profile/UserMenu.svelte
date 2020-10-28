@@ -26,8 +26,6 @@
     store['user.info'].set(
       await request(`/api/v1/oauth`)
     );
-
-    onClose();
   }
 
   function onClickEnter() {
@@ -36,6 +34,8 @@
       component: AuthorizationForm,
       onClose: getUserInfo
     });
+
+    onClose();
   }
 
   store['user.admin'].subscribe((value) => {
@@ -45,6 +45,8 @@
   async function onClickExit() {
     request.clearAll();
     await getUserInfo();
+    
+    onClose();
   }
 </script>
 

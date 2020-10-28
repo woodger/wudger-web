@@ -13,8 +13,8 @@
   export let onClose;
 
   let show = false;
-  let shema;
-  let data;
+  let schema;
+  let values;
 
   const options = [{
     name: 'title',
@@ -41,9 +41,8 @@
   }];
 
   onMount(async () => {
-    shema = await request(`/api/v1/static/schemes/article.json`);
-
-    data = id ?
+    schema = await request(`/api/v1/static/schemes/article.json`);
+    values = id ?
       await request(`/api/v1/articles/${id}`) : createNewArticle();
 
     show = true;
@@ -52,8 +51,8 @@
   function createNewArticle() {
     const dct = {};
 
-    for (const key of Object.keys(shema.properties)) {
-      dct[key] = shema.properties[key].default;
+    for (const key of Object.keys(schema.properties)) {
+      dct[key] = schema.properties[key].default;
     }
 
     if ('madeYear' in dct) {
@@ -65,25 +64,25 @@
   }
 
   function getLabel(name) {
-    if (shema.properties[name]) {
-      return shema.properties[name].description;
+    if (schema.properties[name]) {
+      return schema.properties[name].description;
     }
   }
 
   function getType(name) {
-    if (shema.properties[name]) {
-      return shema.properties[name].type;
+    if (schema.properties[name]) {
+      return schema.properties[name].type;
     }
   }
 
   function onInputText(name) {
     return ({target}) => {
-      data[name] = target.value;
+      values[name] = target.value;
     }
   }
 
   async function onClickSave() {
-    const body = contract(shema, data);
+    const body = contract(schema, values);
 
     if (id) {
       await request(`/api/v1/articles/${id}`, {
@@ -94,7 +93,6 @@
     else {
       await request(`/api/v1/articles`, {
         method: 'POST',
-        shema,
         body
       });
     }
@@ -134,18 +132,18 @@
       body
     });
 
-    data.files = [
-      ...data.files,
+    values.files = [
+      ...values.files,
       ...values
     ];
   }
 
   function onInputFileName(name, index) {
     return ({target}) => {
-      data.files[index].name = target.value + getExtname(name);
+      values.files[index].name = target.value + getExtname(name);
 
       if (!target.value.length && confirm('Удалить?')) {
-        data.files = data.files.filter((i, key) =>
+        values.files = values.files.filter((i, key) =>
           index !== key
         );
       }
@@ -153,10 +151,10 @@
   }
 
   function onMoveFiles() {
-    const first = data.files.splice(0, 1);
+    const first = values.files.splice(0, 1);
 
-    data.files = [
-      ...data.files,
+    values.files = [
+      ...values.files,
       ...first
     ];
   }
@@ -190,7 +188,7 @@
     margin: 0 0 .5rem;
   }
 
-  .form__control {
+  .control {
     display: flex;
     align-items: center;
     padding: .5rem 0;
@@ -204,7 +202,7 @@
         <div class="field_{size}">
           <Input
             type={getType(name)}
-            value={data[name]}
+            value={values[name]}
             label={getLabel(name)}
             {disabled}
             onInput={onInputText(name)}
@@ -215,20 +213,20 @@
 
     <div class="field_100">
       <TextArea
-        value={data.description}
+        value={values.description}
         label={getLabel('description')}
         onInput={onInputText('description')}
       />
     </div>
 
-    {#if data.files.length}
+    {#if values.files.length}
       <div>
         <div class="fieldset">
           <Label>{getLabel('files')}</Label>
         </div>
 
         <div class="files">
-          {#each data.files as {id, name}, index (id)}
+          {#each values.files as {id, name}, index (id)}
             <div class="file">
               <div class="field_100">
                 <Input
@@ -246,7 +244,7 @@
       </div>
     {/if}
 
-    <div class="form__control">
+    <div class="control">
       <Button color="blue" onClick={onClickSave}>Сохранить</Button>
 
       {#if id}
@@ -257,7 +255,7 @@
 
       <InputFile onInput={onUploadFiles} />
 
-      {#if data.files.length > 1}
+      {#if values.files.length > 1}
         <Button onClick={onMoveFiles}>
           <Svg src="icons/eject.svg" width="16px" height="16px" />
         </Button>

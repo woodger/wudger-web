@@ -1,15 +1,20 @@
 <script>
-  import ArticleContract from './ArticleContract.svelte';
+  import { onMount } from 'svelte';
+  import { request } from '@toolkit';
   import Button from '../Button.svelte';
 
-  export let props = {};
-  export let pages = [];
+  export let values;
+  export let schema;
 
-  let options = [];
+  let pages = [];
 
-  function updateOptions(value) {
-    options = value;
-  }
+  const options = [
+    'price',
+    'madeYear',
+    'activityType',
+    'totalPages',
+    'note'
+  ];
 </script>
 
 <style>
@@ -30,29 +35,25 @@
     display: flex;
   }
 
-  .feature {
+  .field {
     display: flex;
     margin: .5rem;
     background: url(data:image/gif;base64,R0lGODlhAwABAIABANra2v///yH5BAEKAAEALAAAAAADAAEAAAICRFIAOw==) 0 .9rem repeat-x;
   }
 
-  .feature > :first-child {
+  .field > :first-child {
     width: 30%;
   }
 
-  .feature > :first-child span {
+  .field > :first-child span {
     padding: 0 .5rem;
     background: #ffffff;
   }
 
-  .feature > :last-child {
+  .field > :last-child {
     width: 70%;
     padding: 0 .5rem;
     background: #ffffff;
-  }
-
-  .unit {
-    padding-left: .1rem;
   }
 
   .description {
@@ -67,10 +68,8 @@
   }
 </style>
 
-<ArticleContract {props} update={updateOptions} />
-
 <div class="global__container">
-  <h1>{props.title}</h1>
+  <h1>{values.title}</h1>
 
   <div class="control">
     <div class="buy">
@@ -80,18 +79,14 @@
 
   <div class="options">
     <div class="coll_50">
-      {#each options as {title, value, unit} (title)}
-        {#if value}
-          <div class="feature">
+      {#each options as name (name)}
+        {#if values[name]}
+          <div class="field">
             <div>
-              <span>{title}</span>
+              <span>{schema.properties[name].description}</span>
             </div>
             <div>
-              <span>{value}</span>
-
-              {#if unit}
-                <span class="unit">{unit}</span>
-              {/if}
+              <span>{values[name]}</span>
             </div>
           </div>
         {/if}
@@ -99,10 +94,14 @@
     </div>
   </div>
 
-  {#if props.description}
+  {#if values.description}
     <div class="description">
-      {props.description}
+      {values.description}
     </div>
+  {/if}
+
+  {#if values.files}
+
   {/if}
 </div>
 
