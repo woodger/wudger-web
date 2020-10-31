@@ -127,14 +127,14 @@
       body.append('uploads', value);
     }
 
-    const {values} = await request(`/api/v1/files`, {
+    const res = await request(`/api/v1/files`, {
       method: 'POST',
       body
     });
 
     values.files = [
       ...values.files,
-      ...values
+      ...res.values
     ];
   }
 

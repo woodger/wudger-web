@@ -99,10 +99,6 @@
       {values.description}
     </div>
   {/if}
-
-  {#if values.files}
-
-  {/if}
 </div>
 
 <article class="pages">
