@@ -7,7 +7,9 @@
 
   store.notification.subscribe((value) => {
     if (value) {
-      type = value.type;
+      type = value instanceof Error ?
+        'error' : value.type;
+      
       message = value.message;
     }
   });
@@ -22,6 +24,7 @@
     position: fixed;
     bottom: 0;
     right: 0;
+    z-index: 1;
   }
 
   .notification {

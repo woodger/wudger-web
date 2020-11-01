@@ -13,6 +13,7 @@
   export let onClose;
 
   let show = false;
+  let save = false;
   let schema;
   let values;
 
@@ -82,18 +83,35 @@
   }
 
   async function onClickSave() {
+    save = true;
+
     const body = contract(schema, values);
+    let error;
+
+    const onError = async (res) => {
+      error = await res.text();
+    }
 
     if (id) {
       await request(`/api/v1/articles/${id}`, {
         method: 'PUT',
-        body
-      })
+        body,
+        onError
+      });
     }
     else {
       await request(`/api/v1/articles`, {
         method: 'POST',
-        body
+        body,
+        onError
+      });
+    }
+
+    save = false;
+
+    if (error) {
+      return store.notification.set({
+        message: error
       });
     }
 
@@ -112,19 +130,19 @@
     onClose();
   }
 
-  function getExtname(name) {
-    return name.substr(name.lastIndexOf('.'));
+  function getExtname(title) {
+    return title.substr(title.lastIndexOf('.'));
   }
 
-  function getFilename(name) {
-    return name.substr(0, name.lastIndexOf('.'));
+  function getFilename(title) {
+    return title.substr(0, title.lastIndexOf('.'));
   }
 
   async function onUploadFiles({target}) {
     const body = new FormData();
 
-    for (const value of target.files) {
-      body.append('uploads', value);
+    for (const item of target.files) {
+      body.append('uploads', item);
     }
 
     const res = await request(`/api/v1/files`, {
@@ -138,13 +156,15 @@
     ];
   }
 
-  function onInputFileName(name, index) {
+  function onInputFileName(title, index) {
+    const ext = getExtname(title);
+
     return ({target}) => {
-      values.files[index].name = target.value + getExtname(name);
+      values.files[index].title = target.value + ext;
 
       if (!target.value.length && confirm('Удалить?')) {
-        values.files = values.files.filter((i, key) =>
-          index !== key
+        values.files = values.files.filter((i, count) =>
+          count !== index
         );
       }
     }
@@ -226,17 +246,17 @@
         </div>
 
         <div class="files">
-          {#each values.files as {id, name}, index (id)}
+          {#each values.files as {id, title}, index (id)}
             <div class="file">
               <div class="field_100">
                 <Input
-                  value={getFilename(name)}
-                  onInput={onInputFileName(name, index)}
+                  value={getFilename(title)}
+                  onInput={onInputFileName(title, index)}
                 />
               </div>
               <Input
                 disabled
-                value={getExtname(name)}
+                value={getExtname(title)}
               />
             </div>
           {/each}
@@ -245,7 +265,7 @@
     {/if}
 
     <div class="control">
-      <Button color="blue" onClick={onClickSave}>Сохранить</Button>
+      <Button color="blue" spin={save} onClick={onClickSave}>Сохранить</Button>
 
       {#if id}
         <Button onClick={onClickTrash}>

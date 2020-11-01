@@ -4,17 +4,15 @@
 
 <style>
   .container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    text-align: center;
   }
 
   .spiner {
-    width: 16px;
-    height: 16px;
-    margin: 1rem;
-    border: 2px solid #f4f4f4;
-    border-top: 2px solid #2d77af;
+    display: inline-block;
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid inherit;
+    border-top: 2px solid #000000;
     border-radius: 50%;
     animation: spin 2s linear infinite;
   }

@@ -14,6 +14,7 @@ export default async function request(...args) {
 
   async function throttle(path, options = {}, auth = true) {
     let {
+      onError,
       method = 'GET',
       query = {},
       headers = {},
@@ -74,15 +75,21 @@ export default async function request(...args) {
       return await throttle(...args);
     }
 
-    if (res.ok === false) {
-      return store.notification.set({
-        type: 'error',
-        message: await res.text()
-      });
+    if (!res.ok) {
+      if (onError) {
+        return onError(res);
+      }
+
+      throw new Error(await res.text());
     }
 
     return await res.json();
   }
 
-  return await throttle(...args);
+  try {
+    return await throttle(...args);
+  }
+  catch (err) {
+    store.notification.set(err);
+  }
 }

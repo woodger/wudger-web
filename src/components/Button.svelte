@@ -1,6 +1,9 @@
 <script>
+  import Loader from './Loader.svelte';
+
   export let href = undefined;
   export let color = undefined;
+  export let spin = false;
   export let onClick;
 </script>
 
@@ -8,7 +11,7 @@
   .btn {
     display: flex;
     align-items: center;
-    height: 30px;
+    min-height: 30px;
     margin: .5rem 1rem;
     padding: 0 1rem;
     border-radius: 3px;
@@ -44,10 +47,14 @@
 
 {#if href}
   <a class="btn link {color}" {href}>
-    <slot />
+    <Loader {spin} >
+      <slot />
+    </Loader>
   </a>
 {:else}
   <div class="btn {color}" on:click={onClick}>
-    <slot />
+    <Loader {spin}>
+      <slot />
+    </Loader>
   </div>
 {/if}

@@ -1,5 +1,6 @@
 <script>
   import { onMount } from 'svelte';
+  import Loader from './Loader.svelte';
 
   export let src;
   export let width;
