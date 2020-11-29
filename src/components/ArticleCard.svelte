@@ -1,6 +1,4 @@
 <script>
-  import ArticleContract from './ArticleContract.svelte';
-
   export let index;
   export let props;
 
@@ -77,8 +75,6 @@
     padding-left: .1rem;
   }
 </style>
-
-<ArticleContract {props} update={updateOptions} />
 
 <div class="container">
   <div class="row">

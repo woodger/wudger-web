@@ -2,7 +2,7 @@
   import * as sapper from '@sapper/app';
   import Navigation from '../../components/navigation/Navigation.svelte';
   import Footer from '../../components/footer/Footer.svelte';
-  import ListOfArticles from '../../components/articles/ListOfArticles.svelte';
+  import ListOfArticles from '../../components/ListOfArticles.svelte';
 
   export let props = [];
 

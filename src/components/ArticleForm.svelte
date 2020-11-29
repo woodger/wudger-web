@@ -1,13 +1,13 @@
 <script>
   import { onMount } from 'svelte';
   import { store, request, contract } from '@toolkit';
-  import Svg from '../Svg.svelte';
-  import Button from '../Button.svelte';
-  import Input from '../Input.svelte';
-  import InputFile from '../InputFile.svelte';
-  import TextArea from '../TextArea.svelte';
-  import Loader from '../Loader.svelte';
-  import Label from '../Label.svelte';
+  import Svg from './Svg.svelte';
+  import Button from './Button.svelte';
+  import Input from './Input.svelte';
+  import InputFile from './InputFile.svelte';
+  import Textarea from './Textarea.svelte';
+  import Loader from './Loader.svelte';
+  import Label from './Label.svelte';
 
   export let id;
   export let onClose;
@@ -42,7 +42,7 @@
   }];
 
   onMount(async () => {
-    schema = await request(`/api/v1/static/schemes/article.json`);
+    schema = await request(`/api/v1/files/schemes/article.json`);
     values = id ?
       await request(`/api/v1/articles/${id}`) : createNewArticle();
 
@@ -232,7 +232,7 @@
     </div>
 
     <div class="field_100">
-      <TextArea
+      <Textarea
         value={values.description}
         label={getLabel('description')}
         onInput={onInputText('description')}
