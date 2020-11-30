@@ -26,6 +26,12 @@
     admin = value;
   });
 
+  store.articles.subscribe((value) => {
+    if (value) {
+      props = value;
+    }
+  });
+
   onMount(async () => {
     schema = await request(`/api/v1/files/schemes/article.json`);
   });

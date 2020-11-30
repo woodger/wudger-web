@@ -90,14 +90,14 @@
     }
 
     if (id) {
-      await request(`/api/v1/articles/${id}`, {
+      request(`/api/v1/articles/${id}`, {
         method: 'PUT',
         body,
         onError
       });
     }
     else {
-      await request(`/api/v1/articles`, {
+      request(`/api/v1/articles`, {
         method: 'POST',
         body,
         onError
