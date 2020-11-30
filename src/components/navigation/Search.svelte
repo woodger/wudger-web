@@ -7,12 +7,12 @@
   let phrase;
 
   onMount(() => {
-    phrase = localStorage.getItem('search');
+    const url = new URL(location.href);
+    phrase = url.searchParams.get('search');
   });
 
   function onInputText({target}) {
     phrase = target.value;
-    localStorage.setItem('search', phrase);
   }
 
   function onKeyPress({keyCode}) {
@@ -22,12 +22,10 @@
   }
 
   async function onClickSearch() {
-    const {values} = await request(`/api/v1/articles?search=${phrase}`);
-    store.articles.set(values);
+    location.href = `${location.origin}/articles?search=${phrase}`;
 
-    if (document.location.pathname === '/') {
-      document.location.pathname = `/articles`;
-    }
+    // const {values} = await request(`/api/v1/articles?search=${phrase}`);
+    // store.articles.set(values);
   }
 </script>
 

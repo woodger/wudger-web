@@ -39,7 +39,7 @@
     options = buffer;
   }
 
-  store['user.admin'].subscribe((value) => {
+  store.admin.subscribe((value) => {
     admin = value;
   });
 

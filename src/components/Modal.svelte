@@ -12,7 +12,7 @@
     inner.style.setProperty('max-height', height + 'px');
   }
 
-  store['modal'].subscribe((value) => {
+  store.modal.subscribe((value) => {
     that = value;
   });
 

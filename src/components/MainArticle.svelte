@@ -1,10 +1,18 @@
 <script>
   import { onMount } from 'svelte';
-  import { request } from '@toolkit';
+  import { store, request } from '@toolkit';
   import Button from './Button.svelte';
+  import Svg from './Svg.svelte';
+  import ArticleForm from './ArticleForm.svelte';
 
   export let values;
   export let schema;
+
+  let admin = false;
+
+  store.admin.subscribe((value) => {
+    admin = value;
+  });
 
   const options = [
     'price',
@@ -13,6 +21,22 @@
     'totalPages',
     'note'
   ];
+
+  function onShowForm({ id, title }) {
+    return () => {
+      store.modal.set({
+        title,
+        component: ArticleForm,
+        props: { id },
+        onClose: updateItem
+      });
+    };
+  }
+
+  async function updateItem() {
+    const res = await request(`/api/v1/articles/${values.id}`);
+    values = res.values;
+  }
 </script>
 
 <style>
@@ -22,6 +46,7 @@
   }
 
   .buy {
+    display: flex;
     margin-left: auto;
   }
 
@@ -84,6 +109,12 @@
   <div class="control">
     <div class="buy">
       <Button color="blue">Купить</Button>
+
+      {#if admin}
+        <Button onClick={onShowForm(values)}>
+          <Svg src="icons/three.svg" width="16px" height="16px" />
+        </Button>
+      {/if}
     </div>
   </div>
 

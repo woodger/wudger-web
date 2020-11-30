@@ -15,21 +15,25 @@
     'Админ' : 'Гость';
 
   onMount(async () => {
-    store['modal'].subscribe((value) => {
+    store.modal.subscribe((value) => {
       if (value) {
         modal = value;
       }
     });
   });
 
+  store.admin.subscribe((value) => {
+    admin = value;
+  });
+
   async function getUserInfo() {
-    store['user.info'].set(
+    store.user.set(
       await request(`/api/v1/oauth`)
     );
   }
 
   function onClickEnter() {
-    store['modal'].set({
+    store.modal.set({
       title: 'Авторизация',
       component: AuthorizationForm,
       onClose: getUserInfo
@@ -38,14 +42,10 @@
     onClose();
   }
 
-  store['user.admin'].subscribe((value) => {
-    admin = value;
-  });
-
   async function onClickExit() {
     request.clearAll();
     await getUserInfo();
-    
+
     onClose();
   }
 </script>

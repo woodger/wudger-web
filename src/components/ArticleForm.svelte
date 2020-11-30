@@ -13,7 +13,6 @@
   export let onClose;
 
   let show = false;
-  let save = false;
   let schema;
   let values;
 
@@ -80,7 +79,11 @@
   }
 
   async function onClickSave() {
-    save = true;
+    if (!values.title) {
+      return store.notification.set(
+        new Error(getLabel('title'))
+      );
+    }
 
     const body = contract(schema, values);
     let error;
@@ -103,8 +106,6 @@
         onError
       });
     }
-
-    save = false;
 
     if (error) {
       return store.notification.set({
@@ -268,7 +269,7 @@
     {/if}
 
     <div class="control">
-      <Button color="blue" spin={save} onClick={onClickSave}>Сохранить</Button>
+      <Button color="blue" onClick={onClickSave}>Сохранить</Button>
 
       {#if id}
         <Button onClick={onClickTrash}>

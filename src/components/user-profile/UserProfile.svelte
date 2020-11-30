@@ -8,14 +8,14 @@
   onMount(getUserInfo);
 
   async function getUserInfo() {
-    store['user.info'].set(
+    store.user.set(
       await request(`/api/v1/oauth`)
     );
   }
 
-  store['user.info'].subscribe((value) => {
+  store.user.subscribe((value) => {
     if (value) {
-      store['user.admin'].set(
+      store.admin.set(
         value.groups.includes('admin')
       );
     }

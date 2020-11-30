@@ -22,7 +22,7 @@
     sheet = 1 + (+query.page | 0) * (+query.limit | 10);
   });
 
-  store['user.admin'].subscribe((value) => {
+  store.admin.subscribe((value) => {
     admin = value;
   });
 
@@ -37,13 +37,13 @@
   });
 
   async function updateList() {
-    const {values} = await request('/api/v1/articles', { query });
-    props = values;
+    const res = await request('/api/v1/articles', { query });
+    props = res.values;
   }
 
   function onShowForm({ id, title }) {
     return () => {
-      store['modal'].set({
+      store.modal.set({
         title,
         component: ArticleForm,
         props: { id },
