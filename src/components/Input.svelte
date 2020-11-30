@@ -7,6 +7,7 @@
   export let value = null;
   export let disabled = false;
   export let onInput;
+  export let onKeyPress;
 </script>
 
 <style>
@@ -41,5 +42,14 @@
   {#if label}
     <Label>{label}</Label>
   {/if}
-  <input class="input" {type} {value} {disabled} {placeholder} on:input={onInput} />
+  
+  <input
+    {type}
+    {value}
+    {disabled}
+    {placeholder}
+    class="input"
+    on:input={onInput}
+    on:keypress={onKeyPress}
+  />
 </div>

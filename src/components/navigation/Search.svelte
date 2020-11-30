@@ -10,14 +10,24 @@
     phrase = localStorage.getItem('search');
   });
 
-  function onInput({target}) {
+  function onInputText({target}) {
     phrase = target.value;
     localStorage.setItem('search', phrase);
   }
 
-  async function onClick() {
+  function onKeyPress({keyCode}) {
+    if (keyCode === 13) {
+      onClickSearch();
+    }
+  }
+
+  async function onClickSearch() {
     const {values} = await request(`/api/v1/articles?search=${phrase}`);
     store.articles.set(values);
+
+    if (document.location.pathname === '/') {
+      document.location.pathname = `/articles`;
+    }
   }
 </script>
 
@@ -35,11 +45,12 @@
   <div class="inner">
     <div class="input">
       <Input
-        {onInput}
         value={phrase}
         placeholder="Поиск ..."
+        onInput={onInputText}
+        onKeyPress={onKeyPress}
       />
     </div>
-    <Button {onClick}>Найти</Button>
+    <Button onClick={onClickSearch}>Найти</Button>
   </div>
 </div>
