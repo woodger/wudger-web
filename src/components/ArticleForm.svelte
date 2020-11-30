@@ -27,9 +27,6 @@
     name: 'madeYear',
     size: 20
   }, {
-    name: 'hidePages',
-    size: 30
-  }, {
     name: 'activityType',
     size: 30
   }, {
@@ -130,12 +127,12 @@
     onClose();
   }
 
-  function getExtname(title) {
-    return title.substr(title.lastIndexOf('.'));
+  function getExtname(filename) {
+    return filename.substring(filename.lastIndexOf('.'));
   }
 
-  function getFilename(title) {
-    return title.substr(0, title.lastIndexOf('.'));
+  function getFilename(filename) {
+    return filename.substring(43, filename.lastIndexOf('.'));
   }
 
   async function onUploadFiles({target}) {
@@ -156,11 +153,12 @@
     ];
   }
 
-  function onInputFileName(title, index) {
-    const ext = getExtname(title);
+  function onInputFileName(filename, index) {
+    const base = filename.substring(0, 43);
+    const ext = getExtname(filename);
 
     return ({target}) => {
-      values.files[index].title = target.value + ext;
+      values.files[index] = base + target.value + ext;
 
       if (!target.value.length && confirm('Удалить?')) {
         values.files = values.files.filter((i, count) =>
@@ -246,18 +244,23 @@
         </div>
 
         <div class="files">
-          {#each values.files as {id, title}, index (id)}
+          {#each values.files as item, index}
             <div class="file">
               <div class="field_100">
                 <Input
-                  value={getFilename(title)}
-                  onInput={onInputFileName(title, index)}
+                  value={getFilename(item)}
+                  onInput={onInputFileName(item, index)}
                 />
               </div>
+
               <Input
                 disabled
-                value={getExtname(title)}
+                value={getExtname(item)}
               />
+
+              <Button href={item}>
+                <Svg src="icons/download.svg" width="16px" height="16px" />
+              </Button>
             </div>
           {/each}
         </div>

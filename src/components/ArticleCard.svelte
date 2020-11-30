@@ -1,14 +1,55 @@
 <script>
+  import { store } from '@toolkit';
+
   export let index;
   export let props;
+  export let schema;
 
   let options = [];
+  let admin = false;
 
-  function updateOptions(value) {
-    options = value;
+  const fields = [
+    'price',
+    'totalPages',
+    'madeYear',
+    'activityType'
+  ];
+
+  $: if (props && schema) {
+    const buffer = [];
+
+    for (const item of fields) {
+      let value = props[item];
+
+      if (value !== null) {
+        const label = getLabel(item);
+        const index = label.indexOf(',');
+
+        if (!value && item === 'price') {
+          value = 'Бесплатно';
+        }
+        else if (index > -1) {
+          value = label + '⠀' + value;
+        }
+
+        buffer.push(value);
+      }
+    }
+
+    options = buffer;
   }
 
-  function crop(value, size = 200, dots = '...') {
+  store['user.admin'].subscribe((value) => {
+    admin = value;
+  });
+
+  function getLabel(name) {
+    if (schema.properties[name]) {
+      return schema.properties[name].description;
+    }
+  }
+
+  function getShort(value, size = 200, dots = '...') {
     if (typeof value !== 'string') {
       return '';
     }
@@ -71,8 +112,10 @@
     margin: 0 1rem;
   }
 
-  .unit {
-    padding-left: .1rem;
+  .note {
+    margin: 1rem;
+    font-weight: bold;
+    color: red;
   }
 </style>
 
@@ -89,22 +132,22 @@
       </div>
 
       <div class="description">
-        {crop(props.description)}
+        {getShort(props.description)}
       </div>
 
       <div class="option-group">
-        {#each options as {title, value, unit} (title)}
-          {#if value}
-            <div class="option">
-              <span>{value}</span>
-
-              {#if unit}
-                <span class="unit">{unit}</span>
-              {/if}
-            </div>
-          {/if}
+        {#each options as item (item)}
+          <div class="option">
+            <span>{item}</span>
+          </div>
         {/each}
       </div>
+
+      {#if admin && props.note}
+        <div class="note">
+          {props.note}
+        </div>
+      {/if}
     </div>
 
     <div class="col_4">

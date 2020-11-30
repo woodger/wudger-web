@@ -60,33 +60,21 @@
   }
 
   .space {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    min-height: 50rem;
+    padding: 2.5rem 0;
     margin: 2.5rem 0 0;
-    counter-reset: item 0;
     background: #eeeeee;
   }
 
-  .page {
-    position: relative;
-    width: 210mm;
-    min-height: 297mm;
-    margin: 2.5rem;
-    padding: 20mm 10mm 20mm 30mm;
-    box-shadow: 0 1px 3px #aaaaaa;
-    background: #ffffff;
+  .space__inner {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
   }
 
-  .page:after {
-    position: absolute;
-    right: 7.2%;
-    bottom: 37px;
-    counter-increment: item;
-    content: counter(item);
-    font-size: 10pt;
-    color: #808080;
+  .page {
+    margin: 1rem;
+    box-shadow: 0 1px 3px #aaaaaa;
+    background: #ffffff;
   }
 </style>
 
@@ -123,10 +111,14 @@
   {/if}
 </div>
 
-<article class="space">
-  {#each values.pages as page}
-    <div class="page">
-      {@html page}
+<div class="space">
+  <div class="global__container">
+    <div class="space__inner">
+      {#each values.pages as item, index (item)}
+        <div class="page">
+          <img src={item} alt={index} />
+        </div>
+      {/each}
     </div>
-  {/each}
-</article>
+  </div>
+</div>

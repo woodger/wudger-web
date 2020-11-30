@@ -1,4 +1,5 @@
 <script>
+  import { onMount } from 'svelte';
   import * as sapper from '@sapper/app';
   import { store, request } from '@toolkit';
   import Pagination from './Pagination.svelte';
@@ -14,6 +15,7 @@
   let query = {};
   let sheet = 1;
   let admin = false;
+  let schema;
 
   sapper.stores().page.subscribe((value) => {
     query = value.query;
@@ -22,6 +24,10 @@
 
   store['user.admin'].subscribe((value) => {
     admin = value;
+  });
+
+  onMount(async () => {
+    schema = await request(`/api/v1/files/schemes/article.json`);
   });
 
   async function updateList() {
@@ -60,10 +66,10 @@
     </div>
   {/if}
 
-  {#each props as dct, index (dct.id)}
-    <ArticleCard props={dct} index={sheet + index}>
+  {#each props as item, index (item.id)}
+    <ArticleCard {schema} props={item} index={sheet + index}>
       {#if admin}
-        <Button onClick={onShowForm(dct)}>
+        <Button onClick={onShowForm(item)}>
           <Svg src="icons/three.svg" width="16px" height="16px" />
         </Button>
       {/if}
