@@ -1,6 +1,6 @@
 <script>
   import Navigation from '../../components/navigation/Navigation.svelte';
-  import MainArticle from '../../components/MainArticle.svelte';
+  import MainArticle from '../../components/articles/MainArticle.svelte';
 
   export let values;
   export let schema;

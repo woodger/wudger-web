@@ -1,8 +1,8 @@
 <script>
   import { onMount } from 'svelte';
   import { store, request } from '@toolkit';
-  import Button from './Button.svelte';
-  import Svg from './Svg.svelte';
+  import Button from '../Button.svelte';
+  import Svg from '../Svg.svelte';
   import ArticleForm from './ArticleForm.svelte';
 
   export let values;
@@ -34,8 +34,7 @@
   }
 
   async function updateItem() {
-    const res = await request(`/api/v1/articles/${values.id}`);
-    values = res.values;
+    values = await request(`/api/v1/articles/${values.id}`);
   }
 </script>
 
@@ -50,8 +49,8 @@
     margin-left: auto;
   }
 
-  .coll_50 {
-    width: 60%;
+  .coll_70 {
+    width: 70%;
   }
 
   .options {
@@ -79,8 +78,12 @@
     background: #ffffff;
   }
 
+  .label {
+    font-weight: bold;
+    color: #666666;
+  }
+
   .description {
-    width: 50%;
     margin: 1rem;
   }
 
@@ -92,14 +95,33 @@
 
   .space__inner {
     display: flex;
+    align-items: center;
     justify-content: center;
     flex-wrap: wrap;
+    max-width: 1600px;
+    margin: 0 auto;
   }
 
   .page {
+    position: relative;
     margin: 1rem;
     box-shadow: 0 1px 3px #aaaaaa;
     background: #ffffff;
+  }
+
+  .paid:before {
+    position: absolute;
+    top: 10px;
+    left: -5px;
+    display: block;
+    line-height: 11px;
+    padding: 2px 7px;
+    font-size: 11px;
+    font-family: Arial, Helvetica, sans-serif;
+    content: "Платный доступ";
+    box-shadow: 1px 1px 1px #666;
+    background: #19aaa1;
+    color: #ffffff;
   }
 </style>
 
@@ -119,11 +141,11 @@
   </div>
 
   <div class="options">
-    <div class="coll_50">
+    <div class="coll_70">
       {#each options as name (name)}
         {#if values[name]}
           <div class="field">
-            <div>
+            <div class="label">
               <span>{schema.properties[name].description}</span>
             </div>
             <div>
@@ -143,13 +165,11 @@
 </div>
 
 <div class="space">
-  <div class="global__container">
-    <div class="space__inner">
-      {#each values.pages as item, index (item)}
-        <div class="page">
-          <img src={item} alt={index} />
-        </div>
-      {/each}
-    </div>
+  <div class="space__inner">
+    {#each values.pages as {src, width, height}, index (src)}
+      <div class="page" class:paid={width < 300}>
+        <img {src} {width} {height} alt={index} />
+      </div>
+    {/each}
   </div>
 </div>

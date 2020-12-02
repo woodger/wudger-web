@@ -1,13 +1,13 @@
 <script>
   import { onMount } from 'svelte';
   import { store, request, contract } from '@toolkit';
-  import Svg from './Svg.svelte';
-  import Button from './Button.svelte';
-  import Input from './Input.svelte';
-  import InputFile from './InputFile.svelte';
-  import Textarea from './Textarea.svelte';
-  import Loader from './Loader.svelte';
-  import Label from './Label.svelte';
+  import Svg from '../Svg.svelte';
+  import Button from '../Button.svelte';
+  import Input from '../Input.svelte';
+  import InputFile from '../InputFile.svelte';
+  import Textarea from '../Textarea.svelte';
+  import Loader from '../Loader.svelte';
+  import Label from '../Label.svelte';
 
   export let id;
   export let onClose;
@@ -25,6 +25,9 @@
   }, {
     name: 'madeYear',
     size: 20
+  }, {
+    name: 'hidePages',
+    size: 30
   }, {
     name: 'activityType',
     size: 30
@@ -86,30 +89,17 @@
     }
 
     const body = contract(schema, values);
-    let error;
-
-    const onError = async (res) => {
-      error = await res.text();
-    }
 
     if (id) {
       request(`/api/v1/articles/${id}`, {
         method: 'PUT',
-        body,
-        onError
+        body
       });
     }
     else {
       request(`/api/v1/articles`, {
         method: 'POST',
-        body,
-        onError
-      });
-    }
-
-    if (error) {
-      return store.notification.set({
-        message: error
+        body
       });
     }
 

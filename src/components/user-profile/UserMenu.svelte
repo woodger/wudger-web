@@ -66,6 +66,7 @@
 
   .control {
     display: flex;
+    margin: .5rem 0;
   }
 </style>
 

@@ -2,11 +2,11 @@
   import { onMount } from 'svelte';
   import * as sapper from '@sapper/app';
   import { store, request } from '@toolkit';
-  import Pagination from './Pagination.svelte';
+  import Pagination from '../Pagination.svelte';
+  import Button from '../Button.svelte';
+  import Svg from '../Svg.svelte';
   import ArticleCard from './ArticleCard.svelte';
   import ArticleForm from './ArticleForm.svelte';
-  import Button from './Button.svelte';
-  import Svg from './Svg.svelte';
 
   export let title;
   export let props = [];
