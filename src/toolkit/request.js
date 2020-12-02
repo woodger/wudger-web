@@ -26,7 +26,7 @@ export default async function request(...args) {
     if (auth) {
       let token = getItem('accessToken');
 
-      if (!token || token === String(undefined)) {
+      if (!token || undefined + '' === token) {
         const res = await throttle('/v1/users', {
           method: 'POST'
         },

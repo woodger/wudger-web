@@ -1,7 +1,7 @@
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
-import dotenv from 'rollup-plugin-dotenv';
+// import dotenv from 'rollup-plugin-dotenv';
 import svelte from 'rollup-plugin-svelte';
 import alias from '@rollup/plugin-alias';
 import babel from '@rollup/plugin-babel';
@@ -32,10 +32,11 @@ export default {
     plugins: [
       replace({
         'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode)
+        'process.env.NODE_ENV': JSON.stringify(mode),
+        'process.env.API_URL': JSON.stringify(process.env.API_URL)
       }),
       alias(customResolver),
-      dotenv(),
+      // dotenv(),
       svelte({
         dev,
         hydratable: true,
@@ -79,10 +80,11 @@ export default {
     plugins: [
       replace({
         'process.browser': false,
-        'process.env.NODE_ENV': JSON.stringify(mode)
+        'process.env.NODE_ENV': JSON.stringify(mode),
+        'process.env.API_URL': JSON.stringify(process.env.API_URL)
       }),
       alias(customResolver),
-      dotenv(),
+      // dotenv(),
       svelte({
         generate: 'ssr',
         hydratable: true,
@@ -106,7 +108,8 @@ export default {
       resolve(),
       replace({
         'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode)
+        'process.env.NODE_ENV': JSON.stringify(mode),
+        'process.env.API_URL': JSON.stringify(process.env.API_URL)
       }),
       commonjs(),
       !dev && terser()
