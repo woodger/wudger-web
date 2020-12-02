@@ -34,8 +34,8 @@ export default {
         'process.browser': true,
         'process.env.NODE_ENV': JSON.stringify(mode)
       }),
-      dotenv(),
       alias(customResolver),
+      dotenv(),
       svelte({
         dev,
         hydratable: true,
@@ -81,8 +81,8 @@ export default {
         'process.browser': false,
         'process.env.NODE_ENV': JSON.stringify(mode)
       }),
-      dotenv(),
       alias(customResolver),
+      dotenv(),
       svelte({
         generate: 'ssr',
         hydratable: true,
@@ -108,7 +108,6 @@ export default {
         'process.browser': true,
         'process.env.NODE_ENV': JSON.stringify(mode)
       }),
-      dotenv(),
       commonjs(),
       !dev && terser()
     ],
