@@ -32,9 +32,8 @@
 
 <Lazy {width} {height} show={!lazy}>
   {#await upLoad()}
+    {alt}
   {:then svg}
     {@html svg}
-  {:catch err}
-    {alt}
   {/await}
 </Lazy>

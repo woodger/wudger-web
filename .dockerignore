@@ -1,0 +1,7 @@
+node_modules
+yarn.lock
+yarn-error.log
+__sapper__
+.nyc_output
+.env
+.git
