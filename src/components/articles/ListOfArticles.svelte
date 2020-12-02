@@ -33,12 +33,12 @@
   });
 
   onMount(async () => {
-    schema = await request(`/api/v1/files/schemes/article.json`);
+    schema = await request(`/v1/files/schemes/article.json`);
   });
 
   async function updateList() {
-    const res = await request('/api/v1/articles', { query });
-    props = res.values;
+    const {values} = await request('/v1/articles', { query });
+    props = values;
   }
 
   function onShowForm({ id, title }) {

@@ -23,9 +23,6 @@
 
   async function onClickSearch() {
     location.href = `${location.origin}/articles?search=${phrase}`;
-
-    // const {values} = await request(`/api/v1/articles?search=${phrase}`);
-    // store.articles.set(values);
   }
 </script>
 

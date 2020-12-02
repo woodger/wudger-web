@@ -27,7 +27,7 @@ export default async function request(...args) {
       let token = getItem('accessToken');
 
       if (!token || token === String(undefined)) {
-        const res = await throttle('/api/v1/users', {
+        const res = await throttle('/v1/users', {
           method: 'POST'
         },
         false);
@@ -66,7 +66,7 @@ export default async function request(...args) {
     if (res.statusText === 'JWT Expired' && counter === 1) {
       const opie = getItem('refreshToken');
 
-      const res = await throttle(`/api/v1/oauth/${opie}`, {
+      const res = await throttle(`/v1/oauth/${opie}`, {
         method: 'POST'
       },
       false);

@@ -12,14 +12,14 @@
   let schema;
 
   onMount(async () => {
-    schema = await request(`/api/v1/files/schemes/user.json`);
+    schema = await request(`/v1/files/schemes/user.json`);
     show = true;
   });
 
   async function onClickNext() {
     const body = contract(schema, values);
 
-    const res = await request('/api/v1/oauth', {
+    const res = await request('/v1/oauth', {
       method: 'POST',
       body
     });
