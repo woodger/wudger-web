@@ -42,7 +42,7 @@ export default async function request(...args) {
       };
     }
 
-    const url = new URL(path, process.env.API_URL);
+    const url = new URL(process.env.API_URL + path);
 
     for (let i of Object.keys(query)) {
       url.searchParams.set(i, query[i]);
