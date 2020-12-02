@@ -108,6 +108,7 @@ export default {
         'process.browser': true,
         'process.env.NODE_ENV': JSON.stringify(mode)
       }),
+      dotenv(),
       commonjs(),
       !dev && terser()
     ],

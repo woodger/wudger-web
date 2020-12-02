@@ -12,8 +12,8 @@
       `/v1/files/schemes/article.json`,
       `/v1/articles/${params.slug}`
     ]
-    .map((path) => {
-      const url = new URL(process.env.API_URL + path);
+    .map((item) => {
+      const url = new URL(process.env.API_URL + item);
       return this.fetch(url);
     });
 

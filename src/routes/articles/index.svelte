@@ -11,7 +11,7 @@
 
 <script context="module">
   export async function preload({query}) {
-    const url = new URL(`${process.env.API_URL}/v1/articles`);
+    const url = new URL(process.env.API_URL + '/v1/articles');
 
     for (const i of Object.entries(query)) {
       url.searchParams.set(...i);
