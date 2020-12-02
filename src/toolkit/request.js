@@ -42,14 +42,6 @@ export default async function request(...args) {
       };
     }
 
-    try {
-      new URL(process.env.API_URL + path);
-    }
-    catch (err) {
-      console.log(process.env.API_URL);
-      console.log(path);
-    }
-
     const url = new URL(process.env.API_URL + path);
 
     for (let i of Object.keys(query)) {
