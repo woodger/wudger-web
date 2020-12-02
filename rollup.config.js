@@ -21,7 +21,7 @@ const onwarn = (warning, onwarn) =>
 const customResolver = {
   entries: [{
     find: '@toolkit',
-    replacement: __dirname + '/src/toolkit/@index'
+    replacement: __dirname + '/src/toolkit/index.js'
   }]
 };
 
