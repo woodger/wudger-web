@@ -2,7 +2,7 @@ FROM alpine
 WORKDIR /app
 COPY . .
 
-RUN apk add yarn \
+RUN apk add nodejs yarn \
   && yarn \
   && yarn build
 
