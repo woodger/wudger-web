@@ -1,8 +1,6 @@
 node_modules
 yarn.lock
-.env
-
 src/node_modules/@sapper
+static/staff
 __sapper__
-
-static/images
+.env

@@ -1,12 +1,13 @@
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
-// import dotenv from 'rollup-plugin-dotenv';
+import dotenv from 'rollup-plugin-dotenv';
 import svelte from 'rollup-plugin-svelte';
 import alias from '@rollup/plugin-alias';
 import babel from '@rollup/plugin-babel';
 import { terser } from 'rollup-plugin-terser';
 import config from 'sapper/config/rollup.js';
+import dotenv from 'dotenv-safe';
 import pkg from './package.json';
 
 const mode = process.env.NODE_ENV;
@@ -32,11 +33,10 @@ export default {
     plugins: [
       replace({
         'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
-        'process.env.API_URL': JSON.stringify(process.env.API_URL)
+        'process.env.NODE_ENV': JSON.stringify(mode)
       }),
+      dotenv(),
       alias(customResolver),
-      // dotenv(),
       svelte({
         dev,
         hydratable: true,
@@ -80,11 +80,10 @@ export default {
     plugins: [
       replace({
         'process.browser': false,
-        'process.env.NODE_ENV': JSON.stringify(mode),
-        'process.env.API_URL': JSON.stringify(process.env.API_URL)
+        'process.env.NODE_ENV': JSON.stringify(mode)
       }),
+      dotenv(),
       alias(customResolver),
-      // dotenv(),
       svelte({
         generate: 'ssr',
         hydratable: true,
@@ -108,8 +107,7 @@ export default {
       resolve(),
       replace({
         'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
-        'process.env.API_URL': JSON.stringify(process.env.API_URL)
+        'process.env.NODE_ENV': JSON.stringify(mode)
       }),
       commonjs(),
       !dev && terser()
