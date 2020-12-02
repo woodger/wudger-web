@@ -3,6 +3,7 @@
   import { store, request } from '@toolkit';
   import Button from '../Button.svelte';
   import Svg from '../Svg.svelte';
+  import Img from '../Img.svelte';
   import ArticleForm from './ArticleForm.svelte';
 
   export let values;
@@ -134,7 +135,7 @@
 
       {#if admin}
         <Button onClick={onShowForm(values)}>
-          <Svg src="icons/three.svg" width="16px" height="16px" />
+          <Svg src="icons/three.svg" width="16" height="16" alt="three" />
         </Button>
       {/if}
     </div>
@@ -166,9 +167,9 @@
 
 <div class="space">
   <div class="space__inner">
-    {#each values.pages as {src, width, height}, index (src)}
+    {#each values.pages as {width, height, src}, index (src)}
       <div class="page" class:paid={width < 300}>
-        <img {src} {width} {height} alt={index} />
+        <Img {src} {width} {height} alt={index} />
       </div>
     {/each}
   </div>

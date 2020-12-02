@@ -70,7 +70,7 @@
           <div class="title">{that.title}</div>
           <div class="btn_right">
             <Button onClick={onClose}>
-              <Svg src="icons/close.svg" width="16px" height="16px" />
+              <Svg src="icons/close.svg" width="16" height="16" alt="close" />
             </Button>
           </div>
         </div>

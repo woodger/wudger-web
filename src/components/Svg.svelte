@@ -1,23 +1,22 @@
 <script>
   import { onMount } from 'svelte';
-  import Loader from './Loader.svelte';
+  import Lazy from './Lazy.svelte';
 
-  export let src;
+  export let lazy = true;
+  export let alt = '';
   export let width;
   export let height;
+  export let src;
   export let onLoad;
 
-  let html = '';
-  let style;
-
-  onMount(async () => {
+  async function upLoad() {
     const res = await fetch(src);
 
     if (res.ok) {
-      const frame = document.createElement('div');
-      frame.innerHTML = await res.text();
+      const div = document.createElement('div');
+      div.innerHTML = await res.text();
 
-      const svg = frame.querySelector('svg');
+      const svg = div.querySelector('svg');
 
       svg.style.setProperty('width', width);
       svg.style.setProperty('height', height);
@@ -26,19 +25,16 @@
         onLoad(svg);
       }
 
-      html = frame.innerHTML;
+      return div.innerHTML;
     }
-  });
-
-  $: style = `width: ${width}; height: ${height}`;
+  }
 </script>
 
-<style>
-  div {
-    display: inline-block;
-  }
-</style>
-
-<div {style}>
-  {@html html}
-</div>
+<Lazy {width} {height} show={!lazy}>
+  {#await upLoad()}
+  {:then svg}
+    {@html svg}
+  {:catch err}
+    {alt}
+  {/await}
+</Lazy>

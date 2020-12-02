@@ -80,11 +80,11 @@
 
     {#if admin}
       <Button onClick={onClickExit}>
-        <Svg src="icons/exit.svg" width="16px" height="16px" />
+        <Svg src="icons/exit.svg" width="16" height="16" alt="exit" />
       </Button>
     {:else}
       <Button onClick={onClickEnter}>
-        <Svg src="icons/enter.svg" width="16px" height="16px" />
+        <Svg src="icons/enter.svg" width="16" height="16" alt="enter" />
       </Button>
     {/if}
   </div>

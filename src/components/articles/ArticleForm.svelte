@@ -250,7 +250,7 @@
               />
 
               <Button href={item}>
-                <Svg src="icons/download.svg" width="16px" height="16px" />
+                <Svg src="icons/download.svg" width="16" height="16" alt="download" />
               </Button>
             </div>
           {/each}
@@ -263,7 +263,7 @@
 
       {#if id}
         <Button onClick={onClickTrash}>
-          <Svg src="icons/trash.svg" width="16px" height="16px" />
+          <Svg src="icons/trash.svg" width="16" height="16" alt="trash" />
         </Button>
       {/if}
 
@@ -271,7 +271,7 @@
 
       {#if values.files.length > 1}
         <Button onClick={onMoveFiles}>
-          <Svg src="icons/eject.svg" width="16px" height="16px" />
+          <Svg src="icons/eject.svg" width="16" height="16" alt="eject" />
         </Button>
       {/if}
     </div>

@@ -23,5 +23,5 @@
 </script>
 
 <Switch component={UserMenu}>
-  <Svg src="icons/user.svg" width="16px" height="16px" />
+  <Svg src="icons/user.svg" width="16" height="16" alt="user" />
 </Switch>

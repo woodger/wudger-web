@@ -42,7 +42,7 @@
   <div class="global__container">
     <div class="navigation">
       <a class="logo" href="/">
-        <Svg src="images/logo.svg" width="128px" height="32px" />
+        <Svg src="images/logo.svg" width="128" height="32" alt="wudger.ru" />
       </a>
 
       {#if !title}

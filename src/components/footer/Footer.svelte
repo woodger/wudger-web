@@ -27,18 +27,6 @@
   li span {
     padding: 0 0 0 1rem;
   }
-
-  /* .bottom {
-    background: #f4f4f4;
-  }
-
-  .seals {
-    display: flex;
-  }
-
-  .seals > div {
-    margin: 1rem;
-  } */
 </style>
 
 <div class="footer">
@@ -49,25 +37,28 @@
         <ul class="section__list">
           <li>
             <Svg src="/icons/vk.svg"
-              width="16px"
-              height="16px"
+              width="16"
+              height="16"
               onLoad="{onLoadIcon}"
+              alt="vk"
             />
             <span>Татьяна Потёмкина</span>
           </li>
           <li>
             <Svg src="/icons/phone.svg"
-              width="16px"
-              height="16px"
+              width="16"
+              height="16"
               onLoad="{onLoadIcon}"
+              alt="phone"
             />
             <span>+7 (964) 925-77-05</span>
           </li>
           <li>
             <Svg src="/icons/envelop.svg"
-              width="16px"
-              height="16px"
+              width="16"
+              height="16"
               onLoad="{onLoadIcon}"
+              alt="envelop"
             />
             <span>wudger@ya.ru</span>
           </li>
@@ -79,17 +70,3 @@
     </div>
   </div>
 </div>
-
-<!-- <div class="bottom">
-  <div class="global__container seals">
-    <div>
-      <Svg src="images/seals/comodo.svg" width="115px" height="36px" />
-    </div>
-    <div>
-      <Svg src="images/seals/aplus.svg" width="90px" height="36px" />
-    </div>
-    <div>
-      <Svg src="images/seals/pci.svg" width="95px" height="36px" />
-    </div>
-  </div>
-</div> -->
