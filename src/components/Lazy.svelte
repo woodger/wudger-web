@@ -1,23 +1,20 @@
 <script>
   import { onMount } from 'svelte';
+  import { boundingRect } from '@toolkit';
 
   export let show = false;
   export let width;
   export let height;
+  export let onLoad;
 
   let elem;
   let style;
 
-  $: if (unit(width)) {
-    width += 'px';
-  }
+  $: style = boundingRect(width, height);
 
-  $: if (unit(height)) {
-    height += 'px';
+  $: if (show && onLoad) {
+    onLoad(elem);
   }
-
-  $: style = (width || height) ?
-    `width:${width};height:${height}` : undefined;
 
   onMount(() => {
     if (show) {
@@ -48,10 +45,6 @@
     const {top, bottom} = elem.getBoundingClientRect();
 
     return (top >= 0 || bottom >= 0) && (gate - top >= 0 || gate - bottom >= 0);
-  }
-
-  function unit(size) {
-    return size && /\d$/.test(size);
   }
 </script>
 
