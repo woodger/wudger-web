@@ -69,11 +69,15 @@ export default async function request(...args) {
 
       const res = await throttle(`/api/v1/oauth/${opie}`, {
         method: 'POST',
-        auth: false
+        auth: false,
+        onError() {
+          clearAll();
+        }
       });
 
-      res ?
-        setItems(res) : clearAll();
+      if (res) {
+        setItems(res);
+      }
 
       return await throttle(...args);
     }
@@ -83,7 +87,9 @@ export default async function request(...args) {
         return onError(res);
       }
 
-      throw new Error(await res.text());
+      throw new Error(
+        await res.text()
+      );
     }
 
     return await res.json();
