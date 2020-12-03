@@ -13,7 +13,7 @@
       `/api/v1/articles/${params.slug}`
     ]
     .map((item) => {
-      const url = new URL(item, process.env.API_SSR | process.env.API_URL);
+      const url = new URL(item, process.env.API_URL);
       return this.fetch(url);
     });
 
