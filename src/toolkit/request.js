@@ -72,8 +72,8 @@ export default async function request(...args) {
         auth: false
       });
 
-      clearAll();
-      setItems(res);
+      res ?
+        setItems(res) : clearAll();
 
       return await throttle(...args);
     }
