@@ -6,27 +6,35 @@ import * as sapper from '@sapper/server';
 
 const dev = process.env.NODE_ENV === 'development';
 
-polka()
-  .use((req, res, next) => {
-    const found = ['/pages', '/bucket'].some((item) => {
-      return req.url.indexOf(item) === 0;
-    });
+function storageUploadMiddleware(req, res, next) {
+  const found = ['/pages', '/bucket'].some((item) => {
+    return req.url.indexOf(item) === 0;
+  });
 
-    if (found === false) {
-      return next();
-    }
+  if (found === false) {
+    return next();
+  }
 
-    const url = new URL(`/api/v1/files${req.url}`, process.env.API_URL);
-    const module = url.protocol === 'https' ?
-      https : http;
+  const url = new URL(`/api/v1/files${req.url}`, process.env.API_URL);
+  const module = url.protocol === 'https' ?
+    https : http;
 
-    module.get(url, (api) => {
-      api.pipe(res);
-    });
-  })
-  .use(sirv('static', {
+  module.get(url, (api) => {
+    api.pipe(res);
+  });
+}
+
+const list = [];
+
+if (dev) {
+  list.push(storageUploadMiddleware);
+  list.push(sirv('static', {
     dev
-  }))
+  }));
+}
+
+polka()
+  .use(...list)
   .use(sapper.middleware())
   .listen(process.env.PORT, (err) => {
     if (err) {

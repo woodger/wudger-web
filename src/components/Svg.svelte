@@ -1,11 +1,10 @@
 <script>
-  import { boundingRect } from '@toolkit';
   import Lazy from './Lazy.svelte';
 
-  export let alt = '';
   export let width;
   export let height;
   export let src;
+  export let alt;
   export let onLoad;
 
   async function onLoadHtml(elem) {
@@ -19,9 +18,10 @@
       elem.innerHTML = await res.text();
 
       const [svg] = elem.children;
-      const style = boundingRect(width, height);
 
-      svg.setAttribute('style', style);
+      svg.setAttribute('width', width);
+      svg.setAttribute('height', height);
+
       onLoad(svg);
     }
   }

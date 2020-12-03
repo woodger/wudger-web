@@ -1,6 +1,5 @@
 <script>
   import { onMount } from 'svelte';
-  import { boundingRect } from '@toolkit';
 
   export let show = false;
   export let width;
@@ -10,7 +9,7 @@
   let elem;
   let style;
 
-  $: style = boundingRect(width, height);
+  $: style = `width:${width}px;height:${height}px`;
 
   $: if (show && onLoad) {
     onLoad(elem);
