@@ -27,7 +27,7 @@
       };
     }
 
-    this.error(res.status);
+    this.error(res.status, url.toString());
   }
 </script>
 
