@@ -9,11 +9,7 @@
 
   async function getUserInfo() {
     store.user.set(
-      await request(`/api/v1/oauth`, {
-        onError() {
-          request.clearAll();
-        }
-      })
+      await request('/api/v1/oauth')
     );
   }
 
