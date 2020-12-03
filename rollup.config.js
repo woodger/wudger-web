@@ -10,7 +10,9 @@ import config from 'sapper/config/rollup.js';
 import safe from 'dotenv-safe';
 import pkg from './package.json';
 
-safe.config();
+safe.config({
+  allowEmptyValues: true
+});
 
 const mode = process.env.NODE_ENV;
 const dev = mode === 'development';
