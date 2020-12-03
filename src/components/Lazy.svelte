@@ -8,11 +8,11 @@
   let elem;
   let style;
 
-  $: if (width && typeof width === 'number') {
+  $: if (unit(width)) {
     width += 'px';
   }
 
-  $: if (height && typeof height === 'number') {
+  $: if (unit(height)) {
     height += 'px';
   }
 
@@ -48,6 +48,10 @@
     const {top, bottom} = elem.getBoundingClientRect();
 
     return (top >= 0 || bottom >= 0) && (gate - top >= 0 || gate - bottom >= 0);
+  }
+
+  function unit(size) {
+    return size && /\d$/.test(size);
   }
 </script>
 
