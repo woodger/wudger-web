@@ -35,7 +35,7 @@
   }
 
   async function updateItem() {
-    values = await request(`/v1/articles/${values.id}`);
+    values = await request(`/api/v1/articles/${values.id}`);
   }
 </script>
 

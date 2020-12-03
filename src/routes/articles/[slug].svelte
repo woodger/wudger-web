@@ -9,11 +9,11 @@
 <script context="module">
   export async function preload({params}) {
     const urls = [
-      `/v1/files/schemes/article.json`,
-      `/v1/articles/${params.slug}`
+      `/api/v1/files/schemes/article.json`,
+      `/api/v1/articles/${params.slug}`
     ]
     .map((item) => {
-      const url = new URL(process.env.API_URL + item);
+      const url = new URL(item, process.env.API_URL);
       return this.fetch(url);
     });
 

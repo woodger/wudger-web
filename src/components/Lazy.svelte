@@ -8,6 +8,17 @@
   let elem;
   let style;
 
+  $: if (width && typeof width === 'number') {
+    width += 'px';
+  }
+
+  $: if (height && typeof height === 'number') {
+    height += 'px';
+  }
+
+  $: style = (width || height) ?
+    `width:${width};height:${height}` : undefined;
+
   onMount(() => {
     if (show) {
       return;
@@ -18,27 +29,12 @@
       return;
     }
 
-    window.addEventListener(event, listener);
+    window.addEventListener('scroll', scroll);
   });
 
-  const number = 'number';
-  const event = 'scroll';
-  const unit = 'px';
-
-  $: if (width && typeof width === number) {
-    width += unit;
-  }
-
-  $: if (height && typeof height === number) {
-    height += unit;
-  }
-
-  $: style = (width || height) ?
-    `width:${width};height:${height}` : undefined;
-
-  function listener() {
+  function scroll() {
     if (boundingClientRect()) {
-      window.removeEventListener(event, listener);
+      window.removeEventListener('scroll', scroll);
       show = true;
     }
   }

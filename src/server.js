@@ -16,7 +16,7 @@ polka()
       return next();
     }
 
-    const url = new URL(process.env.API_URL + '/v1/files' + req.url);
+    const url = new URL(`/api/v1/files${req.url}`, process.env.API_URL);
     const module = url.protocol === 'https' ?
       https : http;
 

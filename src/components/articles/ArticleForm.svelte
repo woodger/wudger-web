@@ -41,9 +41,9 @@
   }];
 
   onMount(async () => {
-    schema = await request(`/v1/files/schemes/article.json`);
+    schema = await request(`/api/v1/files/schemes/article.json`);
     values = id ?
-      await request(`/v1/articles/${id}`) : createNewArticle();
+      await request(`/api/v1/articles/${id}`) : createNewArticle();
 
     show = true;
   });
@@ -91,13 +91,13 @@
     const body = contract(schema, values);
 
     if (id) {
-      request(`/v1/articles/${id}`, {
+      request(`/api/v1/articles/${id}`, {
         method: 'PUT',
         body
       });
     }
     else {
-      request(`/v1/articles`, {
+      request(`/api/v1/articles`, {
         method: 'POST',
         body
       });
@@ -133,7 +133,7 @@
       body.append('uploads', item);
     }
 
-    const res = await request(`/v1/files`, {
+    const res = await request(`/api/v1/files`, {
       method: 'POST',
       body
     });

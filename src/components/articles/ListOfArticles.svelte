@@ -33,11 +33,11 @@
   });
 
   onMount(async () => {
-    schema = await request(`/v1/files/schemes/article.json`);
+    schema = await request(`/api/v1/files/schemes/article.json`);
   });
 
   async function updateList() {
-    const {values} = await request('/v1/articles', { query });
+    const {values} = await request('/api/v1/articles', { query });
     props = values;
   }
 
