@@ -12,13 +12,14 @@ Object.assign(request, {
 export default async function request(...args) {
   let counter = 0;
 
-  async function throttle(path, options = {}, auth = true) {
+  async function throttle(path, options = {}) {
     let {
       onError,
+      auth = true,
       method = 'GET',
       query = {},
       headers = {},
-      body
+      body,
     } = options;
 
     counter++;
@@ -28,9 +29,9 @@ export default async function request(...args) {
 
       if (!token || undefined + '' === token) {
         const res = await throttle('/api/v1/users', {
-          method: 'POST'
-        },
-        false);
+          method: 'POST',
+          auth: false
+        });
 
         setItems(res);
         token = getItem('accessToken');
@@ -67,13 +68,13 @@ export default async function request(...args) {
       const opie = getItem('refreshToken');
 
       const res = await throttle(`/api/v1/oauth/${opie}`, {
-        method: 'POST'
-      },
-      false);
+        method: 'POST',
+        auth: false
+      });
 
       clearAll();
       setItems(res);
-      
+
       return await throttle(...args);
     }
 

@@ -41,7 +41,10 @@
   }];
 
   onMount(async () => {
-    schema = await request(`/api/v1/files/schemes/article.json`);
+    schema = await request(`/api/v1/files/schemes/article.json`, {
+      auth: false
+    });
+
     values = id ?
       await request(`/api/v1/articles/${id}`) : createNewArticle();
 

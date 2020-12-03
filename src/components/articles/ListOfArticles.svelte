@@ -33,7 +33,9 @@
   });
 
   onMount(async () => {
-    schema = await request(`/api/v1/files/schemes/article.json`);
+    schema = await request(`/api/v1/files/schemes/article.json`, {
+      auth: false
+    });
   });
 
   async function updateList() {
