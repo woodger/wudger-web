@@ -1,4 +1,4 @@
-import adjustCSSDescriptor from './adjustCSSDescriptor.js';
+import adjustCSSDescriptor from './adjust-css-descriptor.js';
 
 export default function boundingRect(width, height) {
   width = adjustCSSDescriptor(width);

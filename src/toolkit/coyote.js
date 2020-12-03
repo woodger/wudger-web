@@ -3,7 +3,7 @@ export default class Coyote {
     return localStorage.getItem(key);
   }
 
-  setItems(values) {
+  setItems(values = {}) {
     for (const key of Object.keys(values)) {
       localStorage.setItem(key, values[key]);
     }

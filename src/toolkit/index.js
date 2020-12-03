@@ -1,5 +1,5 @@
-import boundingRect from './boundingRect.js';
-import adjustCSSDescriptor from './adjustCSSDescriptor.js';
+import boundingRect from './bounding-rect.js';
+import adjustCSSDescriptor from './adjust-css-descriptor.js';
 import contract from './contract.js';
 import request from './request.js';
 import store from './store.js';
