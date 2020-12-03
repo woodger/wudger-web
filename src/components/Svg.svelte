@@ -10,6 +10,10 @@
   export let onLoad;
 
   async function onLoadHtml(elem) {
+    if (!onLoad) {
+      return;
+    }
+
     const res = await fetch(src);
 
     if (res.ok) {
