@@ -6,7 +6,7 @@ import * as sapper from '@sapper/server';
 
 const dev = process.env.NODE_ENV === 'development';
 
-function storageUploadMiddleware(req, res, next) {
+function proxy(req, res, next) {
   const found = ['/pages', '/bucket'].some((item) => {
     return req.url.indexOf(item) === 0;
   });
@@ -27,15 +27,16 @@ function storageUploadMiddleware(req, res, next) {
 const list = [];
 
 if (dev) {
-  list.push(storageUploadMiddleware);
+  list.push(proxy);
   list.push(sirv('static', {
     dev
   }));
 }
 
+list.push(sapper.middleware());
+
 polka()
   .use(...list)
-  .use(sapper.middleware())
   .listen(process.env.PORT, (err) => {
     if (err) {
       console.log('error', err);
