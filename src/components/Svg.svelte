@@ -9,7 +9,7 @@
   export let src;
   export let onLoad;
 
-  async function upLoad(elem) {
+  async function onLoadHtml(elem) {
     const res = await fetch(src);
 
     if (res.ok) {
@@ -19,11 +19,12 @@
       const style = boundingRect(width, height);
 
       svg.setAttribute('style', style);
+      onLoad(svg);
     }
   }
 </script>
 
-<Lazy {width} {height} onLoad={upLoad}>
+<Lazy {width} {height} onLoad={onLoadHtml}>
   {#if !onLoad}
     <img {src} {width} {height} {alt} />
   {/if}

@@ -1,8 +1,8 @@
 <script>
   import * as sapper from '@sapper/app';
   import Navigation from '../../components/navigation/Navigation.svelte';
-  import Footer from '../../components/footer/Footer.svelte';
   import ListOfArticles from '../../components/articles/ListOfArticles.svelte';
+  import Footer from '../../components/Footer.svelte';
 
   export let props = [];
 

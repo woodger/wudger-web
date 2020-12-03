@@ -1,5 +1,5 @@
 <script>
-  import Svg from '../Svg.svelte';
+  import Svg from './Svg.svelte';
 
   const date = new Date();
   const year = date.getFullYear();
@@ -39,8 +39,8 @@
             <Svg src="/icons/vk.svg"
               width="16"
               height="16"
-              onLoad="{onLoadIcon}"
               alt="vk"
+              onLoad={onLoadIcon}
             />
             <span>Татьяна Потёмкина</span>
           </li>
@@ -48,8 +48,8 @@
             <Svg src="/icons/phone.svg"
               width="16"
               height="16"
-              onLoad="{onLoadIcon}"
               alt="phone"
+              onLoad={onLoadIcon}
             />
             <span>+7 (964) 925-77-05</span>
           </li>
@@ -57,8 +57,8 @@
             <Svg src="/icons/envelop.svg"
               width="16"
               height="16"
-              onLoad="{onLoadIcon}"
               alt="envelop"
+              onLoad={onLoadIcon}
             />
             <span>wudger@ya.ru</span>
           </li>
