@@ -1,5 +1,4 @@
 <script>
-  import { onMount } from 'svelte';
   import { boundingRect } from '@toolkit';
   import Lazy from './Lazy.svelte';
 
