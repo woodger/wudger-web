@@ -24,6 +24,11 @@ function proxy(req, res, next) {
   });
 }
 
+function debug(req, res, next) {
+  console.log(req.headers);
+  next();
+}
+
 const list = [];
 
 if (dev) {
@@ -33,6 +38,7 @@ if (dev) {
   }));
 }
 
+list.push(debug);
 list.push(sapper.middleware());
 
 polka()
