@@ -5,40 +5,14 @@ import polka from 'polka';
 import * as sapper from '@sapper/server';
 
 const dev = process.env.NODE_ENV === 'development';
-
-// function proxy(req, res, next) {
-//   const found = ['/pages', '/bucket'].some((item) => {
-//     return req.url.indexOf(item) === 0;
-//   });
-//
-//   if (found === false) {
-//     return next();
-//   }
-//
-//   const url = new URL(`/api/v1/files${req.url}`, process.env.API_URL);
-//   const module = url.protocol === 'https' ?
-//     https : http;
-//
-//   module.get(url, (api) => {
-//     api.pipe(res);
-//   });
-// }
-
-// function logger(req, res, next) {
-//   console.log(req.headers);
-//   next();
-// }
-
 const list = [];
 
 if (dev) {
-  // list.push(proxy);
   list.push(sirv('static', {
     dev
   }));
 }
 
-// list.push(logger);
 list.push(sapper.middleware());
 
 polka()

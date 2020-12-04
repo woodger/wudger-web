@@ -41,7 +41,7 @@
   }];
 
   onMount(async () => {
-    schema = await request(`/api/v1/files/schemes/article.json`, {
+    schema = await request(`/api/v1/static/schemes/article.json`, {
       auth: false
     });
 
@@ -136,7 +136,7 @@
       body.append('uploads', item);
     }
 
-    const res = await request(`/api/v1/files`, {
+    const res = await request(`/api/v1/bucket`, {
       method: 'POST',
       body
     });
@@ -252,7 +252,7 @@
                 value={getExtname(item)}
               />
 
-              <Button href={item}>
+              <Button href={item} download>
                 <Svg src="icons/download.svg" width="16" height="16" alt="download" />
               </Button>
             </div>

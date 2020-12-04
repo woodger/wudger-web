@@ -1,6 +1,7 @@
 <script>
-  export let href = undefined;
-  export let color = undefined;
+  export let href;
+  export let color;
+  export let download;
   export let onClick;
 </script>
 
@@ -43,7 +44,7 @@
 </style>
 
 {#if href}
-  <a class="btn link {color}" {href}>
+  <a class="btn link {color}" {href} {download}>
     <slot />
   </a>
 {:else}

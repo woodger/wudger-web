@@ -9,7 +9,7 @@
 <script context="module">
   export async function preload({params}) {
     const urls = [
-      `/api/v1/files/schemes/article.json`,
+      `/api/v1/static/schemes/article.json`,
       `/api/v1/articles/${params.slug}`
     ]
     .map((item) => {
