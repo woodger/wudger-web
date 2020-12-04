@@ -8,9 +8,11 @@
   onMount(getUserInfo);
 
   async function getUserInfo() {
-    store.user.set(
-      await request('/api/v1/oauth')
-    );
+    const info = await request('/api/v1/oauth');
+
+    console.log(info);
+
+    store.user.set(info);
   }
 
   store.user.subscribe((value) => {

@@ -64,7 +64,7 @@ export default async function request(...args) {
       body
     });
 
-    if (res.statusText === 'JWT Expired' && counter <= 2) {
+    if (res.statusText === 'JWT Expired' && counter === 1) {
       const opie = getItem('refreshToken');
 
       const res = await throttle(`/api/v1/oauth/${opie}`, {
