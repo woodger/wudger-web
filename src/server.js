@@ -24,10 +24,10 @@ function proxy(req, res, next) {
   });
 }
 
-function logger(req, res, next) {
-  console.log(req.headers);
-  next();
-}
+// function logger(req, res, next) {
+//   console.log(req.headers);
+//   next();
+// }
 
 const list = [];
 
@@ -38,7 +38,7 @@ if (dev) {
   }));
 }
 
-list.push(logger);
+// list.push(logger);
 list.push(sapper.middleware());
 
 polka()
