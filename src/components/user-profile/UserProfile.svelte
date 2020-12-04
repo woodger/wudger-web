@@ -8,7 +8,11 @@
   onMount(getUserInfo);
 
   async function getUserInfo() {
-    const info = await request('/api/v1/oauth');
+    const info = await request('/api/v1/oauth', {
+      onError() {
+        request.clearAll();
+      }
+    });
 
     console.log(info);
 
