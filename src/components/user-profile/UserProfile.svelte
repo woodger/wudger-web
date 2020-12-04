@@ -14,8 +14,6 @@
       }
     });
 
-    console.log(info);
-
     store.user.set(info);
   }
 
