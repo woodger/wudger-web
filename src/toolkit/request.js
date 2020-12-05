@@ -57,7 +57,7 @@ export default async function request(...args) {
       body = JSON.stringify(body);
     }
 
-    if (dev && process.env.API_URL.includes('localhost')) {
+    if (dev && location.hostname === 'localhost') {
       mode = 'no-cors';
     }
 
