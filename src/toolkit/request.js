@@ -1,6 +1,6 @@
 import store from './store.js';
-import Coyote from './coyote.js';
 import resolve from './resolve.js';
+import Coyote from './coyote.js';
 
 const dev = process.env.NODE_ENV === 'development';
 
