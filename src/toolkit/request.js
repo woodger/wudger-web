@@ -2,6 +2,7 @@ import store from './store.js';
 import resolve from './resolve.js';
 import Coyote from './coyote.js';
 
+const dev = process.env.NODE_ENV === 'development';
 const {getItem, setItems, clearAll} = new Coyote();
 
 Object.assign(request, {
@@ -15,12 +16,13 @@ export default async function request(...args) {
 
   async function throttle(src, options = {}) {
     let {
+      auth = true,
       method = 'GET',
       query = {},
       headers = {},
-      auth = true,
       body,
-      onError
+      onError,
+      mode
     } = options;
 
     counter++;
@@ -55,10 +57,15 @@ export default async function request(...args) {
       body = JSON.stringify(body);
     }
 
+    if (dev && process.env.API_URL.includes('localhost')) {
+      mode = 'no-cors';
+    }
+
     const res = await fetch(url, {
       method,
       headers,
-      body
+      body,
+      mode
     });
 
     if (res.statusText === 'JWT Expired' && counter === 1) {
