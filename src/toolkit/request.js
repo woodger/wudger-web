@@ -1,5 +1,6 @@
 import store from './store.js';
 import Coyote from './coyote.js';
+import resolve from './resolve.js';
 
 const {getItem, setItems, clearAll} = new Coyote();
 
@@ -12,7 +13,7 @@ Object.assign(request, {
 export default async function request(...args) {
   let counter = 0;
 
-  async function throttle(path, options = {}) {
+  async function throttle(src, options = {}) {
     let {
       onError,
       auth = true,
@@ -43,11 +44,7 @@ export default async function request(...args) {
       };
     }
 
-    const url = new URL(path, process.env.API_URL);
-
-    for (let i of Object.keys(query)) {
-      url.searchParams.set(i, query[i]);
-    }
+    const url = resolve(src, query);
 
     if (typeof body === 'object' && body instanceof FormData === false) {
       headers = {

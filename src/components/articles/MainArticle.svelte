@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { store, request } from '@toolkit';
+  import { store, request, resolve } from '@toolkit';
   import Button from '../Button.svelte';
   import Svg from '../Svg.svelte';
   import Img from '../Img.svelte';
@@ -169,7 +169,7 @@
   <div class="space__inner">
     {#each values.pages as {width, height, src}, index (src)}
       <div class="page" class:paid={width < 300}>
-        <Img {src} {width} {height} alt={index} />
+        <Img src={resolve(src)} {width} {height} alt="Лист {index + 1}" />
       </div>
     {/each}
   </div>
