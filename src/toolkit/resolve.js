@@ -1,11 +1,5 @@
 export default function resolve(src, query) {
-  let api;
-
-  if (process.env.NODE_ENV === 'development') {
-    api = process.env.API_URL;
-  }
-
-  const url = new URL(src, api);
+  const url = new URL(src, process.env.API_URL);
 
   if (query) {
     for (let i of Object.keys(query)) {
