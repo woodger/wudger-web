@@ -2,6 +2,8 @@ import store from './store.js';
 import Coyote from './coyote.js';
 import resolve from './resolve.js';
 
+const dev = process.env.NODE_ENV === 'development';
+
 const {getItem, setItems, clearAll} = new Coyote();
 
 Object.assign(request, {
@@ -21,6 +23,7 @@ export default async function request(...args) {
       query = {},
       headers = {},
       body,
+      mode
     } = options;
 
     counter++;
@@ -55,10 +58,15 @@ export default async function request(...args) {
       body = JSON.stringify(body);
     }
 
+    if (dev) {
+      mode = 'no-cors';
+    }
+
     const res = await fetch(url, {
       method,
       headers,
-      body
+      body,
+      mode
     });
 
     if (res.statusText === 'JWT Expired' && counter === 1) {
