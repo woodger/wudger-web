@@ -121,12 +121,15 @@
     onClose();
   }
 
-  function getExtname(filename) {
-    return filename.substring(filename.lastIndexOf('.'));
-  }
+  function parseFilename(value) {
+    const slash = value.lastIndexOf('/') + 1;
+    const dot = value.lastIndexOf('.');
 
-  function getFilename(filename) {
-    return filename.substring(43, filename.lastIndexOf('.'));
+    return {
+      path: value.substring(0, slash),
+      base: value.substring(slash, dot),
+      ext: value.substring(dot)
+    };
   }
 
   async function onUploadFiles({target}) {
@@ -148,11 +151,10 @@
   }
 
   function onInputFileName(filename, index) {
-    const base = filename.substring(0, 43);
-    const ext = getExtname(filename);
+    const {path, ext} = parseFilename(filename);
 
     return ({target}) => {
-      values.files[index] = base + target.value + ext;
+      values.files[index] = path + target.value + ext;
 
       if (!target.value.length && confirm('Удалить?')) {
         values.files = values.files.filter((i, count) =>
@@ -242,14 +244,14 @@
             <div class="file">
               <div class="field_100">
                 <Input
-                  value={getFilename(item)}
+                  value={parseFilename(item).base}
                   onInput={onInputFileName(item, index)}
                 />
               </div>
 
               <Input
                 disabled
-                value={getExtname(item)}
+                value={parseFilename(item).ext}
               />
 
               <Button href={item} download>
