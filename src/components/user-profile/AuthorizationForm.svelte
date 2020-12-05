@@ -36,6 +36,12 @@
       values[name] = target.value;
     }
   }
+
+  function getLabel(name) {
+    if (schema.properties[name]) {
+      return schema.properties[name].description;
+    }
+  }
 </script>
 
 <style>
@@ -56,14 +62,14 @@
     <div class="fields">
       <div class="field">
         <Input
-          label="Логин"
+          label={getLabel('login')}
           onInput={onInputText('login')}
         />
       </div>
 
       <div class="field">
         <Input
-          label="Пароль"
+          label={getLabel('password')}
           type="password"
           onInput={onInputText('password')}
         />
