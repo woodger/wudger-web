@@ -1,6 +1,6 @@
 <script>
   import { onMount } from 'svelte';
-  import { store, request, contract } from '@toolkit';
+  import { store, request, resolve, contract } from '@toolkit';
   import Svg from '../Svg.svelte';
   import Button from '../Button.svelte';
   import Input from '../Input.svelte';
@@ -272,7 +272,7 @@
                 <Svg src="icons/trash.svg" width="16" height="16" alt="trash" />
               </Button>
 
-              <Button href={item} download>
+              <Button href={resolve('/api/v1/bucket/' + item)} download>
                 <Svg src="icons/download.svg" width="16" height="16" alt="download" />
               </Button>
             </div>
