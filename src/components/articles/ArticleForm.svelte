@@ -85,10 +85,20 @@
   }
 
   async function onClickSave() {
+    let error;
+
     if (!values.title) {
-      return store.notification.set(
-        new Error(getLabel('title'))
-      );
+      error = new Error(getLabel('title'));
+    }
+
+    for (const item of values.files) {
+      if (!parseFilename(item).base) {
+        error = new Error(getLabel('files'));
+      }
+    }
+
+    if (error) {
+      return store.notification.set(error);
     }
 
     const body = contract(schema, values);
@@ -155,12 +165,6 @@
 
     return ({target}) => {
       values.files[index] = path + target.value + ext;
-
-      if (!target.value.length && confirm('Удалить?')) {
-        values.files = values.files.filter((i, count) =>
-          count !== index
-        );
-      }
     }
   }
 
@@ -171,6 +175,16 @@
       ...values.files,
       ...first
     ];
+  }
+
+  function onClickTrashFile(index) {
+    return () => {
+      if (confirm('Удалить?')) {
+        values.files = values.files.filter((i, count) =>
+          count !== index
+        );
+      }
+    };
   }
 </script>
 
@@ -253,6 +267,10 @@
                 disabled
                 value={parseFilename(item).ext}
               />
+
+              <Button onClick={onClickTrashFile(index)}>
+                <Svg src="icons/trash.svg" width="16" height="16" alt="trash" />
+              </Button>
 
               <Button href={item} download>
                 <Svg src="icons/download.svg" width="16" height="16" alt="download" />
