@@ -1,8 +1,9 @@
-FROM node
+FROM alpine
 WORKDIR /app
 COPY . .
 
-RUN yarn install && yarn build
+RUN apk add yarn \
+  && yarn install && yarn build
 
 EXPOSE 3000
 CMD [ "yarn", "start" ]
