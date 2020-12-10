@@ -31,6 +31,7 @@
     display: flex;
     align-items: center;
   }
+
   .input {
     width: 400px;
   }

@@ -4,7 +4,7 @@
   import Button from '../Button.svelte';
   import Svg from '../Svg.svelte';
   import Img from '../Img.svelte';
-  import ArticleForm from './ArticleForm.svelte';
+  import ArticleForm from '../forms/ArticleForm.svelte';
 
   export let values;
   export let schema;

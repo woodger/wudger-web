@@ -5,8 +5,8 @@
   import Pagination from '../Pagination.svelte';
   import Button from '../Button.svelte';
   import Svg from '../Svg.svelte';
+  import ArticleForm from '../forms/ArticleForm.svelte';
   import ArticleCard from './ArticleCard.svelte';
-  import ArticleForm from './ArticleForm.svelte';
 
   export let title;
   export let props = [];

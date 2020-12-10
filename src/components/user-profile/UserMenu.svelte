@@ -3,7 +3,7 @@
   import { store, request } from '@toolkit';
   import Svg from '../Svg.svelte';
   import Button from '../Button.svelte';
-  import AuthorizationForm from './AuthorizationForm.svelte';
+  import AuthorizationForm from '../forms/AuthorizationForm.svelte';
 
   export let onClose;
 
