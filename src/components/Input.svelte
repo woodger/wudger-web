@@ -11,11 +11,11 @@
 </script>
 
 <style>
-  .container {
+  .input {
     margin: .5rem 1rem;
   }
 
-  .input {
+  input {
     box-sizing: border-box;
     width: 100%;
     height: 32px;
@@ -28,27 +28,26 @@
     outline: none;
   }
 
-  .input:disabled {
+  input:disabled {
     background: #fafafa;
   }
 
-  .input:focus {
+  input:focus {
     border-color: #5192c3;
     box-shadow: 0 0 2px #4f7dac;
   }
 </style>
 
-<div class="container">
+<div class="input">
   {#if label}
     <Label>{label}</Label>
   {/if}
-  
+
   <input
     {type}
     {value}
     {disabled}
     {placeholder}
-    class="input"
     on:input={onInput}
     on:keypress={onKeyPress}
   />

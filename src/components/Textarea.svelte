@@ -8,11 +8,11 @@
 </script>
 
 <style>
-  .container {
+  .textarea {
     margin: .5rem 1rem;
   }
 
-  .textarea {
+  .input {
     box-sizing: border-box;
     width: 100%;
     min-height: 5rem;
@@ -26,15 +26,15 @@
     outline: none;
   }
 
-  .textarea:focus {
+  .input:focus {
     border-color: #5192c3;
     box-shadow: 0 0 2px #4f7dac;
   }
 </style>
 
-<div class="container">
+<div class="textarea">
   {#if label}
     <Label>{label}</Label>
   {/if}
-  <textarea class="textarea" {name} on:input={onInput}>{value}</textarea>
+  <textarea class="input" {name} on:input={onInput}>{value}</textarea>
 </div>

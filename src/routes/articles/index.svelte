@@ -4,30 +4,59 @@
   import ListOfArticles from '../../components/articles/ListOfArticles.svelte';
   import Footer from '../../components/Footer.svelte';
 
-  export let props = [];
+  export let values;
+  export let schema;
 
   let title = 'Каталог';
 </script>
 
 <script context="module">
+  // export async function preload({query}) {
+  //   const url = new URL('/api/v1/articles', process.env.API_URL);
+  //
+  //   for (const i of Object.entries(query)) {
+  //     url.searchParams.set(...i);
+  //   }
+  //
+  //   const res = await this.fetch(url);
+  //
+  //   if (res.ok) {
+  //     return await res.json();
+  //   }
+  //
+  //   this.error(res.status);
+  // }
   export async function preload({query}) {
-    const url = new URL('/api/v1/articles', process.env.API_URL);
+    const urls = [
+      `/api/v1/static/schemes/article.json`,
+      `/api/v1/articles`
+    ]
+    .map((item) => {
+      const url = new URL(item, process.env.API_URL);
 
-    for (const i of Object.entries(query)) {
-      url.searchParams.set(...i);
-    }
+      for (const i of Object.entries(query)) {
+        url.searchParams.set(...i);
+      }
 
-    const res = await this.fetch(url);
+      return this.fetch(url);
+    });
 
-    if (res.ok) {
-      const {values} = await res.json();
+    const status = await Promise.all(urls);
 
-      return {
-        props: values
-      };
-    }
+    const body = status.map((res) => {
+      if (res.ok) {
+        return res.json();
+      }
 
-    this.error(res.status);
+      this.error(res.status);
+    });
+
+    const [schema, values] = await Promise.all(body);
+
+    return {
+      schema,
+      values
+    };
   }
 </script>
 
@@ -36,5 +65,5 @@
 </svelte:head>
 
 <Navigation />
-<ListOfArticles {title} {props} />
+<ListOfArticles {title} {values} {schema} />
 <Footer />

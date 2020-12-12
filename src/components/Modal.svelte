@@ -30,7 +30,7 @@
 </script>
 
 <style>
-  .container {
+  .modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -63,7 +63,7 @@
 <svelte:window bind:innerHeight={y} />
 
 {#if that}
-  <div class="container">
+  <div class="modal">
     <div class="global__container">
       <div class="inner">
         <div class="control">

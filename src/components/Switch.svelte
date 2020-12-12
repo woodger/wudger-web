@@ -10,7 +10,7 @@
 </script>
 
 <style>
-  .container {
+  .switch {
     position: relative;
   }
 
@@ -25,7 +25,7 @@
   }
 </style>
 
-<div class="container">
+<div class="switch">
   <Button onClick={onSwitch}>
     <slot />
   </Button>

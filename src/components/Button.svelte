@@ -6,7 +6,7 @@
 </script>
 
 <style>
-  .btn {
+  .button {
     display: flex;
     align-items: center;
     min-height: 30px;
@@ -17,11 +17,11 @@
     cursor: pointer;
   }
 
-  .btn:hover {
+  .button:hover {
     opacity: .9;
   }
 
-  .btn:active {
+  .button:active {
     border-color: #5192c3;
     box-shadow: 0 0 2px #4f7dac;
   }
@@ -44,11 +44,11 @@
 </style>
 
 {#if href}
-  <a class="btn link {color}" {href} {download}>
+  <a class="button link {color}" {href} {download}>
     <slot />
   </a>
 {:else}
-  <div class="btn {color}" on:click={onClick}>
+  <div class="button {color}" on:click={onClick}>
     <slot />
   </div>
 {/if}

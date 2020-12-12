@@ -3,7 +3,7 @@
 </script>
 
 <style>
-  .container {
+  .loader {
     text-align: center;
   }
 
@@ -28,7 +28,7 @@
 </style>
 
 {#if spin}
-  <div class="container">
+  <div class="loader">
     <div class="spiner"></div>
   </div>
 {:else}

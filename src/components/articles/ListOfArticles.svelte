@@ -2,20 +2,19 @@
   import { onMount } from 'svelte';
   import * as sapper from '@sapper/app';
   import { store, request } from '@toolkit';
-  import Pagination from '../Pagination.svelte';
   import Button from '../Button.svelte';
   import Svg from '../Svg.svelte';
+  import Pagination from '../Pagination.svelte';
   import ArticleForm from '../forms/ArticleForm.svelte';
   import ArticleCard from './ArticleCard.svelte';
 
   export let title;
-  export let props = [];
+  export let schema;
+  export let values;
 
-  let slug;
   let query = {};
   let sheet = 1;
   let admin = false;
-  let schema;
 
   sapper.stores().page.subscribe((value) => {
     query = value.query;
@@ -26,22 +25,11 @@
     admin = value;
   });
 
-  store.articles.subscribe((value) => {
-    if (value) {
-      props = value;
-    }
-  });
-
-  onMount(async () => {
-    schema = await request(`/api/v1/static/schemes/article.json`, {
-      auth: false
-    });
-  });
-
-  async function updateList() {
-    const {values} = await request('/api/v1/articles', { query });
-    props = values;
-  }
+  // store.articles.subscribe((value) => {
+  //   if (value) {
+  //     values = value;
+  //   }
+  // });
 
   function onShowForm({ id, title }) {
     return () => {
@@ -52,6 +40,10 @@
         onClose: updateList
       });
     };
+  }
+
+  async function updateList() {
+    values = await request('/api/v1/articles', { query });
   }
 </script>
 
@@ -74,7 +66,7 @@
     </div>
   {/if}
 
-  {#each props as item, index (item.id)}
+  {#each values.values as item, index (item.id)}
     <ArticleCard {schema} props={item} index={sheet + index}>
       {#if admin}
         <Button onClick={onShowForm(item)}>
@@ -84,5 +76,7 @@
     </ArticleCard>
   {/each}
 
-  <Pagination />
+  <Pagination length="2" count="51" />
+
+  <!-- <Pagination length={values.values.length} count={values.count} /> -->
 </div>

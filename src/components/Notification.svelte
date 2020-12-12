@@ -9,7 +9,7 @@
     if (value) {
       type = value instanceof Error ?
         'error' : value.type;
-      
+
       message = value.message;
     }
   });
@@ -20,14 +20,14 @@
 </script>
 
 <style>
-  .container {
+  .notification {
     position: fixed;
     bottom: 0;
     right: 0;
     z-index: 1;
   }
 
-  .notification {
+  .inner {
     margin: 1rem;
     padding: .5rem 1rem;
     border-radius: 3px;
@@ -44,8 +44,8 @@
 </style>
 
 {#if message}
-  <div class="container">
-    <div class="notification {type}" transition:fade on:click={onClose}>
+  <div class="notification">
+    <div class="inner {type}" transition:fade on:click={onClose}>
       {message}
     </div>
   </div>
