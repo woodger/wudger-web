@@ -76,7 +76,5 @@
     </ArticleCard>
   {/each}
 
-  <Pagination length="2" count="51" />
-
-  <!-- <Pagination length={values.values.length} count={values.count} /> -->
+  <Pagination length={values.values.length} count={values.count} />
 </div>
