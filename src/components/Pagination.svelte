@@ -2,106 +2,107 @@
   import * as sapper from '@sapper/app';
   import Button from './Button.svelte';
 
-  export let length = 0;
-  export let count = 0;
   export let tabs = 9;
+  export let length = 10;
+  export let count = 0;
 
   let values = [];
-  let active;
   let page;
-  let searchParams;
 
   sapper.stores().page.subscribe((value) => {
     page = value;
   });
 
-  $: {
-    searchParams = new URLSearchParams();
-
-    for (let i of Object.keys(page.query)) {
-      searchParams.append(i, page.query[i]);
-    }
+  $: if (page) {
+    values = makeTabs(page);
   }
 
-  $: active = parseInt(page.query.page) || 1;
-
-  $: {
+  function makeTabs({ path, query }) {
     const result = [];
+    const active = parseInt(query.page) || 0;
+    const searchParams = new URLSearchParams();
+
+    for (let i of Object.keys(query)) {
+      searchParams.append(i, query[i]);
+    }
+
+    function tabHref(value) {
+      searchParams.set('page', value);
+
+      return value === 0 ?
+        path : path + '?' + searchParams;
+    }
+
+    function tabColor(value) {
+      return value === active ?
+        'blue' : undefined;
+    }
+
     let place = Math.ceil(count / length) || 1;
-    let num = 1;
+    const axis = tabs / 2;
+    let value = 1;
 
     if (place > tabs) {
-      let late = tabs - 1;
+      let cursor = tabs - 1;
 
-      if (active >= late){
-        num = parseInt(active - late / 2 + 2);
-        late = parseInt(active + late / 2 - 2);
+      if (active >= tabs - 2) {
+        result.push({
+          value: 1,
+          color: tabColor(0),
+          href: tabHref(0)
+        });
 
-        if (late >= place) {
-          late = place;
+        cursor = parseInt(active + axis - 1);
+        value = parseInt(active - axis + 4);
+
+        if (cursor >= place - 2) {
+          cursor = place;
+          value = place - tabs + 3;
         }
 
         result.push({
-          href: tabHref(1),
-          color: tabColor(1),
-          value: 1
-        });
-
-        result.push({
           value: '...',
-          color: tabColor(num - 1),
-          href: tabHref(num - 1)
+          color: tabColor(value - 2),
+          href: tabHref(value - 2)
         });
       }
       else {
-        late--;
+        cursor--;
       }
 
-      for ( ; num <= late; num++) {
+      for ( ; value <= cursor; value++) {
         result.push({
-          value: num,
-          color: tabColor(num),
-          href: tabHref(num)
+          value,
+          color: tabColor(value - 1),
+          href: tabHref(value - 1)
         });
       }
 
-      if (active < place - tabs / 2 + 2) {
+      if (active < place - axis - 1) {
         result.push({
           value: '...',
-          color: tabColor(late + 1),
-          href: tabHref(late + 1)
+          color: tabColor(cursor),
+          href: tabHref(cursor)
         });
 
         result.push({
           value: place,
-          color: tabColor(place),
-          href: tabHref(place)
+          color: tabColor(place - 1),
+          href: tabHref(place - 1)
         });
       }
     }
     else {
-      for ( ; num <= place; num++) {
+      for ( ; value <= place; value++) {
         result.push({
-          value: num,
-          color: tabColor(num),
-          href: tabHref(num)
+          value,
+          color: tabColor(value - 1),
+          href: tabHref(value - 1)
         });
       }
     }
 
-    values = result;
-  }
-
-  function tabColor(value) {
-    return value === active ?
-      'blue' : undefined;
-  }
-
-  function tabHref(value) {
-    searchParams.set('page', value);
-
-    return value === 1 ?
-      page.path : page.path + '?' + searchParams;
+    return result;
   }
 </script>
 
