@@ -1,5 +1,4 @@
 <script>
-  import * as sapper from '@sapper/app';
   import Navigation from '../../components/navigation/Navigation.svelte';
   import ListOfArticles from '../../components/articles/ListOfArticles.svelte';
   import Footer from '../../components/Footer.svelte';
@@ -11,21 +10,6 @@
 </script>
 
 <script context="module">
-  // export async function preload({query}) {
-  //   const url = new URL('/api/v1/articles', process.env.API_URL);
-  //
-  //   for (const i of Object.entries(query)) {
-  //     url.searchParams.set(...i);
-  //   }
-  //
-  //   const res = await this.fetch(url);
-  //
-  //   if (res.ok) {
-  //     return await res.json();
-  //   }
-  //
-  //   this.error(res.status);
-  // }
   export async function preload({query}) {
     const urls = [
       `/api/v1/static/schemes/article.json`,

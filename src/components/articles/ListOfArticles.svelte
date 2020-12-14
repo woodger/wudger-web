@@ -25,12 +25,6 @@
     admin = value;
   });
 
-  // store.articles.subscribe((value) => {
-  //   if (value) {
-  //     values = value;
-  //   }
-  // });
-
   function onShowForm({ id, title }) {
     return () => {
       store.modal.set({
