@@ -6,28 +6,27 @@
 </script>
 
 <style>
-  .container {
+  .navigation {
     background: url(/images/wallpapers/abstract.svg) repeat-x;
-    /* border-bottom: 1px solid #aaaaaa; */
     box-shadow: 0 1px 3px #aaaaaa;
   }
 
-  .navigation {
+  .inner {
     display: flex;
     align-items: center;
     height: 50px;
-  }
-
-  .btn_right {
-    margin-left: auto;
   }
 
   .logo {
     margin: 1rem;
   }
 
-  h1 {
+  .h1 {
     text-align: center;
+  }
+
+  .profile {
+    margin-left: auto;
   }
 
   .control {
@@ -37,9 +36,9 @@
   }
 </style>
 
-<div class="container">
+<div class="navigation">
   <div class="global__container">
-    <div class="navigation">
+    <div class="inner">
       <a class="logo" href="/">
         <img src="images/logo.svg" width="128" height="32" alt="wudger.ru" />
       </a>
@@ -48,13 +47,13 @@
         <BlockControl />
       {/if}
 
-      <div class="btn_right">
+      <div class="profile">
         <UserProfile />
       </div>
     </div>
 
     {#if title}
-      <h1>{title}</h1>
+      <h1 class="h1">{title}</h1>
       <div class="control">
         <BlockControl />
       </div>
