@@ -4,16 +4,30 @@
   import Button from '../Button.svelte';
   import Svg from '../Svg.svelte';
   import Img from '../Img.svelte';
+  import FileIcon from '../FileIcon.svelte';
   import ArticleForm from '../forms/ArticleForm.svelte';
 
   export let values;
   export let schema;
 
   let admin = false;
+  let files = [];
 
   store.admin.subscribe((value) => {
     admin = value;
   });
+
+  $: if (values) {
+    files = values.files.map((name) => {
+      return {
+        name,
+        href: null,
+        download: null
+      };
+    });
+  }
+
+  onMount(getFileCode);
 
   const options = [
     'price',
@@ -36,6 +50,32 @@
 
   async function updateItem() {
     values = await request(`/api/v1/articles/${values.id}`);
+  }
+
+  async function getFileCode() {
+    const res = await request(`/api/v1/articles/${values.id}/files`);
+
+    files = res.files.map((item) => {
+      const index = item.lastIndexOf('/');
+      const name = item.substr(index + 1);
+      const href = resolve(`/api/v1/articles/${values.id}/files/${item}`);
+
+      return {
+        name,
+        href,
+        download: true
+      };
+    });
+
+    // files = values.files.map((name) => {
+    //   const href = resolve(`/api/v1/articles/${values.id}/files/${accessCode}/${name}`);
+    //
+    //   return {
+    //     name,
+    //     href,
+    //     download: true
+    //   };
+    // });
   }
 </script>
 
@@ -80,12 +120,25 @@
   }
 
   .label {
-    font-weight: bold;
-    color: #666666;
+    color: #313131;
   }
 
   .description {
     margin: 1rem;
+  }
+
+  .files {
+    margin: 2rem 0;
+  }
+
+  .files__inner {
+    display: flex;
+    align-items: center;
+    margin: 1rem;
+  }
+
+  .filename {
+    margin: 0 1rem;
   }
 
   .space {
@@ -131,7 +184,9 @@
 
   <div class="control">
     <div class="buy">
-      <Button color="blue">Купить</Button>
+      {#if values.price}
+        <Button color="blue">Купить</Button>
+      {/if}
 
       {#if admin}
         <Button onClick={onShowForm(values)}>
@@ -161,6 +216,20 @@
   {#if values.description}
     <div class="description">
       {values.description}
+    </div>
+  {/if}
+
+  {#if files}
+    <div class="files">
+      {#each files as {href, name, download} (name)}
+        <div class="files__inner">
+          <FileIcon {name} />
+
+          <a class="filename" {href} {download}>
+            {name}
+          </a>
+        </div>
+      {/each}
     </div>
   {/if}
 </div>

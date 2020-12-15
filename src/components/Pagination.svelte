@@ -46,14 +46,20 @@
       let cursor = tabs - 1;
 
       if (active >= tabs - 2) {
-        result.push({
-          value: 1,
-          color: tabColor(0),
-          href: tabHref(0)
-        });
-
         cursor = parseInt(active + axis - 1);
         value = parseInt(active - axis + 4);
+
+        let first = 1;
+
+        if (active - 1 > tabs) {
+          first = value - tabs;
+        }
+
+        result.push({
+          value: first,
+          color: tabColor(first - 1),
+          href: tabHref(first - 1)
+        });
 
         if (cursor >= place - 2) {
           cursor = place;
@@ -85,10 +91,16 @@
           href: tabHref(cursor)
         });
 
+        let last = cursor + tabs;
+
+        if (last > place) {
+          last = place;
+        }
+
         result.push({
-          value: place,
-          color: tabColor(place - 1),
-          href: tabHref(place - 1)
+          value: last,
+          color: tabColor(last - 1),
+          href: tabHref(last - 1)
         });
       }
     }
