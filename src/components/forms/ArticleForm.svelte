@@ -124,7 +124,7 @@
       return;
     }
 
-    await request(`/v1/articles/${id}`, {
+    await request(`/api/v1/articles/${id}`, {
       method: 'DELETE'
     });
 
@@ -220,6 +220,7 @@
     display: flex;
     align-items: center;
     padding: .5rem 0;
+    background: #f4f4f4;
   }
 </style>
 

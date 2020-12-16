@@ -6,7 +6,7 @@
   let type;
 
   store.notification.subscribe((value) => {
-    if (value) {
+    if (value !== undefined) {
       type = value instanceof Error ?
         'error' : value.type;
 

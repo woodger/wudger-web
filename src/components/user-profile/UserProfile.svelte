@@ -18,7 +18,7 @@
   }
 
   store.user.subscribe((value) => {
-    if (value) {
+    if (value !== undefined) {
       store.admin.set(
         value.groups.includes('admin')
       );

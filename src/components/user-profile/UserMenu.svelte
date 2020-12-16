@@ -23,7 +23,9 @@
   });
 
   store.admin.subscribe((value) => {
-    admin = value;
+    if (value !== undefined) {
+      admin = value;
+    }
   });
 
   async function getUserInfo() {

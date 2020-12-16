@@ -4,5 +4,5 @@ export default function store() {}
 
 store.modal = writable();
 store.user = writable();
-store.admin = writable(false);
+store.admin = writable();
 store.notification = writable();

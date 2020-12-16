@@ -17,12 +17,16 @@
   let admin = false;
 
   sapper.stores().page.subscribe((value) => {
-    query = value.query;
-    sheet = 1 + (+query.page | 0) * (+query.limit | 10);
+    if (value !== undefined) {
+      query = value.query;
+      sheet = 1 + (+query.page | 0) * (+query.limit | 10);
+    }
   });
 
   store.admin.subscribe((value) => {
-    admin = value;
+    if (value !== undefined) {
+      admin = value;
+    }
   });
 
   function onShowForm({ id, title }) {

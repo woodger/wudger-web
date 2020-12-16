@@ -347,3 +347,43 @@ template {
 [hidden] {
   display: none;
 }
+
+/**
+ * Custom global style
+ */
+
+html {
+  font-size: 14px;
+}
+
+body {
+  font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  border-bottom: 1px dotted #999999;
+}
+
+a[href] {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+h1 {
+  margin: 0;
+  padding: 2.5rem 1rem;
+  font-weight: normal;
+  font-size: 1.5rem;
+}
+
+h2 {
+  margin: 0;
+  padding: 1.5rem 1rem;
+  font-weight: normal;
+  font-size: 1.3rem;
+}
+
+.global__container {
+  max-width: 1200px;
+  margin: 0 auto;
+}

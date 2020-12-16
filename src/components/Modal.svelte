@@ -13,7 +13,9 @@
   }
 
   store.modal.subscribe((value) => {
-    that = value;
+    if (value !== undefined) {
+      that = value;
+    }
   });
 
   function onCloseThat() {

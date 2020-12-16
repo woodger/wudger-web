@@ -10,7 +10,9 @@
   let page;
 
   sapper.stores().page.subscribe((value) => {
-    page = value;
+    if (value !== undefined) {
+      page = value;
+    }
   });
 
   $: if (page) {

@@ -10,32 +10,28 @@
   export let values;
   export let schema;
 
-  let admin = false;
+  let admin;
   let files = [];
-
-  store.admin.subscribe((value) => {
-    admin = value;
-  });
-
-  $: if (values) {
-    files = values.files.map((name) => {
-      return {
-        name,
-        href: null,
-        download: null
-      };
-    });
-  }
-
-  onMount(getFileCode);
-
-  const options = [
+  let options = [
     'price',
     'madeYear',
     'activityType',
-    'totalPages',
-    'note'
+    'totalPages'
   ];
+
+  store.admin.subscribe((value) => {
+    if (value !== undefined) {
+      admin = value;
+    }
+  });
+
+  $: if (values) {
+    files = values.files.map(fileProcessing);
+  }
+
+  $: if (admin !== undefined) {
+    bucketFiles();
+  }
 
   function onShowForm({ id, title }) {
     return () => {
@@ -52,30 +48,30 @@
     values = await request(`/api/v1/articles/${values.id}`);
   }
 
-  async function getFileCode() {
-    const res = await request(`/api/v1/articles/${values.id}/files`);
+  async function bucketFiles() {
+    const res = await request(`/api/v1/articles/${values.id}/bucket`);
+    files = res.values.map(fileProcessing);
+  }
 
-    files = res.files.map((item) => {
-      const index = item.lastIndexOf('/');
-      const name = item.substr(index + 1);
-      const href = resolve(`/api/v1/articles/${values.id}/files/${item}`);
+  function fileProcessing(name) {
+    const sep = name.lastIndexOf('/');
 
+    if (sep === -1) {
       return {
         name,
-        href,
-        download: true
+        href: null,
+        download: null
       };
-    });
+    }
 
-    // files = values.files.map((name) => {
-    //   const href = resolve(`/api/v1/articles/${values.id}/files/${accessCode}/${name}`);
-    //
-    //   return {
-    //     name,
-    //     href,
-    //     download: true
-    //   };
-    // });
+    const href = resolve(`/api/v1/bucket/${name}`);
+    name = name.substr(sep + 1);
+
+    return {
+      name,
+      href,
+      download: true
+    };
   }
 </script>
 
@@ -223,7 +219,7 @@
     <div class="files">
       {#each files as {href, name, download} (name)}
         <div class="files__inner">
-          <FileIcon {name} />
+          <FileIcon src={name} />
 
           <a class="filename" {href} {download}>
             {name}
@@ -238,7 +234,7 @@
   <div class="space__inner">
     {#each values.pages as {width, height, src}, index (src)}
       <div class="page" class:paid={width < 300}>
-        <Img src={resolve(src)} {width} {height} alt="Лист {index + 1}" />
+        <Img src={resolve(src)} {width} {height} alt="лист {index + 1}" />
       </div>
     {/each}
   </div>

@@ -1,19 +1,19 @@
 <script>
   import Svg from './Svg.svelte';
 
-  export let name;
+  export let src;
   export let width = 16;
   export let height = 16;
 
   let img;
 
-  $: if (name) {
-    img = getSource(name);
+  $: if (src) {
+    img = getSource(src);
   }
 
-  function getSource(name) {
-    const index = name.lastIndexOf('.');
-    const ext = name.substr(index);
+  function getSource(src) {
+    const index = src.lastIndexOf('.');
+    const ext = src.substr(index);
 
     if (['.doc', '.docx'].includes(ext)) {
       return {
@@ -85,4 +85,6 @@
   }
 </script>
 
-<Svg {width} {height} src={img.src} alt={img.alt} />
+{#if img}
+  <Svg {width} {height} src={img.src} alt={img.alt} />
+{/if}
