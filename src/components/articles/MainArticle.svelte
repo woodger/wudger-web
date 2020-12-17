@@ -57,11 +57,7 @@
     const sep = name.lastIndexOf('/');
 
     if (sep === -1) {
-      return {
-        name,
-        href: null,
-        download: null
-      };
+      return { name };
     }
 
     const href = resolve(`/api/v1/bucket/${name}`);
@@ -220,7 +216,6 @@
       {#each files as {href, name, download} (name)}
         <div class="files__inner">
           <FileIcon src={name} />
-
           <a class="filename" {href} {download}>
             {name}
           </a>
