@@ -220,7 +220,6 @@
     display: flex;
     align-items: center;
     padding: .5rem 0;
-    background: #f4f4f4;
   }
 </style>
 

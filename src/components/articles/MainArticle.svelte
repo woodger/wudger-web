@@ -70,7 +70,7 @@
     return {
       name,
       href,
-      download: true
+      download: name
     };
   }
 </script>
