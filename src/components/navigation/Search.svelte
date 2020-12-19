@@ -31,6 +31,11 @@
   .search {
     display: flex;
     align-items: center;
+    width: 100%;
+  }
+
+  .input {
+    width: 100%;
   }
 
   .button {
@@ -38,6 +43,10 @@
   }
 
   @media screen and (min-width: 600px) {
+    .search {
+      width: auto;
+    }
+
     .input {
       width: 375px;
     }
