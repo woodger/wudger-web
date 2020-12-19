@@ -1,8 +1,9 @@
 <script>
+  import Svg from '../Svg.svelte';
+  import Button from '../Button.svelte';
   import UserProfile from '../user-profile/UserProfile.svelte';
   import BlockControl from './BlockControl.svelte';
-
-  export let title;
+  import Search from './Search.svelte';
 </script>
 
 <style>
@@ -12,51 +13,44 @@
   }
 
   .inner {
+    padding: 1rem 0;
+  }
+
+  .header {
     display: flex;
-    align-items: center;
-    height: 50px;
   }
 
   .logo {
-    margin: 1rem;
+    margin: .5rem 1rem;
   }
 
-  .h1 {
-    text-align: center;
-  }
-
-  .profile {
+  .user-profile {
     margin-left: auto;
   }
 
   .control {
     display: flex;
     justify-content: center;
-    min-height: 16rem;
   }
 </style>
 
 <div class="navigation">
   <div class="global__container">
     <div class="inner">
-      <a class="logo" href="/">
-        <img src="images/logo.svg" width="128" height="32" alt="wudger.ru" />
-      </a>
 
-      {#if !title}
-        <BlockControl />
-      {/if}
+      <div class="header">
+        <a class="logo" href="/">
+          <Svg src="images/logo.svg" width="128" height="32" alt="wudger.ru" />
+        </a>
+        <div class="user-profile">
+          <UserProfile />
+        </div>
+      </div>
 
-      <div class="profile">
-        <UserProfile />
+      <div class="control">
+        <Button href="/articles" color="blue">Каталог</Button>
+        <Search />
       </div>
     </div>
-
-    {#if title}
-      <h1 class="h1">{title}</h1>
-      <div class="control">
-        <BlockControl />
-      </div>
-    {/if}
   </div>
 </div>

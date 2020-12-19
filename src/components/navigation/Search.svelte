@@ -3,6 +3,7 @@
   import { store, request } from '@toolkit';
   import Button from '../Button.svelte';
   import Input from '../Input.svelte';
+  import Svg from '../Svg.svelte';
 
   let phrase;
 
@@ -22,31 +23,41 @@
   }
 
   async function onClickSearch() {
-    location.href = `${location.origin}/articles?search=${phrase}`;
+    location.href = `${location.origin}/articles?search=${phrase || ''}`;
   }
 </script>
 
 <style>
-  .inner {
+  .search {
     display: flex;
     align-items: center;
   }
 
-  .input {
-    width: 400px;
+  .button {
+    display: none;
+  }
+
+  @media screen and (min-width: 600px) {
+    .input {
+      width: 375px;
+    }
+
+    .button {
+      display: block;
+    }
   }
 </style>
 
-<div>
-  <div class="inner">
-    <div class="input">
-      <Input
-        value={phrase}
-        placeholder="Поиск ..."
-        onInput={onInputText}
-        onKeyPress={onKeyPress}
-      />
-    </div>
+<div class="search">
+  <div class="input">
+    <Input
+      value={phrase}
+      placeholder="Поиск ..."
+      onInput={onInputText}
+      onKeyPress={onKeyPress}
+    />
+  </div>
+  <div class="button">
     <Button onClick={onClickSearch}>Найти</Button>
   </div>
 </div>

@@ -1,6 +1,7 @@
 <script>
   import Navigation from '../../components/navigation/Navigation.svelte';
   import MainArticle from '../../components/articles/MainArticle.svelte';
+  import Footer from '../../components/Footer.svelte';
 
   export let values;
   export let schema;
@@ -42,3 +43,4 @@
 
 <Navigation />
 <MainArticle {values} {schema} />
+<Footer />

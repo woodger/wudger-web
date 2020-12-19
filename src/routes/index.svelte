@@ -7,28 +7,30 @@
 
 <style>
   .section {
-    margin: 2rem;
+    margin: 0 0 2rem;
+  }
+
+  .content {
+    padding: 1rem;
   }
 
   .section ul {
     margin: 0;
-    padding-left: 1.2rem;
+    /* padding-left: 1.2rem; */
   }
 
   .section li {
-    padding: .3rem;
+    padding: .5rem;
   }
 
-  .section_left {
-    margin-right: 50%;
-  }
+  @media screen and (min-width: 600px) {
+    .indent_rigth {
+      margin-left: 40%;
+    }
 
-  .section_rigth {
-    margin-left: 50%;
-  }
-
-  .section__content {
-    padding: 1rem;
+    .indent_left {
+      margin-right: 40%;
+    }
   }
 </style>
 
@@ -36,19 +38,22 @@
   <title>{title}</title>
 </svelte:head>
 
-<Navigation {title}/>
+<Navigation />
 
 <div class="global__container">
-  <div class="section section_rigth">
+  <h1>{title}</h1>
+
+  <div class="section indent_rigth">
     <h2>О проекте</h2>
-    <div class="section__content">
-      Авторская коллекция готовых научных исследований для студентов. Некоторые из работ уже прошли успешную защиту. Исследования на актуальные темы направлены на развитие технологии, совершенствование методик, внедрение и аппробацию новых идей.
+    <div class="content">
+      <p>Авторская коллекция готовых научных исследований для студентов</p>
+      <p>Некоторые из работ уже прошли успешную защиту. Исследования на актуальные темы направлены на развитие технологии, совершенствование методик, внедрение и аппробацию новых идей</p>
     </div>
   </div>
 
-  <div class="section section_left">
+  <div class="section indent_left">
     <h2>Готовые работы</h2>
-    <div class="section__content">
+    <div class="content">
       <ul>
         <li>Некорые готовые работы ранее написаны на заказ по определенным требованиям</li>
         <li>Обычно служат опорным материалом для написания собственной работы</li>

@@ -4,13 +4,13 @@
 </script>
 
 <style>
-  .container {
+  .control {
     display: flex;
     align-items: flex-start;
   }
 </style>
 
-<div class="container">
+<div class="control">
   <Button href="/articles" color="blue">Каталог</Button>
   <Search />
 </div>

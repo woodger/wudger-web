@@ -31,7 +31,16 @@
   }
 
   .undefined {
-    border: 1px solid #aaaaaa;
+    border: 1px solid #ababab;
+    background: linear-gradient(to bottom,
+      rgba(255, 255, 255, 0.7) 97%,
+      rgba(66, 66, 66, 0.7) 100%
+    );
+    color: #222222;
+  }
+
+  .white {
+    border: 1px solid #a8a8a8;
     background: linear-gradient(to bottom, #ffffff 97%, #aaaaaa 100%);
     color: #222222;
   }

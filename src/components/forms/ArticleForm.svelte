@@ -212,7 +212,6 @@
 
   .file {
     display: flex;
-    align-items: flex-end;
     margin: 0 0 .5rem;
   }
 
