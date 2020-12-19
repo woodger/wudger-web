@@ -1,13 +1,13 @@
 <script>
   import { onMount } from 'svelte';
   import { store, request, resolve, contract } from '@toolkit';
-  import Svg from '../Svg.svelte';
   import Button from '../Button.svelte';
   import Input from '../Input.svelte';
   import InputFile from '../InputFile.svelte';
   import Textarea from '../Textarea.svelte';
   import Loader from '../Loader.svelte';
   import Label from '../Label.svelte';
+  import Svg from '../Svg.svelte';
 
   export let id;
   export let onClose;
@@ -194,16 +194,8 @@
     flex-wrap: wrap;
   }
 
-  .field_100 {
+  .field_20, .field_30, .field_100 {
     width: 100%;
-  }
-
-  .field_30 {
-    width: 30%;
-  }
-
-  .field_20 {
-    width: 20%;
   }
 
   .fieldset {
@@ -212,6 +204,7 @@
 
   .file {
     display: flex;
+    flex-wrap: wrap;
     margin: 0 0 .5rem;
   }
 
@@ -219,6 +212,20 @@
     display: flex;
     align-items: center;
     padding: .5rem 0;
+  }
+
+  @media screen and (min-width: 600px) {
+    .field_20 {
+      width: 20%;
+    }
+
+    .field_30 {
+      width: 30%;
+    }
+
+    .file {
+      flex-wrap: nowrap;
+    }
   }
 </style>
 
@@ -271,7 +278,7 @@
                 <Svg src="icons/trash.svg" width="16" height="16" alt="trash" />
               </Button>
 
-              <Button href={resolve('/api/v1/bucket/' + item)} download>
+              <Button href={resolve(`/api/v1/bucket/${item}`)} download>
                 <Svg src="icons/download.svg" width="16" height="16" alt="download" />
               </Button>
             </div>

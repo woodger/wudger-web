@@ -21,17 +21,16 @@
     }
 
     if (boundingClientRect()) {
-      show = true;
-      return;
+      return show = true;
     }
 
-    window.addEventListener('scroll', scroll);
+    window.addEventListener('scroll', onScroll, true);
   });
 
-  function scroll() {
+  function onScroll() {
     if (boundingClientRect()) {
-      window.removeEventListener('scroll', scroll);
       show = true;
+      window.removeEventListener('scroll', onScroll, true);
     }
   }
 
