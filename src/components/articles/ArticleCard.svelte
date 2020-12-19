@@ -75,7 +75,7 @@
 </script>
 
 <style>
-  .container {
+  .article-card {
     padding: 1rem 0;
   }
 
@@ -106,12 +106,13 @@
 
   .option-group {
     display: flex;
+    flex-wrap: wrap;
     font-style: italic;
     color: #333000;
   }
 
   .option {
-    margin: 0 1rem;
+    margin: .5rem 1rem;
   }
 
   .note {
@@ -121,7 +122,7 @@
   }
 </style>
 
-<div class="container">
+<div class="article-card">
   <div class="row">
     <div>
       <div class="number">

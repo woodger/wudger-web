@@ -1,8 +1,9 @@
 <script>
+  import { onMount } from 'svelte';
   import * as sapper from '@sapper/app';
   import Button from './Button.svelte';
 
-  export let tabs = 9;
+  export let tabs = 7;
   export let length = 10;
   export let count = 0;
 
@@ -123,6 +124,7 @@
 <style>
   .pagination {
     display: flex;
+    flex-wrap: wrap;
     margin: 3rem 0;
   }
 </style>
