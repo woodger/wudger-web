@@ -13,13 +13,9 @@
     font-family: Roboto, -apple-system, BlinkMacSystemFont, Segoe UI, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   }
 
-  /* :global(a) {
-    border-bottom: 1px dotted #999999;
-  } */
-
   :global(a[href]) {
     cursor: pointer;
-    text-decoration: none;
+    color: inherit;
   }
 
   :global(h1) {

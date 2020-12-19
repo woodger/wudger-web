@@ -22,7 +22,7 @@
   .section__item {
     display: flex;
     align-items: center;
-    margin: .5rem 0;
+    margin: 1rem 0;
   }
 
   .section__item > span {
@@ -44,16 +44,18 @@
       <h2>Контакты</h2>
       <ul class="section">
         <li class="section__item">
-          <Svg src="/icons/vk.svg"
+          <Svg src="icons/vk.svg"
             width="16"
             height="16"
             alt="vk"
             onLoad={onLoadIcon}
           />
-          <span>Татьяна Потёмкина</span>
+          <span>
+            <a href="https://vk.com/wudger">Татьяна Потёмкина</a>
+          </span>
         </li>
         <li class="section__item">
-          <Svg src="/icons/phone.svg"
+          <Svg src="icons/phone.svg"
             width="16"
             height="16"
             alt="phone"
@@ -62,7 +64,7 @@
           <span>+7 (964) 925-77-05</span>
         </li>
         <li class="section__item">
-          <Svg src="/icons/envelop.svg"
+          <Svg src="icons/envelop.svg"
             width="16"
             height="16"
             alt="envelop"

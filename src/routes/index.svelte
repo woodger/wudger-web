@@ -16,7 +16,6 @@
 
   .section ul {
     margin: 0;
-    /* padding-left: 1.2rem; */
   }
 
   .section li {
