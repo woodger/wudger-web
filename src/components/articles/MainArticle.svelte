@@ -82,14 +82,6 @@
     margin-left: auto;
   }
 
-  .coll_70 {
-    width: 70%;
-  }
-
-  .options {
-    display: flex;
-  }
-
   .field {
     display: flex;
     margin: .5rem;
@@ -97,7 +89,7 @@
   }
 
   .field > :first-child {
-    width: 30%;
+    flex: 1;
   }
 
   .field > :first-child span {
@@ -106,7 +98,7 @@
   }
 
   .field > :last-child {
-    width: 70%;
+    flex: 1;
     padding: 0 .5rem;
     background: #ffffff;
   }
@@ -136,6 +128,7 @@
   .space {
     padding: 2.5rem 0;
     margin: 2.5rem 0 0;
+    overflow-x: auto;
     background: #eeeeee;
   }
 
@@ -169,6 +162,12 @@
     background: #19aaa1;
     color: #ffffff;
   }
+
+  @media screen and (min-width: 600px) {
+    .field {
+      width: 50%;
+    }
+  }
 </style>
 
 <div class="global__container">
@@ -189,20 +188,18 @@
   </div>
 
   <div class="options">
-    <div class="coll_70">
-      {#each options as name (name)}
-        {#if values[name]}
-          <div class="field">
-            <div class="label">
-              <span>{schema.properties[name].description}</span>
-            </div>
-            <div>
-              <span>{values[name]}</span>
-            </div>
+    {#each options as name (name)}
+      {#if values[name]}
+        <div class="field">
+          <div class="label">
+            <span>{schema.properties[name].description}</span>
           </div>
-        {/if}
-      {/each}
-    </div>
+          <div>
+            <span>{values[name]}</span>
+          </div>
+        </div>
+      {/if}
+    {/each}
   </div>
 
   {#if values.description}
