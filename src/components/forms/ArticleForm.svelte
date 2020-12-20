@@ -154,10 +154,12 @@
       body
     });
 
-    values.files = [
-      ...values.files,
-      ...res.values
-    ];
+    if (res !== undefined) {
+      values.files = [
+        ...values.files,
+        ...res.values
+      ];
+    }
   }
 
   function onInputFileName(filename, index) {
