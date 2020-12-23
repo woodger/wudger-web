@@ -38,10 +38,6 @@
     width: 100%;
   }
 
-  .button {
-    display: none;
-  }
-
   @media screen and (min-width: 600px) {
     .search {
       width: auto;
@@ -49,10 +45,6 @@
 
     .input {
       width: 375px;
-    }
-
-    .button {
-      display: block;
     }
   }
 </style>

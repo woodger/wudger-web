@@ -16,8 +16,8 @@
 
   .popup {
     position: absolute;
-    top: 35px;
-    right: 0;
+    top: calc(32px + .5rem);
+    right: .5rem;
     border: 1px solid #aaaaaa;
     box-shadow: 0 1px 3px #aaaaaa;
     background: #ffffff;
