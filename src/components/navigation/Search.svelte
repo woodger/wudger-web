@@ -1,9 +1,8 @@
 <script>
   import { onMount } from 'svelte';
-  import { store, request } from '@toolkit';
   import Button from '../Button.svelte';
   import Input from '../Input.svelte';
-  import Svg from '../Svg.svelte';
+  // import Svg from '../Svg.svelte';
 
   let phrase;
 
@@ -59,6 +58,9 @@
     />
   </div>
   <div class="button">
-    <Button onClick={onClickSearch}>Найти</Button>
+    <Button onClick={onClickSearch}>
+      Найти
+      <!-- <Svg src="icons/search.svg" width="16" height="16" alt="search" /> -->
+    </Button>
   </div>
 </div>

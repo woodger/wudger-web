@@ -10,6 +10,7 @@
   .navigation {
     background: url(/images/wallpapers/abstract.svg) repeat-x;
     box-shadow: 0 1px 3px #aaaaaa;
+    min-height: 12rem;
   }
 
   .inner {
