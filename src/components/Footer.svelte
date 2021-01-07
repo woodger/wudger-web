@@ -10,6 +10,10 @@
 </script>
 
 <style>
+  a {
+    color: inherit;
+  }
+
   .footer {
     background: #666666;
     color: #ffffff;

@@ -187,7 +187,7 @@
     </div>
   </div>
 
-  <div class="options">
+  <div>
     {#each options as name (name)}
       {#if values[name]}
         <div class="field">

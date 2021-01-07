@@ -15,7 +15,7 @@
 
   :global(a[href]) {
     cursor: pointer;
-    color: inherit;
+    /* color: inherit; */
   }
 
   :global(h1) {
