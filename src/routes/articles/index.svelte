@@ -12,7 +12,7 @@
 <script context="module">
   export async function preload({query}) {
     const urls = [
-      `/api/v1/files/schemes/article.json`,
+      `/api/v1/schemes/article.json`,
       `/api/v1/articles`
     ]
     .map((item) => {

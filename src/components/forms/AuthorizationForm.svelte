@@ -12,7 +12,7 @@
   let schema;
 
   onMount(async () => {
-    schema = await request(`/api/v1/files/schemes/user.json`, {
+    schema = await request(`/api/v1/schemes/user.json`, {
       auth: false
     });
 
