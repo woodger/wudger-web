@@ -133,7 +133,11 @@
 
   function parseFilename(value) {
     const slash = value.lastIndexOf('/') + 1;
-    const dot = value.lastIndexOf('.');
+    let dot = value.lastIndexOf('.');
+
+    if (dot === -1) {
+      dot = value.length;
+    }
 
     return {
       path: value.substring(0, slash),
@@ -280,7 +284,7 @@
                 <Svg src="icons/trash.svg" width="16" height="16" alt="trash" />
               </Button>
 
-              <Button href={resolve(`/api/v1/bucket/${item}`)} download>
+              <Button href={resolve(`/api/v1/bucket/${item}`)} download={parseFilename(item)}>
                 <Svg src="icons/download.svg" width="16" height="16" alt="download" />
               </Button>
             </div>

@@ -45,7 +45,13 @@
   }
 
   async function updateItem() {
-    values = await request(`/api/v1/articles/${values.id}`);
+    values = await request(`/api/v1/articles/${values.id}`, {
+      onError(res) {
+        if (res.ok === false) {
+          location.href = `${location.origin}/articles`;
+        }
+      }
+    });
   }
 
   async function bucketFiles() {
