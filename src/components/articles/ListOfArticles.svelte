@@ -58,7 +58,7 @@
     <div class="control">
       <div class="btn">
         <Button onClick={onShowForm({ title: 'Новый документ' })}>
-          <Svg src="icons/three.svg" width="16" height="16" alt="three" />
+          Добавить
         </Button>
       </div>
     </div>
@@ -68,7 +68,7 @@
     <ArticleCard {schema} props={item} index={sheet + index}>
       {#if admin}
         <Button onClick={onShowForm(item)}>
-          <Svg src="icons/three.svg" width="16" height="16" alt="three" />
+          <Svg src="icons/edit.svg" width="16" height="16" alt="edit" />
         </Button>
       {/if}
     </ArticleCard>

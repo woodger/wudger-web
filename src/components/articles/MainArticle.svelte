@@ -29,9 +29,7 @@
     files = values.files.map(fileProcessing);
   }
 
-  $: if (admin !== undefined) {
-    bucketFiles();
-  }
+  onMount(bucketFiles);
 
   function onShowForm({ id, title }) {
     return () => {
@@ -187,7 +185,7 @@
 
       {#if admin}
         <Button onClick={onShowForm(values)}>
-          <Svg src="icons/three.svg" width="16" height="16" alt="three" />
+          <Svg src="icons/edit.svg" width="16" height="16" alt="edit" />
         </Button>
       {/if}
     </div>
