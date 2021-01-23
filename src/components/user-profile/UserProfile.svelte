@@ -8,13 +8,15 @@
   onMount(getUserInfo);
 
   async function getUserInfo() {
-    const info = await request('/api/v1/oauth', {
+    const res = await request('/api/v1/oauth', {
       onError() {
         request.clearAll();
       }
     });
 
-    store.user.set(info);
+    if (res !== undefined) {
+      store.user.set(res);
+    }
   }
 
   store.user.subscribe((value) => {

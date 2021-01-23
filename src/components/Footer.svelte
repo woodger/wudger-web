@@ -21,6 +21,8 @@
 
   .section {
     list-style: none;
+    padding: 0;
+    margin: 0 1rem;
   }
 
   .section__item {

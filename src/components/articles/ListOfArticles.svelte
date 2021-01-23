@@ -10,7 +10,7 @@
 
   export let title;
   export let schema;
-  export let values;
+  export let values = [];
 
   let query = {};
   let sheet = 1;
@@ -41,7 +41,11 @@
   }
 
   async function updateList() {
-    values = await request('/api/v1/articles', { query });
+    const res = await request('/api/v1/articles', { query });
+
+    if (res !== undefined) {
+      values = res;
+    }
   }
 </script>
 

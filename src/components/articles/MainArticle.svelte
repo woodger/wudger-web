@@ -7,7 +7,7 @@
   import FileIcon from '../FileIcon.svelte';
   import ArticleForm from '../forms/ArticleForm.svelte';
 
-  export let values;
+  export let values = [];
   export let schema;
 
   let admin;
@@ -42,19 +42,32 @@
     };
   }
 
+  async function onClickBuy() {
+    request(`/api/v1/articles/${values.id}/buy`, {
+      method: 'POST'
+    });
+  }
+
   async function updateItem() {
-    values = await request(`/api/v1/articles/${values.id}`, {
+    const res = await request(`/api/v1/articles/${values.id}`, {
       onError(res) {
         if (res.ok === false) {
           location.href = `${location.origin}/articles`;
         }
       }
     });
+
+    if (res !== undefined) {
+      values = res;
+    }
   }
 
   async function bucketFiles() {
     const res = await request(`/api/v1/articles/${values.id}/bucket`);
-    files = res.values.map(fileProcessing);
+
+    if (res !== undefined) {
+      files = res.values.map(fileProcessing);
+    }
   }
 
   function fileProcessing(name) {
@@ -180,7 +193,7 @@
   <div class="control">
     <div class="buy">
       {#if values.price}
-        <Button color="blue">Купить</Button>
+        <Button color="blue" onClick={onClickBuy}>Купить</Button>
       {/if}
 
       {#if admin}
