@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "dotenv-safe": "^8.2.0",
+    "node-fetch": "^2.6.1",
     "polka": "next",
     "sirv": "^1.0.0"
   },
