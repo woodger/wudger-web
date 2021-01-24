@@ -92,7 +92,7 @@
     }
 
     for (const item of values.files) {
-      if (!parseFilename(item).base) {
+      if (!parseFilename(item).name) {
         error = new Error(getLabel('files'));
       }
     }
@@ -141,8 +141,9 @@
 
     return {
       path: value.substring(0, slash),
-      base: value.substring(slash, dot),
-      ext: value.substring(dot)
+      base: value.substring(slash),
+      ext: value.substring(dot),
+      name: value.substring(slash, dot)
     };
   }
 
@@ -270,7 +271,7 @@
             <div class="file">
               <div class="field_100">
                 <Input
-                  value={parseFilename(item).base}
+                  value={parseFilename(item).name}
                   onInput={onInputFileName(item, index)}
                 />
               </div>
@@ -284,7 +285,7 @@
                 <Svg src="icons/trash.svg" width="16" height="16" alt="trash" />
               </Button>
 
-              <Button href={resolve(`/api/v1/bucket/${item}`)} download={parseFilename(item)}>
+              <Button href={resolve(`/api/v1/bucket/${item}`)} download={parseFilename(item).base}>
                 <Svg src="icons/download.svg" width="16" height="16" alt="download" />
               </Button>
             </div>
