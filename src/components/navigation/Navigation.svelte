@@ -25,7 +25,8 @@
     margin: .5rem 1rem;
   }
 
-  .user-profile {
+  .profile {
+    display: flex;
     margin-left: auto;
   }
 
@@ -50,7 +51,8 @@
         <a class="logo" href="/">
           <Svg src="images/logo.svg" width="128" height="32" alt="wudger.ru" />
         </a>
-        <div class="user-profile">
+
+        <div class="profile">
           <UserProfile />
         </div>
       </div>

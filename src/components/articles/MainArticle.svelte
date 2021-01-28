@@ -7,7 +7,7 @@
   import FileIcon from '../FileIcon.svelte';
   import ArticleForm from '../forms/ArticleForm.svelte';
 
-  export let values = [];
+  export let values = {};
   export let schema;
 
   let admin;
@@ -19,6 +19,9 @@
     'totalPages'
   ];
 
+  let paid;
+  let payForm;
+
   store.admin.subscribe((value) => {
     if (value !== undefined) {
       admin = value;
@@ -27,6 +30,10 @@
 
   $: if (values) {
     files = values.files.map(fileProcessing);
+  }
+
+  $: if (payForm) {
+    payForm.submit();
   }
 
   onMount(bucketFiles);
@@ -43,9 +50,13 @@
   }
 
   async function onClickBuy() {
-    request(`/api/v1/articles/${values.id}/buy`, {
+    const order = await request(`/api/v1/articles/${values.id}/orders`, {
       method: 'POST'
     });
+
+    if (order) {
+      paid = await request(`/api/v1/orders/${order.id}/payment`);
+    }
   }
 
   async function updateItem() {
@@ -126,6 +137,12 @@
 
   .description {
     margin: 1rem;
+  }
+
+  .note {
+    margin: 1rem;
+    font-weight: bold;
+    color: red;
   }
 
   .files {
@@ -225,6 +242,12 @@
     </div>
   {/if}
 
+  {#if values.note && admin}
+    <div class="note">
+      {values.note}
+    </div>
+  {/if}
+
   {#if files}
     <div class="files">
       {#each files as {href, name, download} (name)}
@@ -248,3 +271,11 @@
     {/each}
   </div>
 </div>
+
+{#if paid}
+  <form action={paid.targetUrl} bind:this={payForm}>
+    {#each Object.entries(paid.dataForm) as [name, value] (name)}
+      <input type="hidden" {name} {value} />
+    {/each}
+  </form>
+{/if}

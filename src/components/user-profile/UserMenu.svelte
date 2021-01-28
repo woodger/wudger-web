@@ -78,7 +78,9 @@
   </div>
 
   <div class="control">
-    <Button>Мои покупки</Button>
+    <Button>
+      Мои покупки
+    </Button>
 
     {#if admin}
       <Button onClick={onClickExit}>

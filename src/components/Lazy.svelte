@@ -46,13 +46,7 @@
   }
 </script>
 
-<style>
-  .lazy {
-    display: inline-block;
-  }
-</style>
-
-<div class="lazy" {style} bind:this={elem}>
+<div {style} bind:this={elem}>
   {#if show}
     <slot />
   {/if}
